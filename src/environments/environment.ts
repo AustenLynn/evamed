@@ -1,5 +1,5 @@
-// genear api
-const apiEvamed = 'http://54.234.135.134:8000/api-projects';
+// generar api
+const apiEvamed = 'http://10.2.102.118:8000/api-projects';
 // apis
 const projects = '/projects/';
 const transports = '/transports/';
@@ -76,12 +76,12 @@ export const environment = {
   api_conversions: `${apiEvamed}${conversion}`,
   api_db_material: `${apiEvamed}${dbMaterial}`,
   firebaseConfig: {
-    apiKey: 'AIzaSyDEygXrnkO5kjueKT_cVtEJKgQlcQx3bdc',
-    authDomain: 'platzi-store-1a207.firebaseapp.com',
-    databaseURL: 'https://platzi-store-1a207.firebaseio.com',
-    projectId: 'platzi-store-1a207',
-    storageBucket: 'platzi-store-1a207.appspot.com',
-    messagingSenderId: '255188436131',
-    appId: '1:255188436131:web:8c3728876042c077f9ab16',
+    apiKey: "AIzaSyC3t_NpPrGwj7i26j5cfIQCt1aaq3f9k-I",
+    authDomain: "evamed-ac3f8.firebaseapp.com",
+    projectId: "evamed-ac3f8",
+    storageBucket: "evamed-ac3f8.firebasestorage.app",
+    messagingSenderId: "511289930174",
+    appId: "1:511289930174:web:25abc474c59e76ae3e89ef",
+    measurementId: "G-DXRYB3RM3H",
   },
 };

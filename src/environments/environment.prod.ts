@@ -1,5 +1,5 @@
-// genear api
-const apiEvamed = 'http://54.234.135.134:8000/api-projects';
+// generar api
+const apiEvamed = 'http://10.2.102.118:8000/api-projects';
 // apis
 const projects = '/projects/';
 const transports = '/transports/';
@@ -76,12 +76,12 @@ export const environment = {
   api_conversions: `${apiEvamed}${conversion}`,
   api_db_material: `${apiEvamed}${dbMaterial}`,
   firebaseConfig: {
-    apiKey: 'AIzaSyAiYvITU78Lq3ixhRlf84BVKDyzgBQmqsw',
-    authDomain: 'evamed-b4a5e.firebaseapp.com',
-    projectId: 'evamed-b4a5e',
-    storageBucket: 'evamed-b4a5e.appspot.com',
-    messagingSenderId: '1002649233755',
-    appId: '1:1002649233755:web:18da85b6d4d502d8b5127e',
-    measurementId: 'G-PM8R9P6HXQ',
+    apiKey: "AIzaSyC3t_NpPrGwj7i26j5cfIQCt1aaq3f9k-I",
+    authDomain: "evamed-ac3f8.firebaseapp.com",
+    projectId: "evamed-ac3f8",
+    storageBucket: "evamed-ac3f8.firebasestorage.app",
+    messagingSenderId: "511289930174",
+    appId: "1:511289930174:web:25abc474c59e76ae3e89ef",
+    measurementId: "G-DXRYB3RM3H",
   },
 };
