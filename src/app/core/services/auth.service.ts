@@ -24,29 +24,29 @@ export class AuthService {
   ) { }
 
   createUser(email: string, password: string) {
-    return this.af.auth.createUserWithEmailAndPassword(email, password);
+    return this.af.createUserWithEmailAndPassword(email, password);
   }
 
   login(email: string, password: string) {
-    return this.af.auth.signInWithEmailAndPassword(email, password);
+    return this.af.signInWithEmailAndPassword(email, password);
   }
 
   logout() {
-    return this.af.auth.signOut();
+    return this.af.signOut();
   }
-  
+
   // Recuperar contraseña
   resetPassword(email): Promise<void> {
-     return this.af.auth.sendPasswordResetEmail(email);
+     return this.af.sendPasswordResetEmail(email);
   }
-  
+
   // Verificar correo
   verifyEmail(): Promise<void> {
-     return this.af.auth.currentUser.sendEmailVerification();
+     return this.af.currentUser.then(u => u.sendEmailVerification());
    }
    // Verificar usuario
    isEmailVerified() {
-     return this.af.auth.currentUser.emailVerified;
+     return this.af.currentUser.then(u => u.emailVerified);
    }
   hasUser() {
     return this.af.authState;

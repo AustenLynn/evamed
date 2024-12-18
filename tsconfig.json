@@ -18,7 +18,9 @@
   },
   "angularCompilerOptions": {
     "enableIvy": false,
+    "importHelpers": true,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
+    "allowSyntheticDefaultImports": true,
   }
 }
