@@ -24,6 +24,7 @@
     "@angular/compiler-cli": "~9.1.9",
     "@angular/core": "~9.1.9",
     "@angular/forms": "~9.1.9",
+    "@angular/localize": "^9.1.13",
     "@angular/material": "^9.2.4",
     "@angular/platform-browser": "~9.1.9",
     "@angular/platform-browser-dynamic": "~9.1.9",
@@ -42,9 +43,9 @@
     "rxjs-compat": "^6.6.3",
     "swiper": "^5.4.5",
     "tslib": "^1.10.0",
-    "zone.js": "~0.10.2",
     "typescript": "~3.8.3",
-    "xlsx": "^0.16.7"
+    "xlsx": "^0.16.7",
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.7",
