@@ -15,38 +15,32 @@ import { DeleteMaterialComponent } from './components/delete-material/delete-mat
 import { DeleteDataSchemeComponent } from './components/delete-data-scheme/delete-data-scheme.component';
 
 @NgModule({
-  declarations: [
-    MaterialsAdminComponent,
-    AddMaterialComponent,
-    UpdateMaterialComponent,
-    UpdateDataSchemeComponent,
-    AddDataSchemeComponent,
-    DeleteMaterialComponent,
-    DeleteDataSchemeComponent,
-  ],
-  imports: [
-    CommonModule,
-    MaterialsAdminRoutingModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    ChartsModule,
-  ],
-  exports: [
-    MaterialsAdminComponent,
-    AddMaterialComponent,
-    UpdateMaterialComponent,
-    UpdateDataSchemeComponent,
-    AddDataSchemeComponent,
-    DeleteMaterialComponent,
-    DeleteDataSchemeComponent,
-  ],
-  entryComponents: [
-    UpdateDataSchemeComponent,
-    AddDataSchemeComponent,
-    DeleteMaterialComponent,
-    DeleteDataSchemeComponent,
-  ],
+    declarations: [
+        MaterialsAdminComponent,
+        AddMaterialComponent,
+        UpdateMaterialComponent,
+        UpdateDataSchemeComponent,
+        AddDataSchemeComponent,
+        DeleteMaterialComponent,
+        DeleteDataSchemeComponent,
+    ],
+    imports: [
+        CommonModule,
+        MaterialsAdminRoutingModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ChartsModule,
+    ],
+    exports: [
+        MaterialsAdminComponent,
+        AddMaterialComponent,
+        UpdateMaterialComponent,
+        UpdateDataSchemeComponent,
+        AddDataSchemeComponent,
+        DeleteMaterialComponent,
+        DeleteDataSchemeComponent,
+    ]
 })
 export class MaterialsAdminModule {}

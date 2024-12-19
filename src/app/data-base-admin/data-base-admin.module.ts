@@ -12,31 +12,26 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  declarations: [
-    DataBaseAdminComponent,
-    AddDataBaseComponent,
-    UpdateDataBaseComponent,
-    DeleteDataBaseComponent,
-  ],
-  imports: [
-    CommonModule,
-    DataBaseAdminRoutingModule,
-    SharedModule,
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ChartsModule,
-  ],
-  exports: [
-    DataBaseAdminComponent,
-    AddDataBaseComponent,
-    UpdateDataBaseComponent,
-    DeleteDataBaseComponent,
-  ],
-  entryComponents: [
-    AddDataBaseComponent,
-    UpdateDataBaseComponent,
-    DeleteDataBaseComponent,
-  ],
+    declarations: [
+        DataBaseAdminComponent,
+        AddDataBaseComponent,
+        UpdateDataBaseComponent,
+        DeleteDataBaseComponent,
+    ],
+    imports: [
+        CommonModule,
+        DataBaseAdminRoutingModule,
+        SharedModule,
+        MaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ChartsModule,
+    ],
+    exports: [
+        DataBaseAdminComponent,
+        AddDataBaseComponent,
+        UpdateDataBaseComponent,
+        DeleteDataBaseComponent,
+    ]
 })
 export class DataBaseAdminModule {}

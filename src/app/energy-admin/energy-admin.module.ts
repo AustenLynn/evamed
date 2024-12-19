@@ -15,39 +15,32 @@ import { MaterialModule } from '../material/material.module';
 import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  declarations: [
-    EnergyAdminComponent,
-    AddEnergyComponent,
-    DeleteEnergyComponent,
-    UpdateEnergyComponent,
-    AddPotentialEnergyComponent,
-    DeletePotentialEnergyComponent,
-    UpdatePotentialEnergyComponent,
-  ],
-  imports: [
-    CommonModule,
-    EnergyAdminRoutingModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    ChartsModule,
-  ],
-  exports: [
-    EnergyAdminComponent,
-    AddEnergyComponent,
-    DeleteEnergyComponent,
-    UpdateEnergyComponent,
-    AddPotentialEnergyComponent,
-    DeletePotentialEnergyComponent,
-    UpdatePotentialEnergyComponent,
-  ],
-  entryComponents: [
-    AddEnergyComponent,
-    DeleteEnergyComponent,
-    AddPotentialEnergyComponent,
-    DeletePotentialEnergyComponent,
-    UpdatePotentialEnergyComponent,
-  ],
+    declarations: [
+        EnergyAdminComponent,
+        AddEnergyComponent,
+        DeleteEnergyComponent,
+        UpdateEnergyComponent,
+        AddPotentialEnergyComponent,
+        DeletePotentialEnergyComponent,
+        UpdatePotentialEnergyComponent,
+    ],
+    imports: [
+        CommonModule,
+        EnergyAdminRoutingModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ChartsModule,
+    ],
+    exports: [
+        EnergyAdminComponent,
+        AddEnergyComponent,
+        DeleteEnergyComponent,
+        UpdateEnergyComponent,
+        AddPotentialEnergyComponent,
+        DeletePotentialEnergyComponent,
+        UpdatePotentialEnergyComponent,
+    ]
 })
 export class EnergyAdminModule {}

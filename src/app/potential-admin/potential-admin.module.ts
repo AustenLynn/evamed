@@ -12,31 +12,26 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  declarations: [
-    PotentialAdminComponent,
-    AddPotentialComponent,
-    UpdatePotentialComponent,
-    DeletePotentialComponent,
-  ],
-  imports: [
-    CommonModule,
-    PotentialAdminRoutingModule,
-    SharedModule,
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ChartsModule,
-  ],
-  exports: [
-    PotentialAdminComponent,
-    AddPotentialComponent,
-    UpdatePotentialComponent,
-    DeletePotentialComponent,
-  ],
-  entryComponents: [
-    AddPotentialComponent,
-    UpdatePotentialComponent,
-    DeletePotentialComponent,
-  ],
+    declarations: [
+        PotentialAdminComponent,
+        AddPotentialComponent,
+        UpdatePotentialComponent,
+        DeletePotentialComponent,
+    ],
+    imports: [
+        CommonModule,
+        PotentialAdminRoutingModule,
+        SharedModule,
+        MaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ChartsModule,
+    ],
+    exports: [
+        PotentialAdminComponent,
+        AddPotentialComponent,
+        UpdatePotentialComponent,
+        DeletePotentialComponent,
+    ]
 })
 export class PotentialAdminModule {}

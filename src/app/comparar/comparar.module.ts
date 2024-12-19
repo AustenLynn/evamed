@@ -23,40 +23,32 @@ import { ImageEdificioComponent } from '../image-edificio/image-edificio.compone
 
 
 @NgModule({
-  declarations: [
-    CompararComponent,
-    PieChartComponent,
-    RadialChartComponent,
-    BarChartComponent,
-    BarChartSimpleComponent,
-    GraficasTercerSeccionComponent,
-    ImageEdificioComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    CompararRoutingModule,
-    MaterialModule,
-    FormsModule,
-    ChartsModule,
-    MatTabsModule,
-    MatMenuModule,
-    MatButtonToggleModule,
-    MatSelectModule,
-    ScrollingModule,
-    MatCheckboxModule,
-    MatSlideToggleModule
-  ],
-  exports: [
-    CompararComponent,
-  ],
-  entryComponents: [
-    BarChartComponent,
-    RadialChartComponent,
-    PieChartComponent,
-    BarChartSimpleComponent,
-    GraficasTercerSeccionComponent,
-    ImageEdificioComponent
-  ]
+    declarations: [
+        CompararComponent,
+        PieChartComponent,
+        RadialChartComponent,
+        BarChartComponent,
+        BarChartSimpleComponent,
+        GraficasTercerSeccionComponent,
+        ImageEdificioComponent,
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        CompararRoutingModule,
+        MaterialModule,
+        FormsModule,
+        ChartsModule,
+        MatTabsModule,
+        MatMenuModule,
+        MatButtonToggleModule,
+        MatSelectModule,
+        ScrollingModule,
+        MatCheckboxModule,
+        MatSlideToggleModule
+    ],
+    exports: [
+        CompararComponent,
+    ]
 })
 export class CompararModule { }

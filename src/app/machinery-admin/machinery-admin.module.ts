@@ -15,39 +15,32 @@ import { MaterialModule } from '../material/material.module';
 import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-  declarations: [
-    MachineryAdminComponent,
-    AddMachineryComponent,
-    UpdateMachineryComponent,
-    DeleteMachineryComponent,
-    UpdatePotentialMachineryComponent,
-    AddPotentialMachineryComponent,
-    DeletePotentialMachineryComponent,
-  ],
-  imports: [
-    CommonModule,
-    MachineryAdminRoutingModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    ChartsModule,
-  ],
-  exports: [
-    MachineryAdminComponent,
-    AddMachineryComponent,
-    UpdateMachineryComponent,
-    DeleteMachineryComponent,
-    UpdatePotentialMachineryComponent,
-    AddPotentialMachineryComponent,
-    DeletePotentialMachineryComponent,
-  ],
-  entryComponents: [
-    AddMachineryComponent,
-    DeleteMachineryComponent,
-    UpdatePotentialMachineryComponent,
-    AddPotentialMachineryComponent,
-    DeletePotentialMachineryComponent,
-  ],
+    declarations: [
+        MachineryAdminComponent,
+        AddMachineryComponent,
+        UpdateMachineryComponent,
+        DeleteMachineryComponent,
+        UpdatePotentialMachineryComponent,
+        AddPotentialMachineryComponent,
+        DeletePotentialMachineryComponent,
+    ],
+    imports: [
+        CommonModule,
+        MachineryAdminRoutingModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ChartsModule,
+    ],
+    exports: [
+        MachineryAdminComponent,
+        AddMachineryComponent,
+        UpdateMachineryComponent,
+        DeleteMachineryComponent,
+        UpdatePotentialMachineryComponent,
+        AddPotentialMachineryComponent,
+        DeletePotentialMachineryComponent,
+    ]
 })
 export class MachineryAdminModule {}

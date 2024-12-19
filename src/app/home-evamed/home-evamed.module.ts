@@ -16,34 +16,29 @@ import { ChartsModule } from 'ng2-charts';
 import { ChangeNameProjectComponent } from './components/change-name-project/change-name-project.component';
 
 @NgModule({
-  declarations: [
-    HomeEvamedComponent,
-    AddNewProjectComponent,
-    ChooseTypeOfProjectComponent,
-    ChangeNameProjectComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    HomeEvamedRoutingModule,
-    MaterialModule,
-    FormsModule,
-    MatTabsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatButtonToggleModule,
-    ChartsModule,
-  ],
-  exports: [
-    HomeEvamedComponent,
-    AddNewProjectComponent,
-    ChooseTypeOfProjectComponent,
-    ChangeNameProjectComponent,
-  ],
-  entryComponents: [
-    AddNewProjectComponent,
-    ChooseTypeOfProjectComponent,
-    ChangeNameProjectComponent,
-  ],
+    declarations: [
+        HomeEvamedComponent,
+        AddNewProjectComponent,
+        ChooseTypeOfProjectComponent,
+        ChangeNameProjectComponent,
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        HomeEvamedRoutingModule,
+        MaterialModule,
+        FormsModule,
+        MatTabsModule,
+        MatButtonModule,
+        MatIconModule,
+        MatButtonToggleModule,
+        ChartsModule,
+    ],
+    exports: [
+        HomeEvamedComponent,
+        AddNewProjectComponent,
+        ChooseTypeOfProjectComponent,
+        ChangeNameProjectComponent,
+    ]
 })
 export class HomeEvamedModule {}

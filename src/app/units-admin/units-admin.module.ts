@@ -12,27 +12,26 @@ import { UpdateUnitComponent } from './components/update-unit/update-unit.compon
 import { DeleteUnitComponent } from './components/delete-unit/delete-unit.component';
 
 @NgModule({
-  declarations: [
-    UnitsAdminComponent,
-    AddUnitComponent,
-    UpdateUnitComponent,
-    DeleteUnitComponent,
-  ],
-  imports: [
-    CommonModule,
-    UnitsAdminRoutingModule,
-    SharedModule,
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ChartsModule,
-  ],
-  exports: [
-    UnitsAdminComponent,
-    AddUnitComponent,
-    UpdateUnitComponent,
-    DeleteUnitComponent,
-  ],
-  entryComponents: [AddUnitComponent, UpdateUnitComponent, DeleteUnitComponent],
+    declarations: [
+        UnitsAdminComponent,
+        AddUnitComponent,
+        UpdateUnitComponent,
+        DeleteUnitComponent,
+    ],
+    imports: [
+        CommonModule,
+        UnitsAdminRoutingModule,
+        SharedModule,
+        MaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ChartsModule,
+    ],
+    exports: [
+        UnitsAdminComponent,
+        AddUnitComponent,
+        UpdateUnitComponent,
+        DeleteUnitComponent,
+    ]
 })
 export class UnitsAdminModule {}

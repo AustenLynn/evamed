@@ -9,16 +9,15 @@ import { IntermedialComponent } from './components/intermedial/intermedial.compo
 import { PassStepComponent } from './components/pass-step/pass-step.component';
 
 @NgModule({
-  declarations: [MaterialStageUpdateComponent, IntermedialComponent, PassStepComponent],
-  imports: [
-    CommonModule,
-    MaterialStageUpdateRoutingModule,
-    SharedModule,
-    FormsModule,
-    MaterialModule,
-    ReactiveFormsModule,
-  ],
-  exports: [MaterialStageUpdateComponent, IntermedialComponent, PassStepComponent],
-  entryComponents: [IntermedialComponent, PassStepComponent],
+    declarations: [MaterialStageUpdateComponent, IntermedialComponent, PassStepComponent],
+    imports: [
+        CommonModule,
+        MaterialStageUpdateRoutingModule,
+        SharedModule,
+        FormsModule,
+        MaterialModule,
+        ReactiveFormsModule,
+    ],
+    exports: [MaterialStageUpdateComponent, IntermedialComponent, PassStepComponent]
 })
 export class MaterialStageUpdateModule {}

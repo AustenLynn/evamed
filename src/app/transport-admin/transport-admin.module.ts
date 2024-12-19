@@ -15,39 +15,32 @@ import { DeletePotentialTransportComponent } from './components/potential/delete
 import { UpdatePotentialTransportComponent } from './components/potential/update-potential-transport/update-potential-transport.component';
 
 @NgModule({
-  declarations: [
-    TransportAdminComponent,
-    AddTransportComponent,
-    UpdateTransportComponent,
-    DeleteTransportComponent,
-    AddPotentialTransportComponent,
-    DeletePotentialTransportComponent,
-    UpdatePotentialTransportComponent,
-  ],
-  imports: [
-    CommonModule,
-    TransportAdminRoutingModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    ChartsModule,
-  ],
-  exports: [
-    TransportAdminComponent,
-    AddTransportComponent,
-    UpdateTransportComponent,
-    DeleteTransportComponent,
-    AddPotentialTransportComponent,
-    DeletePotentialTransportComponent,
-    UpdatePotentialTransportComponent,
-  ],
-  entryComponents: [
-    AddTransportComponent,
-    DeleteTransportComponent,
-    AddPotentialTransportComponent,
-    DeletePotentialTransportComponent,
-    UpdatePotentialTransportComponent,
-  ],
+    declarations: [
+        TransportAdminComponent,
+        AddTransportComponent,
+        UpdateTransportComponent,
+        DeleteTransportComponent,
+        AddPotentialTransportComponent,
+        DeletePotentialTransportComponent,
+        UpdatePotentialTransportComponent,
+    ],
+    imports: [
+        CommonModule,
+        TransportAdminRoutingModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ChartsModule,
+    ],
+    exports: [
+        TransportAdminComponent,
+        AddTransportComponent,
+        UpdateTransportComponent,
+        DeleteTransportComponent,
+        AddPotentialTransportComponent,
+        DeletePotentialTransportComponent,
+        UpdatePotentialTransportComponent,
+    ]
 })
 export class TransportAdminModule {}

@@ -9,22 +9,19 @@ import { MaterialModule } from './../material/material.module';
 import { PrevStepsComponent } from './components/prev-steps/prev-steps.component';
 
 @NgModule({
-  declarations: [
-    ToDoFileComponent,
-    PrevStepsComponent
-  ],
-  imports: [
-    CommonModule,
-    ToDoFileRoutingModule,
-    SharedModule,
-    FormsModule,
-    MaterialModule,
-  ],
-  exports: [
-    PrevStepsComponent
-  ],
-  entryComponents: [
-    PrevStepsComponent
-  ]
+    declarations: [
+        ToDoFileComponent,
+        PrevStepsComponent
+    ],
+    imports: [
+        CommonModule,
+        ToDoFileRoutingModule,
+        SharedModule,
+        FormsModule,
+        MaterialModule,
+    ],
+    exports: [
+        PrevStepsComponent
+    ]
 })
 export class ToDoFileModule { }
