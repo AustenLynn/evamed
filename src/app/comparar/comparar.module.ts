@@ -50,5 +50,13 @@ import { ImageEdificioComponent } from '../image-edificio/image-edificio.compone
   exports: [
     CompararComponent,
   ],
+  entryComponents: [
+    BarChartComponent,
+    RadialChartComponent,
+    PieChartComponent,
+    BarChartSimpleComponent,
+    GraficasTercerSeccionComponent,
+    ImageEdificioComponent
+  ]
 })
 export class CompararModule { }

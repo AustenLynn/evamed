@@ -32,7 +32,7 @@ import { Calculos } from '../../../calculos/calculos';
 import { CalculosSegundaSeccion } from 'src/app/calculos/calculos-segunda-seccion';
 import { CalculosTercerSeccion } from 'src/app/calculos/calculos-tercer-seccion';
 import { UserService } from 'src/app/core/services/user/user.service';
-import { createThis } from 'typescript';
+//import { createThis } from 'typescript';
 
 @Component({
   selector: 'app-comparar',
@@ -49,16 +49,7 @@ import { createThis } from 'typescript';
     ]),
   ],
 })
-@NgModule({
-  entryComponents: [
-    BarChartComponent,
-    RadialChartComponent,
-    PieChartComponent,
-    BarChartSimpleComponent,
-    GraficasTercerSeccionComponent,
-    ImageEdificioComponent
-  ],
-})
+
 export class CompararComponent implements OnInit {
   barChartComponent = BarChartComponent;
   radialChart = RadialChartComponent;
@@ -490,7 +481,7 @@ export class CompararComponent implements OnInit {
       flagPie: true,
       fragBar: false,
     };
-    
+
     if (this.Elementos_constructivos) {
       this.iniciarSeccionTres();
     }
@@ -1046,7 +1037,7 @@ export class CompararComponent implements OnInit {
       let analisisPie = this.getAnalisisPie(id,data);
       let analisisPieBarDos = this.getAnalisisPieBarSegunaSeccion(id);
       let analisisPieTres = this.getAnalisisElementos(id);
-      
+
       //sección uno
       this.outproyect_bar.push(analisis);
       this.outproyect_radar.push(analisisRad);
@@ -1992,7 +1983,7 @@ export class CompararComponent implements OnInit {
                 });
               }
             });
-          });    
+          });
           this.flagMaterialesDispercion = true;
           this.flagSinMaterialesDispercion = false;
         }
