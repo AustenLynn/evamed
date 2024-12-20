@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+//import { AngularFireAuth } from '@angular/fire/auth';
+import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  UserCredential, signOut, sendPasswordResetEmail, sendEmailVerification,} from '@angular/fire/auth';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { timeout, retry, catchError, switchMap, finalize, tap  } from 'rxjs/operators';
 import { TokenService } from './token.service';
 import { of } from 'rxjs';
-import { _throw } from 'rxjs/observable/throw';
+//import { _throw } from 'rxjs/observable/throw';
 
 @Injectable({
   providedIn: 'root'
@@ -18,38 +20,39 @@ export class AuthService {
   response: {};
 
   constructor(
-    private af: AngularFireAuth,
+    //private af: AngularFireAuth,
+    private auth: Auth,
     private http: HttpClient,
     private token: TokenService
   ) { }
 
   createUser(email: string, password: string) {
-    return this.af.createUserWithEmailAndPassword(email, password);
+    return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  login(email: string, password: string) {
-    return this.af.signInWithEmailAndPassword(email, password);
+  login(email: string, password: string): Promise<UserCredential> {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
   logout() {
-    return this.af.signOut();
+    return signOut(this.auth);
   }
 
   // Recuperar contraseña
   resetPassword(email): Promise<void> {
-     return this.af.sendPasswordResetEmail(email);
+     return sendPasswordResetEmail(this.auth, email);
   }
 
   // Verificar correo
   verifyEmail(): Promise<void> {
-     return this.af.currentUser.then(u => u.sendEmailVerification());
+     return sendEmailVerification(this.auth.currentUser);
    }
    // Verificar usuario
    isEmailVerified() {
-     return this.af.currentUser.then(u => u.emailVerified);
+    return this.auth.currentUser.emailVerified;
    }
   hasUser() {
-    return this.af.authState;
+    return authState(this.auth);
   }
 
   loginCoreEVAMED( username: string, password: string ) {
