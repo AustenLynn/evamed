@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { MatListOption } from '@angular/material/list';
-import 'rxjs/add/operator/filter';
+//import 'rxjs/add/operator/filter';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -237,7 +237,7 @@ export class EndLifeStageComponent implements OnInit {
           const schemaFilter = msp.filter(
             (schema) => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('materials-stage');
           } else {
@@ -267,7 +267,7 @@ export class EndLifeStageComponent implements OnInit {
           const schemaFilter = cse.filter(
             (schema) => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('construction-stage');
           } else {
@@ -282,7 +282,7 @@ export class EndLifeStageComponent implements OnInit {
     });
   }
 
-  goToUsageStage() { 
+  goToUsageStage() {
     const dialogRef = this.dialog.open(PassStepComponent, {
       width: '680px',
       data: {},
@@ -297,7 +297,7 @@ export class EndLifeStageComponent implements OnInit {
           const schemaFilter = acr.filter(
             (schema) => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('usage-stage');
           } else {

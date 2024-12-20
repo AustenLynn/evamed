@@ -13,7 +13,7 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { runInThisContext } from 'vm';
 import { element } from 'protractor';
 import { convertToObject } from 'typescript';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+//import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
