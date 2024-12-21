@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 export interface DialogData {
   name_transport: string;
@@ -13,11 +13,11 @@ export interface DialogData {
   styleUrls: ['./add-transport.component.scss'],
 })
 export class AddTransportComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   constructor(
     private materialsService: MaterialsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddTransportComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {

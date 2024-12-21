@@ -4,7 +4,7 @@ import { MaterialsService } from './../../../core/services/materials/materials.s
 import { ProjectsService } from './../../../core/services/projects/projects.service';
 import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AnalisisService } from 'src/app/core/services/analisis/analisis.service';
@@ -70,7 +70,7 @@ export class MaterialStageUpdateComponent implements OnInit {
   mexicaniuh: any;
   description_material_selected: any
 
-  myControl = new FormControl();
+  myControl = new UntypedFormControl();
   options: Material[];
   filteredOptions: Observable<Material[]>;
 

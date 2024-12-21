@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPotentialEnergyComponent } from '../potential/add-potential-energy/add-potential-energy.component';
@@ -13,7 +13,7 @@ import { DeletePotentialEnergyComponent } from '../potential/delete-potential-en
   styleUrls: ['./update-energy.component.scss'],
 })
 export class UpdateEnergyComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   units: any;
 
@@ -33,7 +33,7 @@ export class UpdateEnergyComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private activatedRoute: ActivatedRoute,
     private materialsService: MaterialsService,
     public dialog: MatDialog

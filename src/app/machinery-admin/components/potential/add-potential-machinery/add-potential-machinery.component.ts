@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialsService } from './../../../../core/services/materials/materials.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 export interface DialogData {
   id: number;
@@ -17,7 +17,7 @@ export interface DialogData {
   styleUrls: ['./add-potential-machinery.component.scss'],
 })
 export class AddPotentialMachineryComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   id: string;
 
@@ -37,7 +37,7 @@ export class AddPotentialMachineryComponent implements OnInit {
 
   constructor(
     private materialsService: MaterialsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddPotentialMachineryComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {

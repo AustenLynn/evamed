@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 export interface DialogData {
   name_unit: string;
@@ -13,13 +13,13 @@ export interface DialogData {
   styleUrls: ['./update-unit.component.scss'],
 })
 export class UpdateUnitComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   id: string;
 
   constructor(
     private materialsService: MaterialsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<UpdateUnitComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {

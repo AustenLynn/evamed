@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialsService } from './../../../../core/services/materials/materials.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 export interface DialogData {
   id: number;
@@ -17,7 +17,7 @@ export interface DialogData {
   styleUrls: ['./update-potential-energy.component.scss'],
 })
 export class UpdatePotentialEnergyComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   id: string;
 
@@ -39,7 +39,7 @@ export class UpdatePotentialEnergyComponent implements OnInit {
 
   constructor(
     private materialsService: MaterialsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<UpdatePotentialEnergyComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {

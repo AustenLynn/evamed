@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { UpdateDataSchemeComponent } from 'src/app/materials-admin/components/update-data-scheme/update-data-scheme.component';
 
 export interface DialogData {
@@ -14,13 +14,13 @@ export interface DialogData {
   styleUrls: ['./update-data-base.component.scss'],
 })
 export class UpdateDataBaseComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   id: string;
 
   constructor(
     private materialsService: MaterialsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<UpdateDataSchemeComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {

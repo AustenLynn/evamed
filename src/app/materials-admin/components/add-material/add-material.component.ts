@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { MaterialsService } from './../../../core/services/materials/materials.s
   styleUrls: ['./add-material.component.scss'],
 })
 export class AddMaterialComponent implements OnInit {
-  addMaterialForm: FormGroup;
+  addMaterialForm: UntypedFormGroup;
 
   units: any;
 
@@ -17,7 +17,7 @@ export class AddMaterialComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private materialsService: MaterialsService
   ) {
     this.buildForm();

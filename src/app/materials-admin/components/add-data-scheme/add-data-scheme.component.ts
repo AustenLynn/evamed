@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { AnalisisService } from '../../../core/services/analisis/analisis.service';
 
 export interface DialogData {
@@ -19,7 +19,7 @@ export interface DialogData {
   styleUrls: ['./add-data-scheme.component.scss'],
 })
 export class AddDataSchemeComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   id: string;
 
@@ -44,7 +44,7 @@ export class AddDataSchemeComponent implements OnInit {
   constructor(
     private materialsService: MaterialsService,
     private analisisService: AnalisisService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddDataSchemeComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {

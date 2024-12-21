@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { AnalisisService } from './../../../core/services/analisis/analisis.service';
 import { UpdateDataSchemeComponent } from '../update-data-scheme/update-data-scheme.component';
@@ -14,7 +14,7 @@ import { DeleteDataSchemeComponent } from '../delete-data-scheme/delete-data-sch
   styleUrls: ['./update-material.component.scss'],
 })
 export class UpdateMaterialComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   id: string;
 
@@ -41,7 +41,7 @@ export class UpdateMaterialComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private activatedRoute: ActivatedRoute,
     private materialsService: MaterialsService,
     private analisisService: AnalisisService,

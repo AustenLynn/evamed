@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPotentialTransportComponent } from '../potential/add-potential-transport/add-potential-transport.component';
@@ -13,7 +13,7 @@ import { DeletePotentialTransportComponent } from '../potential/delete-potential
   styleUrls: ['./update-transport.component.scss'],
 })
 export class UpdateTransportComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   id: string;
 
@@ -25,7 +25,7 @@ export class UpdateTransportComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private activatedRoute: ActivatedRoute,
     private materialsService: MaterialsService,
     public dialog: MatDialog

@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialsService } from './../../../../core/services/materials/materials.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 export interface DialogData {
   potential_type_id: number;
@@ -15,7 +15,7 @@ export interface DialogData {
   styleUrls: ['./add-potential-transport.component.scss'],
 })
 export class AddPotentialTransportComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   transport_id: number;
 
@@ -23,7 +23,7 @@ export class AddPotentialTransportComponent implements OnInit {
 
   constructor(
     private materialsService: MaterialsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddPotentialTransportComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
