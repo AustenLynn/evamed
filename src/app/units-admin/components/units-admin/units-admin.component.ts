@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 import { AddUnitComponent } from '../add-unit/add-unit.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UpdateUnitComponent } from '../update-unit/update-unit.component';
 import { DeleteUnitComponent } from '../delete-unit/delete-unit.component';
 import { Router } from '@angular/router';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { DeleteEnergyComponent } from '../delete-energy/delete-energy.component';
 import { AddEnergyComponent } from '../add-energy/add-energy.component';
 import { Router } from '@angular/router';

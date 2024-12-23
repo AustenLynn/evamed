@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { AddMachineryComponent } from '../add-machinery/add-machinery.component';
 import { DeleteMachineryComponent } from '../delete-machinery/delete-machinery.component';
 import { Router } from '@angular/router';

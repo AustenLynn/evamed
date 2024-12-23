@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 import { UpdatePotentialComponent } from '../update-potential/update-potential.component';
 import { DeletePotentialComponent } from '../delete-potential/delete-potential.component';

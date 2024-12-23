@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
-import { MatSelectModule } from '@angular/material/select';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import {ScrollingModule} from '@angular/cdk/scrolling';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
 
 import { CompararRoutingModule } from './comparar-routing.module';
 import { CompararComponent } from './component/comparar/comparar.component';
@@ -17,7 +17,7 @@ import { RadialChartComponent } from '../radial-chart/radial-chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { BarChartComponent } from '../bar-chart/bar-chart.component';
 import { BarChartSimpleComponent } from '../bar-chart-simple/bar-chart-simple.component';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
 import { GraficasTercerSeccionComponent } from './component/graficas-tercer-seccion/graficas-tercer-seccion.component';
 import { ImageEdificioComponent } from '../image-edificio/image-edificio.component';
 
