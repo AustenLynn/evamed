@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatLegacyListOption as MatListOption } from '@angular/material/legacy-list';
+import { MatListOption } from '@angular/material/list';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { ProjectsService } from './../../../core/services/projects/projects.service';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AddConstructiveElementComponent } from '../add-constructive-element/add-constructive-element.component';
 import { AddConstructiveSystemComponent } from '../add-constructive-system/add-constructive-system.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AnalisisService } from 'src/app/core/services/analisis/analisis.service';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 

@@ -317,7 +317,7 @@ span.title {
   height: 16px;
 }
 
-table.mat-elevation-z8.data-info.mat-table {
+table.mat-elevation-z8.data-info.mat-mdc-table {
   width: max-content !important;
   border: 1px solid #97969c !important;
 }
@@ -327,8 +327,8 @@ table.mat-elevation-z8.data-info.mat-table {
   font-weight: 800;
 }
 
-th.mat-header-cell:first-of-type,
-td.mat-cell:first-of-type,
-td.mat-footer-cell:first-of-type {
+th.mat-mdc-header-cell:first-of-type,
+td.mat-mdc-cell:first-of-type,
+td.mat-mdc-footer-cell:first-of-type {
   padding-right: 24px !important;
 }

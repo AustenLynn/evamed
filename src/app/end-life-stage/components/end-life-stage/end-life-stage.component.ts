@@ -3,11 +3,11 @@ import { EndLifeService } from './../../../core/services/end-life/end-life.servi
 import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { MatLegacyListOption as MatListOption } from '@angular/material/legacy-list';
+import { MatListOption } from '@angular/material/list';
 //import 'rxjs/add/operator/filter';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { IntermedialComponent } from '../intermedial/intermedial.component';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 

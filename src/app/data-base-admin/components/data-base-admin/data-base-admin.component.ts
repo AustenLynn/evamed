@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AddDataBaseComponent } from '../add-data-base/add-data-base.component';
 import { UpdateDataBaseComponent } from '../update-data-base/update-data-base.component';
 import { DeleteDataBaseComponent } from '../delete-data-base/delete-data-base.component';

@@ -4,7 +4,7 @@ import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 import { ElectricitConsumptionService } from './../../../core/services/electricity-consumption/electricit-consumption.service';
 import { IntermedialComponent } from '../intermedial/intermedial.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 
 @Component({

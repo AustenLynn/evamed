@@ -29,7 +29,7 @@
     </div>
     <div>
       <div *ngFor="let item of proyectosMostrados;let i = index" class="button-graph">
-        <mat-card class="card">
+        <mat-card appearance="outlined" class="card">
           {{item.num}}
           <button mat-icon-button (click)="quitarProyecto(item.id)"><mat-icon>highlight_off</mat-icon></button>
           {{item.Nombre}}
@@ -37,7 +37,7 @@
       </div>
     </div>
   </div>
-  <mat-card class="mat-master">
+  <mat-card appearance="outlined" class="mat-master">
       <mat-tab-group mat-stretch-tabs class="container-principal-tab" (selectedIndexChange)="show($event)" (animationDone)="finShow()">
         <mat-tab>
           <ng-template mat-tab-label>

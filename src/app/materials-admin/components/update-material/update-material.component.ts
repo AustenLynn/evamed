@@ -4,7 +4,7 @@ import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { AnalisisService } from './../../../core/services/analisis/analisis.service';
 import { UpdateDataSchemeComponent } from '../update-data-scheme/update-data-scheme.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AddDataSchemeComponent } from '../add-data-scheme/add-data-scheme.component';
 import { DeleteDataSchemeComponent } from '../delete-data-scheme/delete-data-scheme.component';
 

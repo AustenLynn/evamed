@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Router } from '@angular/router';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AddNewProjectComponent } from '../add-new-project/add-new-project.component';
 import { ChooseTypeOfProjectComponent } from '../choose-type-of-project/choose-type-of-project.component';
 import { ProjectsService } from './../../../core/services/projects/projects.service';

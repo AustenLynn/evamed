@@ -4,7 +4,7 @@
   margin-bottom: 50px;
 }
 
-.mat-dialog-content.dialog-content {
+.mat-mdc-dialog-content.dialog-content {
   margin-top: -24px;
   display: block!important;
   text-align: center!important;
@@ -15,7 +15,8 @@ h3.title-common {
   font-weight: 300;
 }
 
-mat-radio-group.mat-radio-group.example-radio-group {
+/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
+mat-radio-group.mat-mdc-radio-group.example-radio-group {
   display: flex;
   justify-content: space-around;
   background-color: #A8D024;
@@ -25,10 +26,12 @@ mat-radio-group.mat-radio-group.example-radio-group {
   margin-left: -24px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
 mat-radio-button {
   padding: 14px!important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
 .mat-radio-checked {
   background-color: #FFF;
   color: #EDC903;

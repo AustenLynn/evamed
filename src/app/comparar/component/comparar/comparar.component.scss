@@ -26,6 +26,7 @@
   }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 ::ng-deep .mat-tab-label .mat-tab-label-content {
   font-size: 12px;
 }
@@ -173,6 +174,7 @@ Fases-ciclo {
   background: #efefef;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 mat-select {
   width: 218px;
   height: 40px;
@@ -197,6 +199,7 @@ mat-select {
 .example-margin {
   margin: 0 10px;
 }
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 ::ng-deep .mat-checkbox-checked .mat-checkbox-background,
 .mat-checkbox-indeterminate .mat-checkbox-background {
   background-color: #a8d024 !important;

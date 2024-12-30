@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'xlsx';
 import { FileSaverService } from 'ngx-filesaver';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { PrevStepsComponent } from 'src/app/to-do-file/components/prev-steps/prev-steps.component';
 import { ViewChild, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
 type AOA = any[][];

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AddPotentialEnergyComponent } from '../potential/add-potential-energy/add-potential-energy.component';
 import { UpdatePotentialEnergyComponent } from '../potential/update-potential-energy/update-potential-energy.component';
 import { DeletePotentialEnergyComponent } from '../potential/delete-potential-energy/delete-potential-energy.component';

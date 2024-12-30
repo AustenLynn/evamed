@@ -22,7 +22,7 @@
         <div class="message-plus">Crea tu primer proyecto</div>
       </div>
     </div>
-    <mat-card *ngFor="let project of projectsList; let i = index" class="card-project">
+    <mat-card appearance="outlined" *ngFor="let project of projectsList; let i = index" class="card-project">
       <div class="header-tag">
         <div class="more-vert">
           <button
@@ -65,6 +65,7 @@
               <mat-tab label="Producción" class="label-second-tab">
                 <section class="grid-container"  >
                   <mat-card
+                    appearance="outlined"
                     class="card-item-custom"
                     *ngFor="let section of serchSections(project.id)"
                     (click)="updateMaterial(project.id)"
@@ -79,6 +80,7 @@
               <mat-tab label="Construcción" class="label-second-tab">
                 <section class="grid-container">
                   <mat-card
+                    appearance="outlined"
                     class="card-item-custom"
                     *ngFor="let section of serchConstructiveSection(project.id)"
                     (click)="updateConstruction(project.id)"
@@ -129,6 +131,7 @@
               <mat-tab label="Fin de vida" class="label-second-tab">
                 <section class="grid-container">
                   <mat-card
+                    appearance="outlined"
                     class="card-item-custom"
                     *ngFor="let section of serchEndLifeSection(project.id)"
                     (click)="updateEndLife(project.id)"
@@ -365,7 +368,7 @@
     </mat-card>
   </div>
   <div class="description-container">
-    <mat-card class="user-card">
+    <mat-card appearance="outlined" class="user-card">
       <mat-card-header class="image-container">
         <div mat-card-avatar class="profile-image"></div>
       </mat-card-header>
@@ -397,9 +400,9 @@
           class="yellow-button"
           (click)="goToAdmin()"
         >
-        Administrador 
+        Administrador
       </button>
-      
+
     </mat-card-actions>
       <mat-card-actions class="content-logout-button">
         <button

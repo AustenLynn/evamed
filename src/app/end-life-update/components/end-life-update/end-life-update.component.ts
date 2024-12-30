@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { MatLegacyListOption as MatListOption } from '@angular/material/legacy-list';
+import { MatDialog } from '@angular/material/dialog';
+import { MatListOption } from '@angular/material/list';
 import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
 import { EndLifeService } from 'src/app/core/services/end-life/end-life.service';

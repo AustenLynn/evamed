@@ -1,4 +1,4 @@
-.mat-card-content.content-estadisticas {
+.mat-mdc-card-content.content-estadisticas {
   display: flex;
   justify-content: center;
   margin-left: -16px;
@@ -7,11 +7,11 @@
   border-top: 1px solid #cbcbcb;
 }
 
-.mat-card-content.content-estadisticas > div {
+.mat-mdc-card-content.content-estadisticas > div {
   padding: 14px;
 }
 
-.mat-card-content.content-estadisticas > div > div:first-child {
+.mat-mdc-card-content.content-estadisticas > div > div:first-child {
   font-weight: bold;
 }
 
@@ -129,6 +129,7 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
   }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 .mat-tab-resultados {
   display: flex;
 
@@ -425,6 +426,7 @@ ul {
   }
 }
 .botones-de-cambio {
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   mat-button-toggle {
     width: 54px;
     height: 40px;
@@ -448,7 +450,7 @@ ul {
   }
 }
 
-.mat-menu-item {
+.mat-mdc-menu-item {
   height: 26px;
   border-bottom: 1px solid #ededed;
   line-height: 1px;
