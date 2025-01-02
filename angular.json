@@ -100,21 +100,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "evamed:build"
+            "buildTarget": "evamed:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "evamed:build:production"
+              "buildTarget": "evamed:build:production"
             },
             "stag": {
-              "browserTarget": "evamed:build:stag"
+              "buildTarget": "evamed:build:stag"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "evamed:build"
+            "buildTarget": "evamed:build"
           }
         },
         "test": {
