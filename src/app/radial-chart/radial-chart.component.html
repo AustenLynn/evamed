@@ -9,10 +9,10 @@
     </mat-card>
     <div>
       <canvas #MyChart='base-chart' #canvas baseChart
-      [datasets]="radarChartData[i]"
+      [data]="radarChartData[i]"
       [options]="radarChartOptions"
       [labels]="radarChartLabels"
-      [chartType]="radarChartType">
+      [type]="radarChartType">
       </canvas>
     </div>
   </div>

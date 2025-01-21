@@ -528,7 +528,7 @@ export class Calculos {
       maxlinea=maxlinea+1;
       numC=numC+1;
     }
-    
+
     //console.log(help);
     return help
   }
@@ -595,11 +595,11 @@ export class Calculos {
     });
     aux = [...aux,
     {
-      data:auxdata,
-      backgroundColor:auxcolor
+      data: auxdata,
+      backgroundColor: auxcolor,
+      hoverBackgroundColor: '#FF829DCC'
     }]
-    let regreso = {datos:aux,labels:auxlabels}
-    return regreso
+    return {datasets: aux, labels: auxlabels}
   }
 
   determinaValorCarbono(data,projectL,idP,UFL){

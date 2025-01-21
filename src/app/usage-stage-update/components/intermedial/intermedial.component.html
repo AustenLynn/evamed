@@ -2,9 +2,9 @@
   <h1 mat-dialog-title class="title-standard-second-light">
     Los datos se han actualizado
   </h1>
-  <a (click)="onNoClick()" class="close-modal">
-    X
-  </a>
+  <button mat-button class="close-icon" [mat-dialog-close]="true" (click)="onNoClick()">
+    <mat-icon style="color: #fff;">close</mat-icon>
+  </button>
 </div>
 
 <div mat-dialog-content>

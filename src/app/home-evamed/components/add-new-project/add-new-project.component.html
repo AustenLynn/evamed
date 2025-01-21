@@ -2,9 +2,9 @@
   <h1 mat-dialog-title class="title-standard-second-light">
     Nuevo proyecto
   </h1>
-  <a (click)="onNoClick()" class="close-modal">
-    X
-  </a>
+  <button mat-button class="close-icon" [mat-dialog-close]="true" (click)="onNoClick()">
+    <mat-icon style="color: #fff;">close</mat-icon>
+  </button>
 </div>
 <div mat-dialog-content>
   <div class="Row">
@@ -17,8 +17,9 @@
           <input
             class="input-general"
             [(ngModel)]="data.nombre"
-            matInput 
+            matInput
             type="text"
+            cdkFocusInitial
           >
         </mat-form-field>
       </div>
@@ -32,7 +33,7 @@
       <div>
         <mat-form-field appearance="outline" class="select-general">
           <mat-label>Seleccione una opción</mat-label>
-          <mat-select [(ngModel)]="data.usoSeleccionado">
+          <mat-select [(ngModel)]="data.usoSeleccionado" hideSingleSelectionIndicator>
             <mat-option *ngFor="let uso of data.catalogoUsos" [value]="uso.id">
               {{uso.name_use}}
             </mat-option>
@@ -47,7 +48,7 @@
       <div>
         <mat-form-field appearance="outline" class="select-general">
           <mat-label>Seleccione una opción</mat-label>
-          <mat-select [(ngModel)]="data.tipoSeleccionado">
+          <mat-select [(ngModel)]="data.tipoSeleccionado" hideSingleSelectionIndicator>
             <mat-option *ngFor="let tipo of data.catalogoTipo" [value]="tipo.id">
               {{tipo.name_type_project}}
             </mat-option>
@@ -64,7 +65,7 @@
       <div>
         <mat-form-field appearance="outline" class="select-general">
           <mat-label>Seleccione una opción</mat-label>
-          <mat-select [(ngModel)]="data.paisSeleccionado">
+          <mat-select [(ngModel)]="data.paisSeleccionado" hideSingleSelectionIndicator>
             <mat-option *ngFor="let pais of data.catalogoPaises" [value]="pais.id">
               {{pais.name_country}}
             </mat-option>
@@ -79,7 +80,7 @@
       <div>
         <mat-form-field appearance="outline" class="select-general">
           <mat-label>Seleccione una opción</mat-label>
-          <mat-select [(ngModel)]="data.esqHabitacionalSeleccionado">
+          <mat-select [(ngModel)]="data.esqHabitacionalSeleccionado" >
             <mat-option *ngFor="let esquema of data.catalogoEsqHabitacional" [value]="esquema.id">
               {{esquema.name_housing_scheme}}
             </mat-option>
@@ -96,7 +97,7 @@
       <div>
         <mat-form-field appearance="outline" class="select-general">
           <mat-label>Seleccione una opción</mat-label>
-          <mat-select [(ngModel)]="data.estadoSeleccionado" (selectionChange)="select(data.estadoSeleccionado)">
+          <mat-select [(ngModel)]="data.estadoSeleccionado" (selectionChange)="select(data.estadoSeleccionado)" hideSingleSelectionIndicator>
             <mat-option *ngFor="let estado of data.catalogoEstados" [value]="estado.id">
               {{estado.name_state}}
             </mat-option>
@@ -111,7 +112,7 @@
       <div>
         <mat-form-field appearance="outline" class="select-general">
           <mat-label>Seleccione una opción</mat-label>
-          <mat-select [(ngModel)]="data.ciudadSeleccionada" >
+          <mat-select [(ngModel)]="data.ciudadSeleccionada" hideSingleSelectionIndicator>
             <mat-option *ngFor="let ciudad of catalogoCiudades" [value]="ciudad.id">
               {{ciudad.name_city}}
             </mat-option>
@@ -123,15 +124,15 @@
   <div class="Row">
     <div class="Col">
       <div class="label-general">
-        Superficie construida(metros cuadrados)
+        Superficie construida (metros cuadrados)
       </div>
       <div>
         <mat-form-field>
           <input
             class="input-general"
-            placeholder="Coloca aquí el nombre del proyecto"
+            placeholder="Ingresa metros cuadrados"
             [(ngModel)]="data.superficieConstruida"
-            matInput 
+            matInput
             type="number"
           >
         </mat-form-field>
@@ -139,15 +140,15 @@
     </div>
     <div class="Col">
       <div class="label-general">
-        Superficie habitable(metros cuadrados)
+        Superficie habitable (metros cuadrados)
       </div>
       <div>
         <mat-form-field>
           <input
             class="input-general"
-            placeholder="Coloca aquí el nombre del proyecto"
+            placeholder="Ingresa superficie habitable"
             [(ngModel)]="data.superficieHabitable"
-            matInput 
+            matInput
             type="number"
           >
         </mat-form-field>
@@ -157,15 +158,15 @@
   <div class="Row">
     <div class="Col">
       <div class="label-general">
-        No. de niveles
+        Número de niveles
       </div>
       <div>
         <mat-form-field>
           <input
             class="input-general"
-            placeholder="Coloca aquí el nombre del proyecto"
+            placeholder="Ingresa número de niveles"
             [(ngModel)]="data.noNiveles"
-            matInput 
+            matInput
             type="number"
           >
         </mat-form-field>
@@ -178,7 +179,7 @@
       <div>
         <mat-form-field appearance="outline" class="select-general">
           <mat-label>Seleccione una opción</mat-label>
-          <mat-select [(ngModel)]="data.vidaUtilSeleccionado">
+          <mat-select [(ngModel)]="data.vidaUtilSeleccionado" hideSingleSelectionIndicator>
             <mat-option *ngFor="let vidaUtil of data.catalogoVidaUtil" [value]="vidaUtil.id">
               {{vidaUtil.name_useful_life}}
             </mat-option>

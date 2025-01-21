@@ -12,7 +12,7 @@ import { UpdatePotentialEnergyComponent } from './components/potential/update-po
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
     declarations: [
@@ -31,8 +31,8 @@ import { ChartsModule } from 'ng2-charts';
         FormsModule,
         ReactiveFormsModule,
         MaterialModule,
-        ChartsModule,
     ],
+    providers: [provideCharts(withDefaultRegisterables())],
     exports: [
         EnergyAdminComponent,
         AddEnergyComponent,

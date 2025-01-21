@@ -6,18 +6,21 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { Label, BaseChartDirective } from 'ng2-charts';
+import { ChartOptions, ChartType, ChartDataset, ChartEvent } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import { CommonModule } from '@angular/common';
 
-import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { runInThisContext } from 'vm';
 import { element } from 'protractor';
-import { convertToObject } from 'typescript';
+//import { convertToObject } from 'typescript';
 //import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
+  standalone: true,
+  imports: [BaseChartDirective, CommonModule],
 })
 export class BarChartComponent implements OnInit {
   @ViewChild('MyChart') chartDir: BaseChartDirective;
@@ -90,11 +93,10 @@ export class BarChartComponent implements OnInit {
 
   public barChartOptions: ChartOptions = {
     responsive: true,
-    title: { display: true },
-    legend: { display: false },
-    tooltips: { enabled: false, mode: 'label' },
-    events: ['touchstart', 'mousemove', 'click'],
     plugins: {
+      title: { display: true },
+      legend: { display: false },
+      tooltip: { enabled: false, mode: 'index' },
       datalabels: {
         color: 'white',
         anchor: 'center',
@@ -105,11 +107,11 @@ export class BarChartComponent implements OnInit {
       },
     },
   };
-  public barChartLabels: Label[];
+  public barChartLabels: BaseChartDirective["labels"];
   public barChartType: ChartType = 'bar';
-  public barChartLegend = true;
+  public barChartLegend = false;
   public barChartPlugins = [
-    pluginDataLabels,
+    ChartDataLabels,
     {
       afterDraw: this.agregaTitulosProyectos.bind(this),
       beforeInit: function (chart) {
@@ -122,8 +124,7 @@ export class BarChartComponent implements OnInit {
     },
   ];
 
-  public barChartData: ChartDataSets[];
-
+  public barChartData: ChartDataset[];
   constructor() {}
 
   ngOnInit(): void {
@@ -134,7 +135,8 @@ export class BarChartComponent implements OnInit {
 
   ngAfterViewInit() {
     // Ya que se inicializa el componente
-    this.canvas = this.chartDir.chart.canvas;
+    //this.canvas = this.chartDir.chart.canvas;
+    this.canvas = this.chartDir.ctx['canvas'];
     this.canvas.addEventListener('mousemove', (e) => {
       this.onHover(e);
     });
@@ -148,49 +150,54 @@ export class BarChartComponent implements OnInit {
     // se se usan porcentajes, limita el eje y de 0 a 100
     if (this.porcentaje) {
       this.barChartOptions.scales = {
-        yAxes: [
-          {
+        y: {
             display: true,
+            beginAtZero: true,
+            stacked: true,
+            max: 100,
             ticks: {
-              beginAtZero: true,
-              max: 100,
-              fontSize: 11,
+
+              font: {
+                size: 11,
+              }
             },
           },
-        ],
-        xAxes: [
-          {
+        x: {
             display: true,
+            beginAtZero: true,
+            stacked: true,
+            max: 100,
             ticks: {
-              beginAtZero: true,
-              max: 100,
-              fontSize: 11,
+              font: {
+                size: 11,
+              }
             },
           },
-        ],
       };
     } else {
       this.barChartOptions.scales = {
-        yAxes: [
-          {
+        y:{
             display: true,
+            beginAtZero: true,
+            stacked: true,
+            max: this.maxValue,
             ticks: {
-              beginAtZero: true,
-              max: this.maxValue,
-              fontSize: 11,
+              font: {
+                size: 11,
+              }
             },
           },
-        ],
-        xAxes: [
-          {
+        x: {
             display: true,
+            beginAtZero: true,
+            stacked: true,
+            max: 100,
             ticks: {
-              beginAtZero: true,
-              max: 100,
-              fontSize: 11,
+              font: {
+                size: 11,
+              }
             },
           },
-        ],
       };
     }
   }
@@ -406,7 +413,10 @@ export class BarChartComponent implements OnInit {
         });
       });
     }
-    this.barChartData = datos;
+    //this.barChartData = datos;
+    this.barChartData['datasets'] = datos;
+    this.barChartData['labels'] = this.barChartLabels;
+
     if (this.Bandera_bar) {
       if (this.impactoAmbiental != null) {
         if (this.elementoConstructivo != ' ') {
@@ -452,7 +462,7 @@ export class BarChartComponent implements OnInit {
           this.centrosX[proyecto] = [];
           this.proyectos = [proyecto, ...this.proyectos];
         }
-        if (x != NaN) {
+        if (!Number.isNaN(x)) {
           if (!this.centrosX[proyecto].includes(x)) {
             this.centrosX[proyecto].push(x);
           }
@@ -473,24 +483,27 @@ export class BarChartComponent implements OnInit {
     });
   }
 
-  private agregaTitulosProyectos(chart: any) {
+  private agregaTitulosProyectos(chart: any, context) {
     // Se agrega los titulos de las barras de varios proyectos (solo cuando son más de uno)
     const ctx = chart.canvas.getContext('2d');
-    const labels = chart['$datalabels']['_labels'];
+    //const labels = chart['$datalabels']['_labels'];
+    const labels = this.barChartLabels;
     const centroY = chart['boxes'][1].height / 2;
 
-    this.iniciaPosiciones(chart);
-    if (chart['$datalabels']['_labels'].length == 0) {
+/*    this.iniciaPosiciones(chart);
+    //if (chart['$datalabels']['_labels'].length == 0) {
+    if (labels.length == 0) {
       return;
     }
-    ctx.font = chart['$datalabels']['_labels'][0]['_ctx'].font; //'30px Comic Sans MS';
+    //ctx.font = chart['$datalabels']['_labels'][0]['_ctx'].font; //'30px Comic Sans MS';
+    ctx.font = labels[0]['_ctx'].font; //'30px Comic Sans MS';
     ctx.fillStyle = 'gray';
     ctx.textAlign = 'center';
     if (this.proyectos.length < 2) {
       return;
     }
     // ctx.clearRect( 0, 0,this.canvas.width, chart['boxes'][1].height*3/4 );
-
+*/
     this.proyectos.forEach((proyecto, index) => {
       this.centrosX[proyecto].forEach((x) => {
         ctx.fillText((index + 1).toString(), x, centroY);
@@ -689,12 +702,10 @@ export class BarChartComponent implements OnInit {
     // Controla el flujo de hover sobre los elementos de las barras
     //console.log(this.showMe);
     if (this.showMe) {
-      if (this.hovered !== null) {
+      if (this.hovered !== null && this.hovered !== undefined) {
         //console.log(this.showMe);
-        const serie =
-          this.chartDir.chart.data.datasets[this.hovered['_datasetIndex']]
-            .label;
-        if (this.hovered.inRange(e.offsetX, e.offsetY)) {
+        const serie = this.chartDir.chart.data.datasets[this.hovered.datasetIndex].label;
+        if (this.hovered.element.inRange(e.offsetX, e.offsetY)) {
           if (this.lastClick !== serie) {
             this.focusSeries(serie);
             this.lastClick = serie;
@@ -713,7 +724,7 @@ export class BarChartComponent implements OnInit {
     if (this.Bandera_bar) {
       let nivelesAux = [];
       let count = -1;
-      this.barChartData.forEach((data, index) => {
+      this.barChartData['datasets'].forEach((data, index) => {
         if (!nivelesAux.includes(data.label)) {
           nivelesAux.push(data.label);
           count += 1;
@@ -723,14 +734,14 @@ export class BarChartComponent implements OnInit {
           count = 0;
         }
         const color = this.auxColor[count];
-        this.barChartData[index].backgroundColor = color;
-        this.barChartData[index].hoverBackgroundColor = color;
+        this.barChartData['datasets'][index].backgroundColor = color;
+        this.barChartData['datasets'][index].hoverBackgroundColor = color;
       });
     } else {
-      this.barChartData.forEach((data, index) => {
+      this.barChartData['datasets'].forEach((data, index) => {
         const color = this.colores[data.label];
-        this.barChartData[index].backgroundColor = color;
-        this.barChartData[index].hoverBackgroundColor = color;
+        this.barChartData['datasets'][index].backgroundColor = color;
+        this.barChartData['datasets'][index].hoverBackgroundColor = color;
       });
     }
 
@@ -741,7 +752,7 @@ export class BarChartComponent implements OnInit {
     // Pone la serie seleccionada de color normal, el resto se pone en blanco y negro
     let count = -1;
     let nivelesAux = [];
-    this.barChartData.forEach((datos, index) => {
+    this.barChartData['datasets'].forEach((datos, index) => {
       let color: any;
       if (this.Bandera_bar) {
         let coloraux = [];
@@ -769,8 +780,8 @@ export class BarChartComponent implements OnInit {
           color = this.colores[datos.label];
         }
       }
-      this.barChartData[index].backgroundColor = color;
-      this.barChartData[index].hoverBackgroundColor = color;
+      this.barChartData['datasets'][index].backgroundColor = color;
+      this.barChartData['datasets'][index].hoverBackgroundColor = color;
     });
     if (this.Bandera_bar) {
     } else {
@@ -778,9 +789,9 @@ export class BarChartComponent implements OnInit {
     }
   }
 
-  public onChartHover(e: any): void {
+  public onChartHover( { event}: { event?: ChartEvent; } ): void {
     // Asigna el elemento de la grafica sobre el cual se hace hover
-    this.hovered = this.chartDir.chart.getElementAtEvent(event)[0];
+    this.hovered = this.chartDir['chart'].getElementsAtEventForMode(event.native, 'nearest', { intersect: true }, false)[0];
 
     // if(!this.hoverIniciado){
     //   this.hoverIniciado = true;

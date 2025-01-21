@@ -1,11 +1,14 @@
 import { Component, Input, OnInit,ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
+import { MatCardModule } from '@angular/material/card';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-radial-chart',
   templateUrl: './radial-chart.component.html',
-  styleUrls: ['./radial-chart.component.scss']
+  styleUrls: ['./radial-chart.component.scss'],
+  standalone: true,
+  imports: [BaseChartDirective, MatCardModule],
 })
 export class RadialChartComponent implements OnInit {
   @ViewChild('MyChart') chartDir: BaseChartDirective;
@@ -167,7 +170,7 @@ export class RadialChartComponent implements OnInit {
       maxlinea=maxlinea+1;
       numC=numC+1;
     }
-    
+
     return help
   }
 

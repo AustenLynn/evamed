@@ -2,9 +2,9 @@
   <h1 mat-dialog-title class="title-standard-second-light">
     Nuevo sistema constructivo
   </h1>
-  <a (click)="onNoClick()" class="close-modal">
-    X
-  </a>
+  <button mat-button class="close-icon" [mat-dialog-close]="true" (click)="onNoClick()">
+    <mat-icon style="color: #fff;">close</mat-icon>
+  </button>
 </div>
 <div mat-dialog-content>
   <div class="Row">
@@ -17,8 +17,9 @@
           <input
             class="input-general"
             [(ngModel)]="data.newConstructiveSystem"
-            matInput 
+            matInput
             type="text"
+            cdkFocusInitial
           >
         </mat-form-field>
       </div>

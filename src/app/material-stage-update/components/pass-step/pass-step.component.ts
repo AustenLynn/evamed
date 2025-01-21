@@ -5,6 +5,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   selector: 'app-pass-step',
   templateUrl: './pass-step.component.html',
   styleUrls: ['./pass-step.component.scss'],
+  host: {
+    'stage': 'material-stage-update'
+  }
 })
 export class PassStepComponent implements OnInit {
   constructor(

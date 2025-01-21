@@ -3,9 +3,9 @@
   <h1 mat-dialog-title class="title-standard-second-light">
     Selecciona el tipo de evaluación a realizar
   </h1>
-  <a (click)="onNoClick()" class="close-modal">
-    X
-  </a>
+  <button mat-button class="close-icon" [mat-dialog-close]="true" (click)="onNoClick()">
+    <mat-icon style="color: #fff;">close</mat-icon>
+  </button>
 </div>
 <!-- Close Header modal-->
 <!--Cuerpo de modal-->

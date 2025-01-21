@@ -58,7 +58,8 @@ export class AuthService {
   loginCoreEVAMED( username: string, password: string ) {
 
     return this.http.post<any>(
-      'http://127.0.0.1:8000/api-profiles/login/',
+      //'http://127.0.0.1:8000/api-profiles/login/',
+      'http://10.2.102.118:8000/api-profiles/login/',
       { username, password }
     ).pipe(
       tap((data: { token: string }) => {

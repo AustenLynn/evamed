@@ -7,6 +7,9 @@ import { MaterialsService } from './../../../core/services/materials/materials.s
   selector: 'app-intermedial',
   templateUrl: './intermedial.component.html',
   styleUrls: ['./intermedial.component.scss'],
+  host: {
+    'stage': 'usage-stage'
+  }
 })
 export class IntermedialComponent implements OnInit {
   constructor(

@@ -53,7 +53,7 @@
         <img *ngSwitchDefault src="../../../../assets/map/12.jpg" class="image-element" alt="" />
       </div>
       <div class="list-elements">
-        <mat-selection-list #sheets [multiple]="false"
+        <mat-selection-list #sheets [multiple]="false" hideSingleSelectionIndicator
           (selectionChange)="onGroupsChange(sheets.selectedOptions.selected)">
           <mat-list-option *ngFor="let sheet of sheetNames" [value]="sheet" class="item-yellow-extend">
             {{sheet}}
@@ -82,7 +82,7 @@
                 </label>
                 <mat-form-field appearance="outline" class="custom-input">
                   <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}">
+                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator panelWidth="">
                     <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
                       {{fuente.name_source_information}}
                     </mat-option>
@@ -101,9 +101,9 @@
                 <label class="label-small-input">
                   Unidad
                 </label>
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" >
                   <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}">
+                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}" hideSingleSelectionIndicator>
                     <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
                       {{unidad.name_energy_unit}}
                     </mat-option>
@@ -146,7 +146,7 @@
                 </label>
                 <mat-form-field appearance="outline">
                   <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}">
+                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator panelWidth="">
                     <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
                       {{fuente.name_source_information}}
                     </mat-option>
@@ -167,7 +167,7 @@
                 </label>
                 <mat-form-field appearance="outline">
                   <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}">
+                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}" hideSingleSelectionIndicator>
                     <mat-option *ngFor="let unidad of catalogoUnidadVolumen" [value]="unidad.id">
                       {{unidad.name_volume_unit}}
                     </mat-option>
@@ -210,7 +210,7 @@
                 </label>
                 <mat-form-field appearance="outline">
                   <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}">
+                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator panelWidth="">
                     <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
                       {{fuente.name_source_information}}
                     </mat-option>
@@ -231,7 +231,7 @@
                 </label>
                 <mat-form-field appearance="outline">
                   <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}">
+                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}" hideSingleSelectionIndicator>
                     <mat-option *ngFor="let unidad of catalogoUnidadVolumen" [value]="unidad.id">
                       {{unidad.name_volume_unit}}
                     </mat-option>

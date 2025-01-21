@@ -1,13 +1,13 @@
 <form [formGroup]="form" (ngSubmit)="updateMaterial($event)">
-  <mat-card  appearance="outlined"  class="custom-card">
+  <mat-card  appearance="outlined" class="custom-card">
     <mat-card-header>
-      <mat-card-title>Actualizar datos de transporte</mat-card-title>
+      <mat-card-title class="card-title">Actualizar datos de transporte</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
       <div class="Row">
         <div class="Col">
-          <mat-form-field  appearance="outline" >
+          <mat-form-field appearance="outline" cdkFocusInitial subscriptSizing="dynamic">
             <input matInput placeholder="Nombre del transporte" formControlName="name_transport">
             <mat-error *ngIf="form.controls['name_transport'].hasError('required')">
               Nombre del transporte es <strong>requerido</strong>
@@ -55,7 +55,7 @@
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Acciones </th>
-        <td mat-cell *matCellDef="let element"> 
+        <td mat-cell *matCellDef="let element">
           <button mat-raised-button (click)="updatePotential($event, element.id)">Editar</button>
           <button mat-raised-button color="warn" (click)="deletePotential($event, element.id)">Eliminar</button>
         </td>

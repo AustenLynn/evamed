@@ -60,7 +60,7 @@ export class EndLifeStageComponent implements OnInit {
       let energia = [];
       data.map((unidad) => {
         if (unidad.name_energy_unit === 'Hrs') {
-          energia.push(data);
+          energia.push(unidad);
         }
       });
       this.catalogoUnidadEnergia = data;

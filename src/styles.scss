@@ -38,9 +38,9 @@ body {
 .label-general {
   color: #aca8a8 !important;
   font-size: 12px !important;
-  margin-top: 10px !important;
-  margin-bottom: -12px !important;
-  font-weight: 600;
+  /*margin-top: 10px !important;
+  margin-bottom: -12px !important;*/
+  font-weight: 500;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
@@ -71,6 +71,18 @@ body {
     .mat-radio-container {
       display: none !important;
     }
+  }
+
+  .mdc-form-field {
+    .mdc-radio {
+      display: none;
+    }
+  }
+
+  .mdc-label {
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 22px;
   }
 }
 
@@ -157,8 +169,8 @@ img.logo-header {
   display: flex;
   justify-content: space-between;
   background-color: #a8d024;
-  margin: -24px -24px 24px -24px;
-  padding: 24px 44px 0px 44px;
+  /*margin: -24px -24px 24px -24px;*/
+  /*padding: 24px 44px 0px 44px;*/
 }
 
 .close-modal {
@@ -168,6 +180,18 @@ img.logo-header {
   font-weight: 300;
   margin-top: -6px;
 }
+
+.close-icon {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  margin-right: -8px;
+  /*transform: translate(50%, -50%);*/
+}
+input::placeholder {
+  font-size: 0.8em;
+}
+
 /**<Header modal>**/
 
 /**<Blur open modal>**/
@@ -175,6 +199,10 @@ img.logo-header {
   background: #0a0a0a67 0% 0% no-repeat padding-box !important;
   backdrop-filter: blur(28px) !important;
   pointer-events: none !important;
+}
+
+.mdc-dialog__surface {
+  overflow: hidden;
 }
 
 /**</Blur open modal>**/
@@ -185,11 +213,19 @@ img.logo-header {
   margin-top: -14px;
 }
 
+.row-space-top {
+  margin-top: 15px !important;
+}
+
+.row-space-bottom {
+  margin-bottom: 20px !important;
+}
+
 .Col {
   margin-top: 0px;
   width: 100%;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .col-small-space {
@@ -203,13 +239,26 @@ img.logo-header {
 .select-general {
   /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  .mat-form-field-wrapper {
+  .mat-mdc-text-field-wrapper {
+    margin-top: 10px;
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-form-field-flex {
+    /*.mat-mdc-form-field-flex {
       height: 34px;
       margin-top: 10px;
-    }
+    }*/
   }
+}
+
+.mat-elevation-z8 {
+  margin-bottom: 15px;
+}
+
+.custom-card {
+  margin-bottom: 15px;
+}
+
+.card-title {
+  margin-bottom: 15px !important;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
@@ -224,7 +273,7 @@ img.logo-header {
 /****/
 .center {
   display: flex;
-  justify-content: center;
+  justify-content: center !important;
 }
 
 .card-standard {
@@ -294,12 +343,14 @@ img.logo-header {
 
 .filter-options {
   margin-top: -16px;
+  width: 250px;
 }
 
 .title-standard-second-light {
   font-size: 30px !important;
   font-weight: 300 !important;
-  color: #fff;
+  color: #fff !important;
+  width: 90%;
 }
 
 .user-card {
@@ -323,29 +374,31 @@ img.logo-header {
   }
 }
 
-.yellow-button {
+button.yellow-button {
   background-color: #edc903;
   font-size: 14px;
   width: 180px;
-  color: #fff;
+  color: #fff !important;
+  margin: auto;
 }
 
 button.yellow-button.alf.mat-mdc-button.mat-mdc-button-base {
   width: 30% !important;
 }
 
-.melon-button {
+button.melon-button {
   background-color: #ed8484;
   font-size: 14px;
   width: 180px;
-  color: #fff;
+  color: #fff !important;
+  margin: auto;
 }
 
 .green-button {
   background-color: #a8d024;
   font-size: 14px;
   width: 180px;
-  color: #fff;
+  color: #fff !important;
 }
 
 .min-action {
@@ -364,6 +417,7 @@ button.yellow-button.alf.mat-mdc-button.mat-mdc-button-base {
 
 .custom-continue {
   width: 150px;
+  margin-top: 10px !important;
 }
 
 .mat-expansion-panel-body {
@@ -423,17 +477,28 @@ mat-list-option.item-list-option.mat-mdc-list-item.mat-list-option.mat-focus-ind
 
 mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
   color: #767676;
+  overflow: unset;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
 .item-yellow-extend.mat-list-single-selected-option,
 .item-yellow-extend.mat-list-single-selected-option:hover,
-.item-yellow-extend.mat-list-single-selected-option:focus {
+.item-yellow-extend.mat-list-single-selected-option:focus,
+.item-yellow-extend.mdc-list-item--selected {
   background-color: #edc903 !important;
   border-radius: 0px 33px 33px 0px !important;
   font-weight: 500 !important;
   width: 180px !important;
   height: 38px !important;
+}
+
+.item-yellow-extend.mdc-list-item--selected .mat-mdc-list-item-unscoped-content {
+  color: #000 !important;
+}
+
+.mat-mdc-list-item-unscoped-content {
+  color: #767676 !important;
+  font-size: 14px !important;
 }
 
 .mat-mdc-list-base .mat-mdc-list-item,
@@ -515,6 +580,15 @@ span.mat-option-text {
   }
 }
 
+:root {
+  --mat-tab-header-divider-height: 1px;
+  --mat-tab-header-divider-color: #e0e2ec;
+}
+
+/*.mat-mdc-tab-body-content {
+  overflow: hidden !important;
+}*/
+
 /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
 /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
 /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
@@ -546,20 +620,26 @@ span.mat-checkbox-label {
   color: #767676 !important;
 }
 
+.margin-checkbox {
+  .mdc-label {
+    font-size: 12px;;
+  }
+}
+
 .mat-toolbar-multiple-rows {
   min-height: 78px !important;
   align-items: center !important;
 }
 
 .input-general-renuew {
-  min-height: 32px !important;
+  /*min-height: 32px !important;*/
   width: 100% !important;
   font-size: 14px !important;
-  outline: none !important;
+  /*outline: none !important;
   padding-left: 16px !important;
   background-color: #ededed !important;
   border-radius: 5px;
-  border: 2px solid #97969c !important;
+  border: 2px solid #97969c !important;*/
 }
 
 .width-90 {
@@ -578,5 +658,5 @@ span.mat-checkbox-label {
 
 .mat-mdc-form-field-error {
   display: block;
-  margin-top: 14px;
+  /*margin-top: 14px;*/
 }

@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { AddMaterialComponent } from './components/add-material/add-material.component';
 import { UpdateMaterialComponent } from './components/update-material/update-material.component';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { UpdateDataSchemeComponent } from './components/update-data-scheme/update-data-scheme.component';
 import { AddDataSchemeComponent } from './components/add-data-scheme/add-data-scheme.component';
 import { DeleteMaterialComponent } from './components/delete-material/delete-material.component';
@@ -31,8 +31,8 @@ import { DeleteDataSchemeComponent } from './components/delete-data-scheme/delet
         FormsModule,
         ReactiveFormsModule,
         MaterialModule,
-        ChartsModule,
     ],
+    providers: [provideCharts(withDefaultRegisterables())],
     exports: [
         MaterialsAdminComponent,
         AddMaterialComponent,

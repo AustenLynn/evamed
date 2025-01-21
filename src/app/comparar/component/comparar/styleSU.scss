@@ -10,7 +10,7 @@
       font-size: 15px;
       padding-top: 9px;
     }
-  
+
     .sub-container {
       font-size: 15px;
       display: inline-grid;
@@ -63,14 +63,14 @@
     font-size: 12px;
     width: 795px;
     overflow: auto;
-  
+
     th {
       padding-left: 15px;
     }
-  
+
     tr {
       white-space: nowrap;
-  
+
       & td {
         padding-left: 16px;
         font-size: 1.2em;
@@ -86,29 +86,31 @@
     opacity: 1;
     font-size: 12px;
     margin-top: 52px;
+    margin-left: 20px;
 }
 
 .div-secondary-graph {
     display: inline-grid;
     grid-template-columns: 161px auto;
-  
+    margin-left: 20px;
+
     p {
       letter-spacing: 0px;
       color: #343434;
       opacity: 1;
       font-size: 13px;
     }
-  
+
     ul {
       list-style-type: none;
       padding: 0;
     }
-  
+
     li {
       margin-bottom: 5px;
       display: flex;
     }
-  
+
     .boton-principal {
       margin-left: 8px;
       text-align: left;
@@ -119,14 +121,14 @@
       font-size: 12px;
       color: #767676;
     }
-  
+
     .boton-icono {
       background: #efefef;
       border-radius: 0px 10px 10px 0px;
       border: 0px;
       padding: 1px;
     }
-  
+
     mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
       color: #ffffff;
       font-size: 14px;

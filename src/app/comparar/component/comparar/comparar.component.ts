@@ -6,7 +6,6 @@ import {
   ViewChild,
   QueryList,
   ViewContainerRef,
-  ComponentFactoryResolver,
 } from '@angular/core';
 
 import { BarChartSimpleComponent } from 'src/app/bar-chart-simple/bar-chart-simple.component';
@@ -52,11 +51,11 @@ import { UserService } from 'src/app/core/services/user/user.service';
 
 export class CompararComponent implements OnInit {
   barChartComponent = BarChartComponent;
-  radialChart = RadialChartComponent;
-  pieChart = PieChartComponent;
+  radialChartComponent = RadialChartComponent;
+  pieChartComponent = PieChartComponent;
   barChartSimpleComponent = BarChartSimpleComponent;
   graficasTercerSeccionComponent = GraficasTercerSeccionComponent;
-  ImgEdificioComponent = ImageEdificioComponent;
+  imgEdificioComponent = ImageEdificioComponent;
 
   @ViewChild('barContainer', { read: ViewContainerRef })
   container: ViewContainerRef;
@@ -221,7 +220,6 @@ export class CompararComponent implements OnInit {
     private calculos: Calculos,
     private calculosSegunaSeccion: CalculosSegundaSeccion,
     private calculosTercerSeccion: CalculosTercerSeccion,
-    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.users
       .searchUser(localStorage.getItem('email-login'))
@@ -494,11 +492,7 @@ export class CompararComponent implements OnInit {
   iniciaBarras() {
     if (this.resultdosGraficos) {
       this.container.clear();
-      const componentFactory =
-        this.componentFactoryResolver.resolveComponentFactory(
-          this.barChartComponent
-        );
-      const grafica = this.container.createComponent(componentFactory);
+      const grafica = this.container.createComponent(this.barChartComponent);
       grafica.instance.porcentaje = this.bandera_porcentaje;
       grafica.instance.inputProyects = this.outproyect_bar;
       grafica.instance.showMe = true;
@@ -514,14 +508,11 @@ export class CompararComponent implements OnInit {
 
   iniciarImgEdificio(){
     this.containerImgEdificio.clear();
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(
-      this.ImgEdificioComponent,
-    )
     let containers = {}
     this.proyect_active.forEach((proyecto, index) => {
       //console.log(this.elementosConstructivosMostradosElementosPorProyecto[proyecto]);
       let auxN = 'imgEdificio'.concat(proyecto);
-      containers[auxN] = this.containerImgEdificio.createComponent(componentFactory);
+      containers[auxN] = this.containerImgEdificio.createComponent(this.imgEdificioComponent);
       containers[auxN].instance.inputPtoyect = this.coloresExistententesElementosConstructivos;
       containers[auxN].instance.elementoSeleccionado = this.elementoContructivoSelecionado;
       containers[auxN].instance.niveles = this.nivelesExistententesElementosConstructivos;
@@ -550,11 +541,7 @@ export class CompararComponent implements OnInit {
   //elementos onstructivos
   iniciaBarrasSeccionDos() {
     this.containerBarGrafica.clear();
-    const componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(
-        this.barChartComponent
-      );
-    const grafica = this.containerBarGrafica.createComponent(componentFactory);
+    const grafica = this.containerBarGrafica.createComponent(this.barChartComponent);
     grafica.instance.inputProyects = this.outproyect_bar_elementos;
     grafica.instance.showMe = false;
     grafica.instance.Bandera_bar = this.bandera_graph_bar;
@@ -567,11 +554,7 @@ export class CompararComponent implements OnInit {
 
   iniciarSeccionTres() {
     this.containerGraficaT.clear();
-    const componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(
-        this.graficasTercerSeccionComponent
-      );
-    const grafica = this.containerGraficaT.createComponent(componentFactory);
+    const grafica = this.containerGraficaT.createComponent(this.graficasTercerSeccionComponent);
     grafica.instance.impactoAmbientalMostrado =
       this.impactoAmbientalSeleccionado;
     grafica.instance.ElementosContructivosEliminados =
@@ -590,9 +573,7 @@ export class CompararComponent implements OnInit {
 
   iniciaRadiales() {
     this.containerGraficas.clear();
-    const componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(this.radialChart);
-    const grafica = this.containerGraficas.createComponent(componentFactory);
+    const grafica = this.containerGraficas.createComponent(this.radialChartComponent);
     grafica.instance.inputProyect = this.outproyect_radar;
     grafica.instance.showMe = this.showVar_1;
     grafica.instance.id = this.ID;
@@ -600,9 +581,7 @@ export class CompararComponent implements OnInit {
   }
   iniciaPie() {
     this.containerGraficas.clear();
-    const componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(this.pieChart);
-    const grafica = this.containerGraficas.createComponent(componentFactory);
+    const grafica = this.containerGraficas.createComponent(this.pieChartComponent);
     grafica.instance.inputProyect = this.outproyect_pie;
     grafica.instance.showMePartially = this.showVar;
     grafica.instance.indicador = this.selector;
@@ -2024,10 +2003,7 @@ export class CompararComponent implements OnInit {
     this.asignarColorGraficaDispercion();
     if (this.banderaTipoGraficaDispercion) {
       this.containerGraficasDos.clear();
-      const componentFactory =
-        this.componentFactoryResolver.resolveComponentFactory(this.pieChart);
-      const grafica =
-        this.containerGraficasDos.createComponent(componentFactory);
+      const grafica = this.containerGraficasDos.createComponent(this.pieChartComponent);
       grafica.instance.inputProyect = aux;
       grafica.instance.showMePartially = this.showVar;
       grafica.instance.indicador = this.selector;
@@ -2037,12 +2013,7 @@ export class CompararComponent implements OnInit {
       grafica.instance.colorDispercion = this.colorGraficaDispercion;
     } else {
       this.containerGraficasDos.clear();
-      const componentFactory =
-        this.componentFactoryResolver.resolveComponentFactory(
-          this.barChartSimpleComponent
-        );
-      const grafica =
-        this.containerGraficasDos.createComponent(componentFactory);
+      const grafica = this.containerGraficasDos.createComponent(this.barChartSimpleComponent);
       grafica.instance.banderaDispercion = true;
       grafica.instance.info = aux;
       grafica.instance.showGr = false;

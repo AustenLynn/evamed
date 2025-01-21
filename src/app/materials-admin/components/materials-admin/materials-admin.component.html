@@ -1,15 +1,15 @@
-<h1>Administrador de Materiales</h1>
+<h1>Administrador de materiales</h1>
 
 <div class="custom-container">
   <button mat-button class="yellow-button" (click)="goToAddMaterial()">
     Agregar material
   </button>
-  <button  mat-raised-button color="primary" (click)="goToAdmin()">
+  <button mat-raised-button color="primary" (click)="goToAdmin()">
     Regresar a Administrador
   </button>
   <mat-form-field appearance="outline" class="select-general">
     <mat-label>Seleccione una opción</mat-label>
-    <mat-select [(ngModel)]="filterSelected" (selectionChange)="selectFilter(filterSelected)">
+    <mat-select [(ngModel)]="filterSelected" (selectionChange)="selectFilter(filterSelected)" hideSingleSelectionIndicator>
       <mat-option *ngFor="let filter of filters" [value]="filter.name">
         {{filter.name}}
       </mat-option>
@@ -47,9 +47,9 @@
 
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Acciones </th>
-    <td mat-cell *matCellDef="let element"> 
-      <a 
-        mat-raised-button 
+    <td mat-cell *matCellDef="let element">
+      <a
+        mat-raised-button
         [routerLink]="['update', element.id]"
       >Editar
     </a>

@@ -4,22 +4,22 @@
     <h1 mat-dialog-title class="title-standard-second-light">
       Actualizar impacto ambiental
     </h1>
-    <a (click)="onNoClick()" class="close-modal">
-      X
-    </a>
+    <button mat-button class="close-icon" [mat-dialog-close]="true" (click)="onNoClick()">
+      <mat-icon style="color: #fff;">close</mat-icon>
+    </button>
   </div>
 
   <div mat-dialog-content>
-    <mat-card  appearance="outlined"  class="custom-card">
-  
+    <mat-card  appearance="outlined" class="custom-card">
       <mat-card-content>
         <div class="Row">
           <div class="Col">
-            <mat-form-field appearance="outline">
-              <mat-select 
-                placeholder="Potencial de impacto ambiental" 
-                formControlName="potential_type_id" 
-                (selectionChange)="potentialSelected($event.value)" 
+            <mat-form-field appearance="outline" cdkFocusInitial>
+              <mat-select
+                placeholder="Potencial de impacto ambiental"
+                formControlName="potential_type_id"
+                (selectionChange)="potentialSelected($event.value)"
+                hideSingleSelectionIndicator
               >
                 <mat-option *ngFor="let potential of ListPotential" [value]="potential.id">
                   {{ potential.name_complete_potential_type }}
@@ -40,7 +40,7 @@
           </div>
         </div>
       </mat-card-content>
-  
+
       <mat-card-content>
         <div class="Row">
           <div class="Col">
@@ -53,7 +53,7 @@
           </div>
         </div>
       </mat-card-content>
-  
+
     </mat-card>
   </div>
 

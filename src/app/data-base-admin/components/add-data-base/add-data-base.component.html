@@ -3,20 +3,20 @@
     <h1 mat-dialog-title class="title-standard-second-light">
       Agregar base de datos
     </h1>
-    <a (click)="onNoClick()" class="close-modal">
-      X
-    </a>
+    <button mat-button class="close-icon" [mat-dialog-close]="true" (click)="onNoClick()">
+      <mat-icon style="color: #fff;">close</mat-icon>
+    </button>
   </div>
 
   <div mat-dialog-content>
-    <mat-card  appearance="outlined"  class="custom-card">
+    <mat-card appearance="outlined" class="custom-card">
       <mat-card-content>
         <div class="Row">
           <div class="Col">
-            <mat-form-field  appearance="outline" >
+            <mat-form-field  appearance="outline" cdkFocusInitial>
               <input matInput placeholder="Nombre de base de datos" formControlName="name">
               <mat-error *ngIf="form.controls['name'].hasError('required')">
-                Nombre de la base de datos es <strong>requerido</strong>
+                El nombre de la base de datos es <strong>requerido</strong>
               </mat-error>
             </mat-form-field>
           </div>

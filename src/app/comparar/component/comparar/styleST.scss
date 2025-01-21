@@ -2,22 +2,22 @@
     display: flex;
     align-items: stretch;
     justify-content: space-around;
-    height: 150px;
+    height: 200px;
     > div {
       &:nth-child(1) {
-        width: 240px;
+        width: 235px;
         p {
           padding-left: 20px;
         }
       }
       &:nth-child(2) {
-        width: 393px;
+        width: 365px;
         p {
           padding-left: 50px;
         }
       }
       &:nth-child(3) {
-        width: 350px;
+        width: 300px;
         p {
           padding-left: 50px;
         }
@@ -38,14 +38,14 @@
           background: #efefef;
           border: 0px;
         }
-  
+
         .button-info-select {
           border-radius: 10px 0px 0px 10px;
           width: 102px;
           height: 39px;
           background: #ffffff;
         }
-  
+
         mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
           color: #ffffff;
           font-size: 14px;
@@ -65,13 +65,13 @@
           border: 0px;
           padding: 1px;
         }
-  
+
         .some-text {
           float: left;
-          text-align: left;
+          /*text-align: left;*/
           display: grid;
-          grid-template-columns: repeat(1, auto);
-          grid-template-rows: 12px;
+          grid-template-columns: 100px;
+          grid-template-rows: 15px;
           font-size: 11px;
           letter-spacing: 0px;
           color: #767676;
@@ -79,7 +79,7 @@
         }
       }
     }
-  
+
     p {
       text-align: left;
       font-size: 12px;
@@ -87,8 +87,8 @@
       color: #707070;
       opacity: 1;
     }
-  
-    .select-impacto-ambiental {
+
+    /*.select-impacto-ambiental {
       width: 221px;
       height: 37px;
       color: #707070;
@@ -98,6 +98,6 @@
       border-style: solid;
       border-radius: 10px;
       opacity: 1;
-    }
+    }*/
 }
 

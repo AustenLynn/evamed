@@ -3,17 +3,17 @@
     <h1 mat-dialog-title class="title-standard-second-light">
       Agregar maquinaria
     </h1>
-    <a (click)="onNoClick()" class="close-modal">
-      X
-    </a>
+    <button mat-button class="close-icon" [mat-dialog-close]="true" (click)="onNoClick()">
+      <mat-icon style="color: #fff;">close</mat-icon>
+    </button>
   </div>
 
   <div mat-dialog-content>
-    <mat-card  appearance="outlined"  class="custom-card">
+    <mat-card appearance="outlined" class="custom-card">
       <mat-card-content>
         <div class="Row">
           <div class="Col">
-            <mat-form-field  appearance="outline" >
+            <mat-form-field  appearance="outline" cdkFocusInitial>
               <input matInput placeholder="Nombre de maquinaria" formControlName="name_source_information">
               <mat-error *ngIf="form.controls['name_source_information'].hasError('required')">
                 Maquinaria es <strong>requerido</strong>

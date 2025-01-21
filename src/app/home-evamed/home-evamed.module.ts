@@ -12,12 +12,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { ChangeNameProjectComponent } from './components/change-name-project/change-name-project.component';
 
 @NgModule({
     declarations: [
-        HomeEvamedComponent,
+        //HomeEvamedComponent,
         AddNewProjectComponent,
         ChooseTypeOfProjectComponent,
         ChangeNameProjectComponent,
@@ -26,14 +26,15 @@ import { ChangeNameProjectComponent } from './components/change-name-project/cha
         CommonModule,
         SharedModule,
         HomeEvamedRoutingModule,
+        HomeEvamedComponent,
         MaterialModule,
         FormsModule,
         MatTabsModule,
         MatButtonModule,
         MatIconModule,
         MatButtonToggleModule,
-        ChartsModule,
     ],
+    providers: [provideCharts(withDefaultRegisterables())],
     exports: [
         HomeEvamedComponent,
         AddNewProjectComponent,

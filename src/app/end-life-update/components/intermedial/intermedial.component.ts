@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
   selector: 'app-intermedial',
   templateUrl: './intermedial.component.html',
   styleUrls: ['./intermedial.component.scss'],
+  host: {
+    'stage': 'end-life-update'
+  }
 })
 export class IntermedialComponent implements OnInit {
   constructor(

@@ -1,11 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { Label, BaseChartDirective } from 'ng2-charts';
+import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-bar-chart-simple',
   templateUrl: './bar-chart-simple.component.html',
-  styleUrls: ['./bar-chart-simple.component.scss']
+  styleUrls: ['./bar-chart-simple.component.scss'],
+  standalone: true,
+  imports: [BaseChartDirective, CommonModule],
 })
 export class BarChartSimpleComponent implements OnInit {
 
@@ -24,22 +27,23 @@ export class BarChartSimpleComponent implements OnInit {
   barChartOptions: ChartOptions = {
     responsive: true,
     events: ['click'],
-    tooltips: { enabled: false },
-    hover: { mode: null },
-    legend: { display: false },
     plugins: {
+      title: { display: true },
+      legend: { display: false },
+      tooltip: { enabled: false },
       datalabels: {
         color: 'white',
         anchor: 'center',
         align: 'center',
         font: {
           size: 7,
-        }
-      }
+        },
+      },
     },
+    hover: { mode: null },
   };
-  barChartLabels: Label[] = ['Materiales', 'Construccion', 'Uso', 'FinDeVida'];
-  barChartLabelsSecond: Label[] = ['Grava', 'Arena', 'Varilla', 'Cemento', 'Cal','Ladrillo'];
+  barChartLabels: BaseChartDirective["labels"] = ['Materiales', 'Construccion', 'Uso', 'FinDeVida'];
+  barChartLabelsSecond: BaseChartDirective["labels"] = ['Grava', 'Arena', 'Varilla', 'Cemento', 'Cal','Ladrillo'];
   barChartType: ChartType = 'bar';
   barChartLegend = false;
   barChartPlugins = [];
@@ -47,7 +51,7 @@ export class BarChartSimpleComponent implements OnInit {
 
   etapa:string='';
 
-  barChartData: ChartDataSets[] = [
+  barChartData: ChartDataset[] = [
     { data: [45, 37, 60, 70],
       backgroundColor: ['#4DBE89', '#148A93', '#8F5091','#DEA961']
     }
@@ -76,7 +80,7 @@ export class BarChartSimpleComponent implements OnInit {
   CargarDatos(elemento:string,ciclo:string){
     let auxlabel = ['Materiales', 'Construccion', 'Uso', 'FinDeVida']
     let auxdatos = [28, 20, 12, 40, 25, 5];
-    let auxdata: ChartDataSets[];
+    let auxdata: ChartDataset[];
     let color:any[];
 
     Object.keys(auxlabel).forEach(element => {
@@ -109,11 +113,11 @@ export class BarChartSimpleComponent implements OnInit {
       if (n1 > n2) {
           return 1;
       }
-  
+
       if (n1 < n2) {
           return -1;
       }
-  
+
       return 0;
     })
     auxdatos = auxdatos.reverse()
@@ -181,10 +185,10 @@ export class BarChartSimpleComponent implements OnInit {
   //detección de click
   public onChartClick(e: any): void {
     let aux: any;
-    if (this.chartDir.chart.getElementAtEvent(event)[0]!=undefined){
-      Object.keys(this.chartDir.chart.getElementAtEvent(event)[0]).forEach(element => {
+    if (this.chartDir.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true)[0]!=undefined){
+      Object.keys(this.chartDir.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true)[0]).forEach(element => {
         if(element=='_model'){
-          aux=this.chartDir.chart.getElementAtEvent(event)[0][element];
+          aux=this.chartDir.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true)[0][element];
           Object.keys(aux).forEach(item=>{
             if(item=='label'){
               this.acomodoDatos(aux[item]);

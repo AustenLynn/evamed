@@ -163,7 +163,7 @@ export class ConstructionStageUpdateComponent implements OnInit {
             prevData['id'] = item.id;
             prevData['cantidad'] = this.trunc(item.quantity);
             prevData['fuente'] = item.source_information_id;
-            prevData['energy_unit_id'] = item.energy_unit_id;
+            prevData['unidad'] = item.energy_unit_id;
             getDataEC.push(prevData);
             break;
           default:

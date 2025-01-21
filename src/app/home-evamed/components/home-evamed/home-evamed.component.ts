@@ -12,16 +12,31 @@ import { ChangeNameProjectComponent } from '../change-name-project/change-name-p
 import { ConstructionStageService } from 'src/app/core/services/construction-stage/construction-stage.service';
 import { EndLifeService } from './../../../core/services/end-life/end-life.service';
 import { ElectricitConsumptionService } from './../../../core/services/electricity-consumption/electricit-consumption.service';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { Label, BaseChartDirective } from 'ng2-charts';
-import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+import { ChartOptions, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { MaterialsService } from '../../../core/services/materials/materials.service';
 import { AnalisisService } from '../../../core/services/analisis/analisis.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule} from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
+import { CommonModule } from '@angular/common';
+import { lastValueFrom, map, Observable } from 'rxjs';
+//import { formatNumber } from '@angular/common';
 
 @Component({
   selector: 'app-home-evamed',
   templateUrl: './home-evamed.component.html',
   styleUrls: ['./home-evamed.component.scss'],
+  standalone: true,
+  imports: [BaseChartDirective, MatCardModule, MatSelectModule, FormsModule, MatFormFieldModule,
+    MatIconModule, MatButtonModule, MatButtonToggleModule, MatTabsModule, MatMenuModule, CommonModule],
 })
 export class HomeEvamedComponent implements OnInit {
   nombre: string;
@@ -73,7 +88,7 @@ export class HomeEvamedComponent implements OnInit {
   //---
   auxDatosGraficaUso = [];
   public doughnutChartType = 'doughnut';
-  public pieChartOptions = {
+  public pieChartOptions : ChartOptions = {
     responsive: false,
     maintainAspectRatio: false,
     layout: {
@@ -81,7 +96,6 @@ export class HomeEvamedComponent implements OnInit {
     },
     events: ['click'],
     elements: { arc: { borderWidth: 0 } },
-    tooltips: { enabled: false },
     hover: { mode: null },
     plugins: {
       datalabels: {
@@ -90,37 +104,21 @@ export class HomeEvamedComponent implements OnInit {
           size: 8,
         },
       },
+      tooltip: {
+        enabled: false
+      },
     },
   };
-  public barChartPlugins = [pluginDataLabels];
+
+  public chartPlugins = [ChartDataLabels];
 
   @ViewChild('MyChart') chartDir: BaseChartDirective;
   public barChartOptions: ChartOptions = {
     responsive: true,
-    title: { display: true },
-    legend: { display: false },
-    tooltips: { enabled: false, mode: 'label' },
-    scales: {
-      yAxes: [
-        {
-          display: true,
-          ticks: {
-            beginAtZero: true,
-            fontSize: 11,
-          },
-        },
-      ],
-      xAxes: [
-        {
-          display: true,
-          ticks: {
-            beginAtZero: true,
-            fontSize: 11,
-          },
-        },
-      ],
-    },
     plugins: {
+      title: { display: true },
+      legend: { display: false },
+      tooltip: { enabled: false, mode: 'index' },
       datalabels: {
         color: 'white',
         anchor: 'center',
@@ -130,45 +128,78 @@ export class HomeEvamedComponent implements OnInit {
         },
       },
     },
+    scales: {
+      y: {
+          display: true,
+          beginAtZero: true,
+          stacked: true,
+          ticks: {
+            font: {
+              size: 11,
+            }
+          },
+        },
+      x: {
+          display: true,
+          beginAtZero: true,
+          stacked: true,
+          ticks: {
+            font: {
+              size: 11,
+            }
+          },
+        },
+    },
   };
   public barChartHorizontalOptions: ChartOptions = {
     responsive: true,
-    title: { display: false, text: 'KgCO2 / m2a por año', position: 'bottom' },
-    legend: { display: false },
-    tooltips: { enabled: false, mode: 'label' },
-    scales: {
-      yAxes: [
-        {
-          display: true,
-          ticks: {
-            fontSize: 11,
-          },
-        },
-      ],
-      xAxes: [
-        {
-          display: false,
-        },
-      ],
-    },
     plugins: {
-      indexAxis: 'y',
+      title: { display: false, text: 'KgCO2 / m2a por año', position: 'bottom' },
+      legend: { display: false },
+      tooltip: { enabled: false, mode: 'index' },
       datalabels: {
         display: false,
       },
     },
+    indexAxis: 'y',
+    scales: {
+      y: {
+          display: true,
+          ticks: {
+            font: {
+              size: 11,
+            }
+          },
+        },
+      x: {
+          display: false,
+        },
+    },
   };
   public barChartType: ChartType = 'bar';
-  public barChartHorizonatlType: ChartType = 'horizontalBar';
+  public barChartHorizontalType: ChartType = 'bar';
 
-  public barChartLegend = true;
+  public barChartLegend = false;
   public pieChartType = 'pie';
-  public pieChartOptions_elementos = {
+  public pieChartOptions_elementos : ChartOptions = {
+    responsive: false,
+    maintainAspectRatio: false,
     elements: { arc: { borderWidth: 0 } },
-    tooltips: { enabled: false },
     hover: { mode: null },
     plugins: {
-      datalabels: false,
+      /*title: {
+        display: true,
+        text: ["Consumo energético total", "requerido anualmente"],
+      },
+      legend: {
+        position: 'right',
+      },*/
+      datalabels: {
+        display: false,
+      },
+      tooltip: {
+        enabled: false
+      },
     },
   };
 
@@ -309,30 +340,28 @@ export class HomeEvamedComponent implements OnInit {
 
   async ngOnInit() {
     this.DatosCalculos = {
-      TEList: await this.analisis.getTypeEnergy().toPromise(),
-      projectsList: await this.projectsService.getProjects().toPromise(),
-      materialList: await this.materials.getMaterials().toPromise(),
-      materialSchemeDataList: await this.analisis
-        .getMaterialSchemeData()
-        .toPromise(),
-      materialSchemeProyectList: await this.analisis
-        .getMaterialSchemeProyect()
-        .toPromise(),
-      potentialTypesList: await this.analisis.getPotentialTypes().toPromise(),
-      standarsList: await this.analisis.getStandars().toPromise(),
-      CSEList: await this.analisis.getConstructiveSystemElement().toPromise(),
-      SIDList: await this.analisis.getSourceInformationData().toPromise(),
-      SIList: await this.analisis.getSourceInformation().toPromise(),
-      ACRList: await this.analisis.getAnnualConsumptionRequired().toPromise(),
-      ECDList: await this.analisis.getElectricityConsumptionData().toPromise(),
-      TEDList: await this.analisis.getTypeEnergyData().toPromise(),
-      ULList: await this.analisis.getUsefulLife().toPromise(),
-      ECDPList: await this.analisis.getECDP().toPromise(),
-      sectionList: await this.analisis.getSectionsList().toPromise(),
-      PTList: await this.analisis.getPotentialTransport().toPromise(),
-      conversionList: await this.analisis.getConversion().toPromise(),
+      TEList: await lastValueFrom(this.analisis.getTypeEnergy()),
+      projectsList: await lastValueFrom(this.projectsService.getProjects()),
+      materialList: await lastValueFrom(this.materials.getMaterials()),
+      materialSchemeDataList: await lastValueFrom(this.analisis
+        .getMaterialSchemeData()),
+      materialSchemeProyectList: await lastValueFrom(this.analisis
+        .getMaterialSchemeProyect()),
+      potentialTypesList: await lastValueFrom(this.analisis.getPotentialTypes()),
+      standarsList: await lastValueFrom(this.analisis.getStandars()),
+      CSEList: await lastValueFrom(this.analisis.getConstructiveSystemElement()),
+      SIDList: await lastValueFrom(this.analisis.getSourceInformationData()),
+      SIList: await lastValueFrom(this.analisis.getSourceInformation()),
+      ACRList: await lastValueFrom(this.analisis.getAnnualConsumptionRequired()),
+      ECDList: await lastValueFrom(this.analisis.getElectricityConsumptionData()),
+      TEDList: await lastValueFrom(this.analisis.getTypeEnergyData()),
+      ULList: await lastValueFrom(this.analisis.getUsefulLife()),
+      ECDPList: await lastValueFrom(this.analisis.getECDP()),
+      sectionList: await lastValueFrom(this.analisis.getSectionsList()),
+      PTList: await lastValueFrom(this.analisis.getPotentialTransport()),
+      conversionList: await lastValueFrom(this.analisis.getConversion()),
     };
-    let listaBD = await this.analisis.getDB().toPromise();
+    let listaBD = await lastValueFrom(this.analisis.getDB());
     let auxBD = [];
     let auxbases = {};
     listaBD.forEach((element) => {
@@ -610,9 +639,18 @@ export class HomeEvamedComponent implements OnInit {
   DataPieUso(data) {
     let aux = [];
     let auxdata = [];
+    let labels = [];
 
     data.forEach((element) => {
       aux.push(element['quantity']);
+      /*let num = formatNumber(element['quantity'], 'en-US', '1.2-2');
+      if (element['source'] == 'fuel') {
+        labels.push(`Combustible: ${num} kWh`);
+      } else if (element['source'] == 'electric') {
+        labels.push(`Red eléctrica nacional: ${num} kWh`);
+      } else {
+        labels.push(`Paneles fotovoltaicos: ${num} kWh`);
+      }*/
     });
 
     auxdata = [
@@ -622,7 +660,8 @@ export class HomeEvamedComponent implements OnInit {
       },
     ];
 
-    return auxdata;
+    //return auxdata;
+    return { labels: labels, datasets: auxdata };
   }
 
   selectUse(id) {
@@ -1007,7 +1046,7 @@ export class HomeEvamedComponent implements OnInit {
   cargarDataBar(data, impactoU, etapasI, id, impactS, porcentajesMostrados) {
     let auxColor = [];
     let aux = [];
-    let auxl: Label[] = [];
+    let auxl: BaseChartDirective["labels"] = [];
     let banderaEtapa = true;
     let auxdata2 = [];
     const auxDatos = { sub1: [], sub2: [], sub3: [], sub4: [] };
@@ -1097,12 +1136,11 @@ export class HomeEvamedComponent implements OnInit {
       ];
     });
 
-    return { datos: aux, labels: auxl };
+    return { labels: auxl, datasets: aux };
   }
 
   cargaDataPie(data, impactoU, etapasI) {
     let auxColor = [];
-    let aux = [];
     let banderaEtapa = true;
     let auxdata2 = [];
     Object.keys(data).forEach((element) => {
@@ -1126,13 +1164,7 @@ export class HomeEvamedComponent implements OnInit {
 
     auxdata2 = this.calculos.Porcentaje(auxdata2);
 
-    aux = [
-      {
-        data: auxdata2,
-        backgroundColor: auxColor,
-      },
-    ];
-    return aux;
+    return { labels: [], datasets: [{data: auxdata2, backgroundColor: auxColor}] };
   }
 
   eliminarEtapa(etapa, i) {

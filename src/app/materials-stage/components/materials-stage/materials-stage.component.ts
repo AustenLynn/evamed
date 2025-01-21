@@ -325,6 +325,7 @@ export class MaterialsStageComponent implements OnInit {
 
   selectCountry(id) {
     this.catalogsService.getExternalDistances().subscribe((data) => {
+      console.log(data)
       data.map((item) => {
         let typeTransport = 'mar';
         if (id === item.id + 1) {
@@ -733,7 +734,7 @@ export class MaterialsStageComponent implements OnInit {
           const schemaFilter = cse.filter(
             (schema) => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('construction-stage');
           } else {
@@ -748,7 +749,7 @@ export class MaterialsStageComponent implements OnInit {
     });
   }
 
-  goToUsageStage() { 
+  goToUsageStage() {
     const dialogRef = this.dialog.open(PassStepComponent, {
       width: '680px',
       data: {},
@@ -763,7 +764,7 @@ export class MaterialsStageComponent implements OnInit {
           const schemaFilter = acr.filter(
             (schema) => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('usage-stage');
           } else {
@@ -793,7 +794,7 @@ export class MaterialsStageComponent implements OnInit {
           const schemaFilter = edcp.filter(
             (schema) => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('end-life-stage');
           } else {

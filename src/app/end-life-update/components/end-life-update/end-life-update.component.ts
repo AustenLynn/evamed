@@ -112,7 +112,7 @@ export class EndLifeUpdateComponent implements OnInit {
         prevData['id'] = item.id;
         prevData['cantidad'] = item.quantity;
         prevData['fuente'] = item.source_information_id;
-        prevData['energy_unit_id'] = item.energy_unit_id;
+        prevData['unidad'] = item.unit_id;
         getDataECPD.push(prevData);
       }
     });

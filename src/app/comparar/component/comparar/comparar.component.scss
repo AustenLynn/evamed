@@ -1,5 +1,5 @@
 .mat-master {
-  width: 940px;
+  width: 975px;
 }
 
 .container-principal-tab {
@@ -12,6 +12,8 @@
 
   a.return-proyecto {
     font-size: 12px;
+    position: relative;
+    bottom: 9px;
   }
 
   a.tittle-proyect {
@@ -22,7 +24,7 @@
 
   mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     color: #92be00;
-    font-size: 15px;
+    /*font-size: 15px;*/
   }
 }
 
@@ -40,7 +42,6 @@
     border: 2px solid;
     border-radius: 10px;
     border-color: #cbcbcb;
-    opacity: 1;
     letter-spacing: 0px;
     color: #767676;
     opacity: 1;
@@ -80,6 +81,12 @@
       border: 0px;
     }
   }
+}
+
+.proyectoBoton {
+  transform: translateY(-8px);
+  display: flex;
+  align-items: center;
 }
 
 ng-template {
@@ -175,13 +182,13 @@ Fases-ciclo {
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-mat-select {
+/*mat-select {
   width: 218px;
   height: 40px;
   background: #ffffff;
   border: 2px solid #cbcbcb;
   opacity: 1;
-}
+}*/
 .example-section {
   display: grid;
   grid-template-columns: 110px 110px 110px;
@@ -189,7 +196,7 @@ mat-select {
   row-gap: 5px;
   align-content: center;
   align-items: center;
-  height: 100px;
+  height: 150px;
   text-align: left;
   font-size: 10px;
   letter-spacing: 0px;

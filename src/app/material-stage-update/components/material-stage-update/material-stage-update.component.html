@@ -59,7 +59,7 @@
         <img *ngSwitchDefault src="../../../../assets/map/12.jpg" class="image-element" alt="" />
       </div>
       <div class="list-elements">
-        <mat-selection-list #sheets [multiple]="false"
+        <mat-selection-list #sheets [multiple]="false" hideSingleSelectionIndicator
           (selectionChange)="onGroupsChange(sheets.selectedOptions.selected)">
           <mat-list-option *ngFor="let sheet of sheetNames" [value]="sheet" class="item-yellow-extend">
             {{ sheet }}
@@ -206,10 +206,10 @@
       <!--Contenedor de condicionales-->
       <div class="conditional-section">
         <!--Listado de materiales-->
-        <mat-selection-list #materials [multiple]="false" (selectionChange)="
-            onSelectedMaterial($event, materials.selectedOptions)
-          " *ngIf="selectedMaterial === false && showSearch === false">
-          <mat-list-option *ngFor="let material of listMateriales | keyvalue" [value]="material">
+        <mat-selection-list #materials [multiple]="false" hideSingleSelectionIndicator
+          (selectionChange)="onSelectedMaterial($event, materials.selectedOptions)"
+          *ngIf="selectedMaterial === false && showSearch === false">
+          <mat-list-option *ngFor="let material of listMateriales | keyvalue" [value]="material" class="item-yellow-extend">
             <div class="table-materials">
               <div class="col-key">{{ material.value.key }}.</div>
               <div class="col-material">
@@ -243,10 +243,8 @@
               <div class="Col">
                 <div class="label-general">Nombre comercial</div>
                 <div>
-                  <mat-form-field>
-                    <textarea class="input-general-renuew" [(ngModel)]="dataMaterialSelected.comercial_name" matInput
-                      type="text">
-                    </textarea>
+                  <mat-form-field appearance="fill">
+                    <textarea class="input-general-renuew" [(ngModel)]="dataMaterialSelected.comercial_name" matInput type="text"></textarea>
                   </mat-form-field>
                 </div>
               </div>
@@ -255,18 +253,16 @@
               <div class="Col select-middle">
                 <div class="label-general">Cantidad</div>
                 <div>
-                  <mat-form-field>
-                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.quantity" matInput
-                      type="text" />
+                  <mat-form-field appearance="fill">
+                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.quantity" matInput type="text">
                   </mat-form-field>
                 </div>
               </div>
               <div class="Col select-middle">
                 <div class="label-general">Unidad</div>
                 <div>
-                  <mat-form-field>
-                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.unit_text" matInput
-                      type="text" />
+                  <mat-form-field appearance="fill">
+                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.unit_text" matInput type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -275,10 +271,9 @@
               <div class="Col">
                 <div class="label-general">Comentarios</div>
                 <div>
-                  <mat-form-field>
-                    <textarea class="input-general-renuew" [(ngModel)]="dataMaterialSelected.description_material"
-                      matInput type="text">
-                    </textarea>
+                  <mat-form-field appearance="fill">
+                    <textarea class="input-general-renuew"
+                      [(ngModel)]="dataMaterialSelected.description_material" matInput type="text"></textarea>
                   </mat-form-field>
                 </div>
               </div>
@@ -292,9 +287,9 @@
               <div class="Col select-middle">
                 <div class="label-general">Tipo de transporte</div>
                 <div>
-                  <mat-form-field appearance="outline" class="select-general">
+                  <mat-form-field appearance="outline" class="select-general" subscriptSizing="dynamic">
                     <mat-label>Seleccione una opción</mat-label>
-                    <mat-select [(ngModel)]="dataMaterialSelected.transporte_1">
+                    <mat-select [(ngModel)]="dataMaterialSelected.transporte_1" hideSingleSelectionIndicator panelWidth="">
                       <mat-option *ngFor="let transporte of catalogoTransportesLocal" [value]="transporte.id">
                         {{ transporte.name_transport }}
                       </mat-option>
@@ -303,11 +298,10 @@
                 </div>
               </div>
               <div class="Col select-middle">
-                <div class="label-general">distancia (KM)</div>
+                <div class="label-general">Distancia (km)</div>
                 <div>
                   <mat-form-field>
-                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.distancia_1" matInput
-                      type="text" />
+                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.distancia_1" matInput type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -321,9 +315,9 @@
               <div class="Col select-middle">
                 <div class="label-general">Tipo de transporte</div>
                 <div>
-                  <mat-form-field appearance="outline" class="select-general">
+                  <mat-form-field appearance="outline" class="select-general" subscriptSizing="dynamic">
                     <mat-label>Seleccione una opción</mat-label>
-                    <mat-select [(ngModel)]="dataMaterialSelected.transporte_2">
+                    <mat-select [(ngModel)]="dataMaterialSelected.transporte_2" hideSingleSelectionIndicator panelWidth="">
                       <mat-option *ngFor="let transporte of catalogoTransportesExtrangero" [value]="transporte.id">
                         {{ transporte.name_transport }}
                       </mat-option>
@@ -332,11 +326,10 @@
                 </div>
               </div>
               <div class="Col select-middle">
-                <div class="label-general">distancia (KM)</div>
+                <div class="label-general">Distancia (km)</div>
                 <div>
                   <mat-form-field>
-                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.distancia_2" matInput
-                      type="text" />
+                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.distancia_2" matInput type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -350,22 +343,18 @@
               <div class="Col select-middle">
                 <div class="label-general">Tiempo de vida</div>
                 <div>
-                  <mat-form-field>
+                  <mat-form-field appearance="fill">
                     <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.vidaUtil"
-                      (ngModelChange)="
-                        changeReplaces(dataMaterialSelected.vidaUtil)
-                      " matInput type="text" />
+                      (ngModelChange)="changeReplaces(dataMaterialSelected.vidaUtil)" matInput type="text">
                   </mat-form-field>
                 </div>
               </div>
               <div class="Col select-middle">
                 <div class="label-general">Reemplazos</div>
                 <div>
-                  <mat-form-field>
-                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.reemplazos" matInput
-                      (ngModelChange)="
-                        changeLifeTime(dataMaterialSelected.reemplazos)
-                      " type="text" />
+                  <mat-form-field appearance="fill">
+                    <input class="input-general-renuew width-90" [(ngModel)]="dataMaterialSelected.reemplazos"
+                      (ngModelChange)="changeLifeTime(dataMaterialSelected.reemplazos)" matInput type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -411,11 +400,11 @@
                 <form class="example-form">
                   <mat-form-field class="example-full-width">
                     <input class="input-general-renuew" type="text" matInput [formControl]="myControl"
-                      [matAutocomplete]="auto" [(ngModel)]="dataMaterialSelected.materialDB" />
-                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                        {{ option.name_material }}
-                      </mat-option>
+                      [matAutocomplete]="auto"/>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" hideSingleSelectionIndicator panelWidth="auto">
+                      @for (option of filteredOptions | async; track option) {
+                        <mat-option [value]="option">{{ option.name_material }}</mat-option>
+                      }
                     </mat-autocomplete>
                   </mat-form-field>
                 </form>
@@ -423,7 +412,7 @@
             </div>
             <div class="Row">
               <div class="Col">
-                <mat-tab-group mat-align-tabs="start">
+                <mat-tab-group mat-align-tabs="start" disablePagination>
                   <mat-tab label="EPD's">
                     <div *ngIf="!showEPD">
                       <div *ngFor="let item of EPDS">

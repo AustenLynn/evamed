@@ -57,8 +57,8 @@ con un menor impacto ambiental durante todo su ciclo de vida <a (click)="about()
               Tipo de usuario / sector
             </div>
             <div>
-              <mat-form-field appearance="outline" class="select-general">
-                <mat-select formControlName="sector">
+              <mat-form-field appearance="outline" class="select-general" subscriptSizing="dynamic">
+                <mat-select formControlName="sector" hideSingleSelectionIndicator>
                   <mat-option value="Academia">Academia</mat-option>
                   <mat-option value="Iniciativa privada">Iniciativa privada</mat-option>
                   <mat-option value="Sector público">Sector público</mat-option>
@@ -73,8 +73,8 @@ con un menor impacto ambiental durante todo su ciclo de vida <a (click)="about()
               País
             </div>
             <div>
-              <mat-form-field appearance="outline" class="select-general">
-                <mat-select formControlName="country">
+              <mat-form-field appearance="outline" class="select-general" subscriptSizing="dynamic">
+                <mat-select formControlName="country" hideSingleSelectionIndicator>
                   <mat-option value="Antigua y Barbuda">Antigua y Barbuda</mat-option>
                   <mat-option value="Argentina">Argentina</mat-option>
                   <mat-option value="Bahamas">Bahamas</mat-option>

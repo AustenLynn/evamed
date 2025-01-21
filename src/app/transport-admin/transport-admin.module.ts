@@ -9,7 +9,7 @@ import { DeleteTransportComponent } from './components/delete-transport/delete-t
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { AddPotentialTransportComponent } from './components/potential/add-potential-transport/add-potential-transport.component';
 import { DeletePotentialTransportComponent } from './components/potential/delete-potential-transport/delete-potential-transport.component';
 import { UpdatePotentialTransportComponent } from './components/potential/update-potential-transport/update-potential-transport.component';
@@ -31,8 +31,7 @@ import { UpdatePotentialTransportComponent } from './components/potential/update
         FormsModule,
         ReactiveFormsModule,
         MaterialModule,
-        ChartsModule,
-    ],
+    ],providers: [provideCharts(withDefaultRegisterables())],
     exports: [
         TransportAdminComponent,
         AddTransportComponent,

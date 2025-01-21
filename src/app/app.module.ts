@@ -15,7 +15,7 @@ import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 //import { AngularFireAuthModule } from '@angular/fire/auth';
 //import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from './../environments/environment';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [AppComponent, LayoutComponent],
@@ -30,12 +30,11 @@ import { ChartsModule } from 'ng2-charts';
     //AngularFireModule.initializeApp(environment.firebaseConfig),
     //AngularFireAuthModule,
     //AngularFireStorageModule,
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+  ],
+  providers: [provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
-    ChartsModule,
-  ],
-  providers: [],
+    provideCharts(withDefaultRegisterables())],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

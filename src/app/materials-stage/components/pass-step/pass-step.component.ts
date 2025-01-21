@@ -5,6 +5,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   selector: 'app-pass-step',
   templateUrl: './pass-step.component.html',
   styleUrls: ['./pass-step.component.scss'],
+  host: {
+    'stage': 'material-stage'
+  }
 })
 export class PassStepComponent implements OnInit {
   constructor(
@@ -22,14 +25,14 @@ export class PassStepComponent implements OnInit {
 
   continueStep(event: Event) {
     event.preventDefault();
-    this.data.continue = true; 
+    this.data.continue = true;
     this.data.save = true;
     this.dialogRef.close(this.data);
   }
 
   continueOnly(event: Event) {
     event.preventDefault();
-    this.data.continue = true; 
+    this.data.continue = true;
     this.data.save = false;
     this.dialogRef.close(this.data);
   }

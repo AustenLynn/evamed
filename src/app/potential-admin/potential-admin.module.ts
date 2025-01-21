@@ -9,7 +9,7 @@ import { DeletePotentialComponent } from './components/delete-potential/delete-p
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
     declarations: [
@@ -25,8 +25,8 @@ import { ChartsModule } from 'ng2-charts';
         MaterialModule,
         FormsModule,
         ReactiveFormsModule,
-        ChartsModule,
     ],
+    providers: [provideCharts(withDefaultRegisterables())],
     exports: [
         PotentialAdminComponent,
         AddPotentialComponent,

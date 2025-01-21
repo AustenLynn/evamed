@@ -6,7 +6,7 @@ import { OthersAdminComponent } from './components/others-admin/others-admin.com
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 
 @NgModule({
@@ -18,7 +18,7 @@ import { ChartsModule } from 'ng2-charts';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    ChartsModule,
-  ]
+  ],
+  providers: [provideCharts(withDefaultRegisterables())],
 })
 export class OthersAdminModule { }

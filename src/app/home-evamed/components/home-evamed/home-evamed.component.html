@@ -6,9 +6,9 @@
         Tus proyectos
       </div>
       <div class="filter-options">
-        <mat-form-field appearance="outline" class="select-general">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="select-general">
           <mat-label>Seleccione una opción</mat-label>
-          <mat-select  [(ngModel)]="filtroUsoSeleccionado" (selectionChange)="selectUse(filtroUsoSeleccionado)">
+          <mat-select [(ngModel)]="filtroUsoSeleccionado" (selectionChange)="selectUse(filtroUsoSeleccionado)" hideSingleSelectionIndicator>
             <mat-option *ngFor="let uso of filtroCatalogoUsos" [value]="uso.id">
               {{uso.name_use}}
             </mat-option>
@@ -23,13 +23,10 @@
       </div>
     </div>
     <mat-card appearance="outlined" *ngFor="let project of projectsList; let i = index" class="card-project">
+      <mat-card-header>
       <div class="header-tag">
         <div class="more-vert">
-          <button
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-            aria-label="Example icon-button with a menu"
-          >
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon class="more-vert-custom">more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" class="custom-menu">
@@ -58,23 +55,30 @@
           </div>
         </div>
       </div>
-      <mat-tab-group class="container-principal-tab">
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group class="container-principal-tab" mat-stretch-tabs="false" mat-align-tabs="end">
         <mat-tab label="Configurar información" class="label-principal-tab">
           <div class="second-mat-tab-group">
             <mat-tab-group class="container-second-tab">
               <mat-tab label="Producción" class="label-second-tab">
-                <section class="grid-container"  >
+                <section class="grid-container">
+
                   <mat-card
                     appearance="outlined"
                     class="card-item-custom"
                     *ngFor="let section of serchSections(project.id)"
                     (click)="updateMaterial(project.id)"
                     >
-                    <h2>{{section.name_section}}</h2>
-                    <ul class="listItems">
-                      <li *ngFor="let sc of serchSC(project.id, section.id)">{{sc}}</li>
-                    </ul>
+                    <mat-card-header></mat-card-header>
+                    <mat-card-content>
+                      <h2>{{section.name_section}}</h2>
+                      <ul class="listItems">
+                        <li *ngFor="let sc of serchSC(project.id, section.id)">{{sc}}</li>
+                      </ul>
+                  </mat-card-content>
                   </mat-card>
+
                 </section>
               </mat-tab>
               <mat-tab label="Construcción" class="label-second-tab">
@@ -98,24 +102,26 @@
               <mat-tab label="Uso" class="label-second-tab">
                 <section class="grid-container">
                   <div class="subseccion">
-                    <div>
-                      <canvas baseChart
-                      [datasets]="auxDatosGraficaUso[i]"
-                      [options]="pieChartOptions_elementos"
-                      [chartType]="pieChartType">
-                    </canvas>
+                    <div class="canvas-container subseccion">
+                      <canvas #MyChart='base-chart' #canvas baseChart
+                          [data]="auxDatosGraficaUso[i]"
+                          [options]="pieChartOptions_elementos"
+                          [type]="pieChartType"
+                          width="250px" height="292px">
+                      </canvas>
                   </div>
                   <div>
                       <h2>Consumo energético total <br>requerido anualmente</h2>
                       <div *ngFor="let data of serchUseData(project.id)">
                         <div *ngIf="data.source === 'electric'">
                           <span class="dot" [ngStyle]="{'background-color': '#767676'}"></span>
-                          Red eléctrica nacional {{data.quantity  | number: '1.2-2' }} kWh
-                        </div>
+                          <span class="dot-label">Red eléctrica nacional {{data.quantity  | number: '1.2-2' }} kWh</span></div>
                         <div *ngIf="data.source === 'fuel'">
-                          <span class="dot" [ngStyle]="{'background-color': '#DFDFDF'}"></span>Combustible: {{data.quantity  | number: '1.2-2' }} kWh</div>
+                          <span class="dot" [ngStyle]="{'background-color': '#DFDFDF'}"></span>
+                          <span class="dot-label">Combustible: {{data.quantity  | number: '1.2-2' }} kWh</span></div>
                         <div *ngIf="data.source === 'panels'">
-                          <span class="dot" [ngStyle]="{'background-color': '#C3C3C3'}"></span>Paneles fotovoltaicos: {{data.quantity  | number: '1.2-2' }} kWh</div>
+                          <span class="dot" [ngStyle]="{'background-color': '#C3C3C3'}"></span>
+                          <span class="dot-label">Paneles fotovoltaicos: {{data.quantity  | number: '1.2-2' }} kWh</span></div>
                       </div>
                       <button
                           mat-button
@@ -155,11 +161,13 @@
               <div>
                 <div class="seccionUno">
                   <p>Selecciona impacto ambiental</p>
-                  <mat-select class="select-impacto-ambiental" [(ngModel)]="auxDataProjectList[i].impactoCompleteSelect" (selectionChange)="selectImpactoAmbiental(auxDataProjectList[i].impactoCompleteSelect,i)" required>
-                    <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
-                      {{impacto.name_complete_potential_type}}
-                    </mat-option>
-                  </mat-select>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-select [(ngModel)]="auxDataProjectList[i].impactoCompleteSelect" (selectionChange)="selectImpactoAmbiental(auxDataProjectList[i].impactoCompleteSelect,i)" required hideSingleSelectionIndicator panelWidth="">
+                      <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
+                        {{impacto.name_complete_potential_type}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                   <p>Fases de ciclo de vida</p>
                   <ul>
                      <li> <button id="{{auxDataProjectList[i].idsBotones['Producción']}}" (click)="selectEtapa('Producción',i,auxDataProjectList[i].id)" mat-stroked-button class="button-info">
@@ -221,18 +229,19 @@
               </div>
               <div>
                 <div class="button-graph">
-                  <mat-button-toggle-group>
+                  <mat-button-toggle-group hideSingleSelectionIndicator>
                        <mat-button-toggle (click)="cambioGrafica(i,'Pie')"><mat-icon>pie_chart</mat-icon></mat-button-toggle>
                        <mat-button-toggle (click)="cambioGrafica(i,'Bar')"><mat-icon>bar_chart</mat-icon></mat-button-toggle>
                      </mat-button-toggle-group>
-                  <button>Exportar</button>
+                  <button mat-button>Exportar</button>
                 </div>
                 <div *ngIf="auxDataProjectList[i].TipoGraficaActiva['Pie']">
                   <div class="canvas-container seccionTres">
                     <canvas #MyChart='base-chart' #canvas baseChart
-                                [datasets]="auxDataProjectList[i].dataGraficaPie"
-                                [chartType]="doughnutChartType"
+                                [data]="auxDataProjectList[i].dataGraficaPie"
+                                [type]="doughnutChartType"
                                 [options]="pieChartOptions"
+                                [plugins]="chartPlugins"
                                 width="217px" height="292px">
                     </canvas>
                   </div>
@@ -240,18 +249,18 @@
                 <div *ngIf="auxDataProjectList[i].TipoGraficaActiva['Bar']">
                   <div class="canvas-container seccionTres">
                     <canvas #MyChart='base-chart' #canvas baseChart
-                        [datasets]="auxDataProjectList[i].dataGraficaBar['datos']"
+                        [data]="auxDataProjectList[i].dataGraficaBar"
                         [labels]="auxDataProjectList[i].dataGraficaBar['labels']"
                         [options]="barChartOptions"
                         [legend]="barChartLegend"
-                        [plugins]="barChartPlugins"
-                        [chartType]="barChartType"
-                         height="305px">
+                        [plugins]="chartPlugins"
+                        [type]="barChartType"
+                        height="305px">
                       </canvas>
                   </div>
                 </div>
                 <p *ngIf="auxDataProjectList[i].errorCalculos" class="text-error">
-                  Existe un herror en los calculos por falta de datos
+                  Existe un error en los calculos por falta de datos
                 </p>
               </div>
               <div>
@@ -269,10 +278,12 @@
                   </li>
                 </ul>
                 <div>
-                  <p>Bases de Datos consideradas</p>
-                  <mat-select multiple (selectionChange)="ajusteUsoBaseDatos($event.value,i)">
-                    <mat-option *ngFor="let topping of auxDataProjectList[i].DBList" [value]="topping">{{topping}}</mat-option>
-                  </mat-select>
+                  <p>Bases de datos consideradas</p>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-select multiple (selectionChange)="ajusteUsoBaseDatos($event.value,i)">
+                      <mat-option *ngFor="let topping of auxDataProjectList[i].DBList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
               </div>
             </div>
@@ -282,23 +293,25 @@
               </div>
               <div class="secciones">
                 <div>
-                  <mat-select class="select-impacto-ambiental" [(ngModel)]="auxDataProjectList[i].opcionCarbonoSeleccionada" (selectionChange)="selectOpcionCarbono(auxDataProjectList[i].opcionCarbonoSeleccionada,i)" required>
-                    <mat-option *ngFor="let opcion of catologoOpcionesCarbono" [value]="opcion">
-                      {{opcion}}
-                    </mat-option>
-                  </mat-select>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-select class="select-impacto-ambiental" [(ngModel)]="auxDataProjectList[i].opcionCarbonoSeleccionada" (selectionChange)="selectOpcionCarbono(auxDataProjectList[i].opcionCarbonoSeleccionada,i)" required hideSingleSelectionIndicator panelWidth="">
+                      <mat-option *ngFor="let opcion of catologoOpcionesCarbono" [value]="opcion">
+                        {{opcion}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                   <div class="texto-descripcion">
                     {{auxDataProjectList[i].descripcionCarbono}}
                   </div>
                 </div>
                 <div class="canvas-container">
                   <canvas #MyChart='base-chart' #canvas baseChart
-                      [datasets]="auxDataProjectList[i].dataGraficaCarbono['datos']"
+                      [data]="auxDataProjectList[i].dataGraficaCarbono"
                       [labels]="auxDataProjectList[i].dataGraficaCarbono['labels']"
                       [options]="barChartHorizontalOptions"
                       [legend]="barChartLegend"
-                      [plugins]="barChartPlugins"
-                      [chartType]="barChartHorizonatlType"
+                      [plugins]="chartPlugins"
+                      [type]="barChartHorizontalType"
                        height="305px">
                     </canvas>
                     <p>KgCO<sub>2</sub> / m<sup>2</sup>a</p>
@@ -365,6 +378,7 @@
           </div>
         </mat-tab>
       </mat-tab-group>
+    </mat-card-content>
     </mat-card>
   </div>
   <div class="description-container">
@@ -394,7 +408,7 @@
       </button>
       </mat-card-actions>
 
-      <mat-card-actions  *ngIf="email === 'arqarvizup@gmail.com'">
+      <mat-card-actions *ngIf="email === 'arqarvizup@gmail.com'">
         <button
           mat-button
           class="yellow-button"

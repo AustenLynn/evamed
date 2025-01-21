@@ -11,7 +11,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [AboutComponent],
@@ -25,8 +25,8 @@ import { ChartsModule } from 'ng2-charts';
     MatButtonModule,
     MatIconModule,
     MatButtonToggleModule,
-    ChartsModule,
   ],
+  providers: [provideCharts(withDefaultRegisterables())],
   exports: [AboutComponent],
 })
 export class AboutModule {}

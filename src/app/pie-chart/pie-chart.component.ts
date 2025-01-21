@@ -1,7 +1,9 @@
 import { EventEmitter, Input, Output } from '@angular/core';
 import { Component, OnInit, ViewChild} from '@angular/core';
-import { ChartDataSets } from 'chart.js';
-import {BaseChartDirective } from 'ng2-charts';
+import { ChartDataset } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 import { couldStartTrivia } from 'typescript';
 import subetapasInfo from 'src/app/calculos/Subetapas.json';
 import { element } from 'protractor';
@@ -9,7 +11,9 @@ import { element } from 'protractor';
 @Component({
   selector: 'app-pie-chart',
   templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.scss']
+  styleUrls: ['./pie-chart.component.scss'],
+  standalone: true,
+  imports: [BaseChartDirective, MatCardModule, CommonModule],
 })
 export class PieChartComponent implements OnInit {
   @ViewChild('MyChart') chartDir: BaseChartDirective;
@@ -145,7 +149,7 @@ export class PieChartComponent implements OnInit {
   }
 
   cargarDatos(ID:string, indicador:string){
-    let auxdata: ChartDataSets[];
+    let auxdata: ChartDataset[];
     let color: any[]
     let auxlabel = ['Producción','Construccion','Uso','FinDeVida']
     let auxlabel_dos = ['Materiales', 'Construccion', 'Uso', 'FinDeVida']
@@ -169,11 +173,11 @@ export class PieChartComponent implements OnInit {
         if (n1 > n2) {
             return 1;
         }
-    
+
         if (n1 < n2) {
             return -1;
         }
-    
+
         return 0;
       })
       auxdatos = auxdatos.reverse()
@@ -251,7 +255,7 @@ export class PieChartComponent implements OnInit {
             data: datos,
             backgroundColor: color
           }]
-    
+
           this.pieChartColor = color;
           this.pieChartData = [...this.pieChartData,auxdata];
           this.pieChartLabels=[...this.pieChartLabels,auxdataLabel];
@@ -277,11 +281,11 @@ export class PieChartComponent implements OnInit {
   public onChartClick(e: any): void {
     let aux: any;
     let auxd= [{Materiales: '#4DBE89'} ,  {Construccion: '#148A93'} ,  {Uso: '#8F5091' },  {FinDeVida: '#DEA961'}];
-    if (this.chartDir.chart.getElementAtEvent(event)[0] != undefined) {
+    if (this.chartDir.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true)[0] != undefined) {
       if (this.bandera_click==0){
-        Object.keys(this.chartDir.chart.getElementAtEvent(event)[0]).forEach(element => {
+        Object.keys(this.chartDir.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true)[0]).forEach(element => {
           if (element == '_model') {
-            aux = this.chartDir.chart.getElementAtEvent(event)[0][element];
+            aux = this.chartDir.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true)[0][element];
             Object.keys(aux).forEach(item => {
               if (item == 'backgroundColor') {
                 auxd.forEach(label => {
@@ -296,9 +300,9 @@ export class PieChartComponent implements OnInit {
           }
         });
       }else{
-        Object.keys(this.chartDir.chart.getElementAtEvent(event)[0]).forEach(element => {
+        Object.keys(this.chartDir.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true)[0]).forEach(element => {
           if (element == '_model') {
-            aux = this.chartDir.chart.getElementAtEvent(event)[0][element];
+            aux = this.chartDir.chart.getElementsAtEventForMode(e, 'nearest', {intersect: true}, true)[0][element];
             this.acomodoDatos(aux.backgroundColor)
           }
         });
@@ -334,7 +338,7 @@ export class PieChartComponent implements OnInit {
   }
 
   RedistribucionGrafica(ID:string, indicador:string){
-    let auxdata: ChartDataSets[];
+    let auxdata: ChartDataset[];
     let color: any[];
     let auxlabel = ['Producción','Construccion','Uso','FinDeVida'];
     let auxdatos = [];
