@@ -1,14 +1,15 @@
 import { Component, Input, OnInit,ViewChild } from '@angular/core';
+import { ChartOptions, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { MatCardModule } from '@angular/material/card';
-import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-radial-chart',
   templateUrl: './radial-chart.component.html',
   styleUrls: ['./radial-chart.component.scss'],
   standalone: true,
-  imports: [BaseChartDirective, MatCardModule],
+  imports: [BaseChartDirective, MatCardModule, CommonModule],
 })
 export class RadialChartComponent implements OnInit {
   @ViewChild('MyChart') chartDir: BaseChartDirective;
@@ -32,38 +33,44 @@ export class RadialChartComponent implements OnInit {
     '#DEA961'
   ];
 
-  public radarChartOptions = {
+  public radarChartOptions: ChartOptions = {
     responsive: true,
     layout:{
-      padding:0,
+      padding: 0,
     },
-    legend:{
-      display:false,
-    },
-    tooltips: { enabled: false },
     plugins: {
+      legend:{
+        display:false,
+      },
+      tooltip: { enabled: false },
       datalabels: {
         display: false
       }
     },
-    scale:{
-      pointLabels: {
-        fontSize:12,
-      },
-      ticks:{
-        fontSize:7,
-      },
+    scales:{
+      r: {
+        pointLabels: {
+          font: {
+            size: 12,
+          }
+        },
+        ticks:{
+          font: {
+            size: 7,
+          }
+        },
+      }
     }
-  };
-  public radarChartLabels=[];
+  }
 
   public radarChartData = [];
-  public radarChartType = 'radar';
+  public radarChartType: ChartType = 'radar';
+  public radarChartLabels: BaseChartDirective["labels"];
+  public chartData = {};
 
   constructor() { }
 
   ngOnInit(): void {
-    this.cargarLabels(this.id);
     this.cargarDatos(this.id);
     console.log("Radar");
   }
@@ -89,7 +96,7 @@ export class RadialChartComponent implements OnInit {
         }
       });
     });
-    //console.log(this.radarChartLabels)
+    this.chartData['labels'] = this.radarChartLabels;
   }
 
   cargarDatos(ID:string){
@@ -111,6 +118,7 @@ export class RadialChartComponent implements OnInit {
     });
        //console.log(suma)
     this.inputProyect.forEach(proyecto => {
+      console.log(proyecto)
       let suma = 0;
       let valores_suma = [];
       Object.keys(proyecto.Datos[auxlabel[0]]).forEach(element => {
@@ -136,10 +144,13 @@ export class RadialChartComponent implements OnInit {
           backgroundColor: bcolor,
           pointBackgroundColor: pcolor,
           borderColor: "transparent",
-          borderWidth: 0.1
+          borderWidth: 0.1,
+          label: `${ID}-${proyecto.id}`,
+          project: proyecto.Nombre,
+          fill: 'start'
         }
       ];
-      this.radarChartData=[...this.radarChartData,auxdata]
+      this.radarChartData.push({ labels: this.chartData['labels'], datasets: auxdata });
       datos=[];
       auxdata=[];
       auxdatos=[];

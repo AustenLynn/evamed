@@ -261,6 +261,13 @@ input::placeholder {
   margin-bottom: 15px !important;
 }
 
+.radial-card-header {
+  padding: 10px 0 !important;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 .mat-select-arrow {
   margin-top: 10px !important;
