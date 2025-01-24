@@ -145,11 +145,23 @@
               "devServerTarget": "evamed:serve:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "f97aa768-b64f-45cb-8e98-48450c80a80a"
+    "analytics": "f97aa768-b64f-45cb-8e98-48450c80a80a",
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }
