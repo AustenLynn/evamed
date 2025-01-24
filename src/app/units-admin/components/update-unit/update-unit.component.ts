@@ -45,7 +45,7 @@ export class UpdateUnitComponent implements OnInit {
     event.preventDefault();
     if (this.form.valid) {
       const unit = this.form.value;
-      this.materialsService.updateUnit(this.id, unit).subscribe((data) => {
+      this.materialsService.updateUnit(this.id, unit).subscribe(() => {
         this.onNoClick();
       });
     }

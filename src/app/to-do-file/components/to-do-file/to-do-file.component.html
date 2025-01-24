@@ -16,8 +16,8 @@
           <p class="p-instrucciones">
             Descarga el complemento para exportar los materiales desde el modelo 3D de REVIT.
           </p>
-          <div class="icon-download" (click)="onDownloadMated()">
-            <img src="assets/images/Icon awesome-file-download.png"/>
+          <div class="icon-download" (click)="onDownloadMated()" (keypress)="onDownloadMated()" tabindex="1">
+            <img src="assets/images/Icon awesome-file-download.png" alt="Download Mated file"/>
             <h3>Descargar archivo</h3>
           </div>
         </div>
@@ -27,12 +27,12 @@
             Descarga la plantilla de Excel para realizar la captura de materiales de forma manual.
           </p>
           <div class="container-two-icons">
-            <div class="icon-download" (click)="onDownloadWindows()">
-              <img src="assets/images/Grupo 2070.png"/>
+            <div class="icon-download" (click)="onDownloadWindows()" (keypress)="onDownloadWindows()" tabindex="2">
+              <img src="assets/images/Grupo 2070.png" alt="Download Windows file"/>
               <h3>Descargar archivo</h3>
             </div>
-            <div class="icon-download" (click)="onDownloadMac()">
-              <img src="assets/images/Grupo 2071.png"/>
+            <div class="icon-download" (click)="onDownloadMac()" (keypress)="onDownloadMac()" tabindex="1">
+              <img src="assets/images/Grupo 2071.png" alt="Download Mac file"/>
               <h3>Descargar archivo</h3>
             </div>
           </div>
@@ -49,7 +49,7 @@
             por sistemas constructivos.
           </p>
           <div class="container-upload-icon">
-            <img  #asImage src="assets/images/Icon awesome-file-upload.png" class="img-upload" />
+            <img  #asImage src="assets/images/Icon awesome-file-upload.png" class="img-upload" alt="File upload"/>
             <input type="file" id="file" (change)="onFileChange($event)" multiple="false" class="input-upload" />
             <label for="file" #asTitle  id="fileType" class="title-action">Cargar archivo</label>
           </div>

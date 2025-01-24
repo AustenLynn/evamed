@@ -29,7 +29,7 @@ export class UpdatePotentialTransportComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.buildForm();
-    this.materialsService.getPotentialTypes().subscribe((data) => {
+    this.materialsService.getPotentialTypes().subscribe(data => {
       this.ListPotential = data;
     });
   }
@@ -58,7 +58,7 @@ export class UpdatePotentialTransportComponent implements OnInit {
           ...scheme,
           transport_id: this.data[0].standard_id,
         })
-        .subscribe((newScheme) => {
+        .subscribe(newScheme => {
           console.log(newScheme);
           this.onNoClick();
         });

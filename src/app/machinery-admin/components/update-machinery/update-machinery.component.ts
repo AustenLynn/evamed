@@ -39,28 +39,28 @@ export class UpdateMachineryComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.buildForm();
-    this.materialsService.getPotentialTypes().subscribe((data) => {
+    this.materialsService.getPotentialTypes().subscribe(data => {
       this.potentialTypeList = data;
     });
-    this.materialsService.getUnits().subscribe((data) => {
+    this.materialsService.getUnits().subscribe(data => {
       this.units = data;
     });
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params) => {
-      this.materialsService.getMachinery().subscribe((data) => {
+      this.materialsService.getMachinery().subscribe(data => {
         const machinaryFiltered = data.filter(
-          (machinary) => machinary.id === parseInt(params.id)
+          machinary => machinary.id === parseInt(params.id)
         );
 
-        machinaryFiltered.map((machinary) => {
+        machinaryFiltered.map(machinary => {
           this.id = machinary.id;
           this.form.patchValue(machinary);
           this.potentialList = [];
-          this.materialsService.getMachineryPotential().subscribe((data) => {
+          this.materialsService.getMachineryPotential().subscribe(data => {
             const potentialList = data.filter(
-              (potential) => potential.sourceInformarion_id === machinary.id
+              potential => potential.sourceInformarion_id === machinary.id
             );
             this.potentialList = potentialList;
             console.log(this.potentialList);
@@ -86,7 +86,7 @@ export class UpdateMachineryComponent implements OnInit {
       const machinery = this.form.value;
       this.materialsService
         .updateMachinery(this.id, machinery)
-        .subscribe((newProduct) => {
+        .subscribe(() => {
           this.ngOnInit();
           this.router.navigate(['./admin-machinery/']);
         });
@@ -100,7 +100,7 @@ export class UpdateMachineryComponent implements OnInit {
       data: { sourceInformarion_id: this.id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -112,7 +112,7 @@ export class UpdateMachineryComponent implements OnInit {
       data: { ...element },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -120,28 +120,28 @@ export class UpdateMachineryComponent implements OnInit {
   deletePotential(event: Event, potentialId: number) {
     event.preventDefault();
     const potentialSelected = this.potentialList.filter(
-      (data) => data.id === potentialId
-    );
-    const dialogRef = this.dialog.open(DeletePotentialMachineryComponent, {
+      data => data.id === potentialId
+    ),
+     dialogRef = this.dialog.open(DeletePotentialMachineryComponent, {
       width: '680px',
       data: potentialSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   getPotential(id: number) {
     const potencial = this.potentialTypeList.filter(
-      (potencial) => potencial.id === id
+      potencial => potencial.id === id
     );
 
     return potencial[0].name_complete_potential_type;
   }
 
   getUnit(id: number) {
-    const unit = this.units.filter((unit) => unit.id === id);
+    const unit = this.units.filter(unit => unit.id === id);
 
     return unit[0].name_unit;
   }

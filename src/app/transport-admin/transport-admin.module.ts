@@ -31,7 +31,7 @@ import { UpdatePotentialTransportComponent } from './components/potential/update
         FormsModule,
         ReactiveFormsModule,
         MaterialModule,
-    ],providers: [provideCharts(withDefaultRegisterables())],
+    ], providers: [provideCharts(withDefaultRegisterables())],
     exports: [
         TransportAdminComponent,
         AddTransportComponent,

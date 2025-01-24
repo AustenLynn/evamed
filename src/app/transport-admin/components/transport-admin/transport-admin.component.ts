@@ -22,7 +22,7 @@ export class TransportAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.materialsService.getTransports().subscribe((data) => {
+    this.materialsService.getTransports().subscribe(data => {
       this.transportList = data;
     });
   }
@@ -38,7 +38,7 @@ export class TransportAdminComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -46,14 +46,14 @@ export class TransportAdminComponent implements OnInit {
   deleteTransport(event: Event, unitId) {
     event.preventDefault();
     const transportSelected = this.transportList.filter(
-      (data) => data.id === unitId
-    );
-    const dialogRef = this.dialog.open(DeleteTransportComponent, {
+      data => data.id === unitId
+    ),
+     dialogRef = this.dialog.open(DeleteTransportComponent, {
       width: '680px',
       data: transportSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }

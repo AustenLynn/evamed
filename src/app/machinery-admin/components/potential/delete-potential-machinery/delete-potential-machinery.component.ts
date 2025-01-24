@@ -26,7 +26,7 @@ export class DeletePotentialMachineryComponent implements OnInit {
 
   deletePotential(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deleteMachineryPotential(id).subscribe((data) => {
+    this.materialsService.deleteMachineryPotential(id).subscribe(() => {
       this.onNoClick();
     });
   }

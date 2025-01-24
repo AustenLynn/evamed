@@ -12,7 +12,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class PassStepComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<PassStepComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { continue: boolean, save: boolean  }
+    @Inject(MAT_DIALOG_DATA) public data: { continue: boolean, save: boolean }
   ) {}
 
   ngOnInit(): void {}

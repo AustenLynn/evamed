@@ -21,10 +21,10 @@ export class AddMaterialComponent implements OnInit {
     private materialsService: MaterialsService
   ) {
     this.buildForm();
-    this.materialsService.getUnits().subscribe((data) => {
+    this.materialsService.getUnits().subscribe(data => {
       this.units = data;
     });
-    this.materialsService.getDbMaterials().subscribe((data) => {
+    this.materialsService.getDbMaterials().subscribe(data => {
       this.ListDatabases = data;
     });
   }
@@ -43,7 +43,7 @@ export class AddMaterialComponent implements OnInit {
   onSubmit() {
     if (this.addMaterialForm.valid) {
       const material = this.addMaterialForm.value;
-      this.materialsService.addMaterial(material).subscribe((data) => {
+      this.materialsService.addMaterial(material).subscribe(() => {
         this.goToMaterialList();
       });
     }

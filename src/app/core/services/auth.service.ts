@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-//import { AngularFireAuth } from '@angular/fire/auth';
 import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword,
   UserCredential, signOut, sendPasswordResetEmail, sendEmailVerification,} from '@angular/fire/auth';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { timeout, retry, catchError, switchMap, finalize, tap  } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
 import { TokenService } from './token.service';
-import { of } from 'rxjs';
-//import { _throw } from 'rxjs/observable/throw';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +14,7 @@ export class AuthService {
 
   boolError: boolean;
 
-  response: {};
+  response: object;
 
   constructor(
     //private af: AngularFireAuth,

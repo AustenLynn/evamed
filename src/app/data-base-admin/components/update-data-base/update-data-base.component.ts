@@ -48,7 +48,7 @@ export class UpdateDataBaseComponent implements OnInit {
       const dataBase = this.form.value;
       this.materialsService
         .updateDbMaterial(this.id, dataBase)
-        .subscribe((data) => {
+        .subscribe(() => {
           this.onNoClick();
         });
     }

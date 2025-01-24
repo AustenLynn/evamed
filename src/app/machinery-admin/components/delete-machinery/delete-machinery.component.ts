@@ -27,7 +27,7 @@ export class DeleteMachineryComponent implements OnInit {
 
   deleteMachinery(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deleteMachinery(id).subscribe((data) => {
+    this.materialsService.deleteMachinery(id).subscribe(() => {
       this.onNoClick();
     });
   }

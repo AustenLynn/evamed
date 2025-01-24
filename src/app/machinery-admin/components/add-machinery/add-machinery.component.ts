@@ -40,7 +40,7 @@ export class AddMachineryComponent implements OnInit {
     event.preventDefault();
     if (this.form.valid) {
       const machinery = this.form.value;
-      this.materialsService.addMachinery(machinery).subscribe((data) => {
+      this.materialsService.addMachinery(machinery).subscribe(() => {
         this.onNoClick();
       });
     }

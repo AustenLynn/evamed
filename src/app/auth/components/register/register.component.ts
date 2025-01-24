@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
     private catalogsService: CatalogsService
   ) {
     this.buildForm();
-    this.catalogsService.countriesCatalog().subscribe((data) => {
+    this.catalogsService.countriesCatalog().subscribe(data => {
       this.catalogoPaises = data;
     });
   }
@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
       const value = this.form.value;
 
       if (value.password === value.password2) {
-        this.user.addUser(value).subscribe((data) => {});
+        this.user.addUser(value).subscribe(() => {});
         this.authService
           .createUser(value.email, value.password)
           .then(() => {
@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
             alert('Registro correcto');
             this.router.navigate(['/auth/login']);
           })
-          .catch(function (err) {
+          .catch( () => {
             alert(
               'El correo ya esta registrado con otro usuario, registra un nuevo correo'
             );

@@ -33,7 +33,7 @@ export class PotentialAdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.materialsService.getPotentialTypes().subscribe((data) => {
+    this.materialsService.getPotentialTypes().subscribe(data => {
       this.ListPotential = data;
     });
   }
@@ -45,7 +45,7 @@ export class PotentialAdminComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -53,14 +53,14 @@ export class PotentialAdminComponent implements OnInit {
   updatePotential(event: Event, potentialId) {
     event.preventDefault();
     const unitSelected = this.ListPotential.filter(
-      (data) => data.id === potentialId
-    );
-    const dialogRef = this.dialog.open(UpdatePotentialComponent, {
+      data => data.id === potentialId
+    ),
+     dialogRef = this.dialog.open(UpdatePotentialComponent, {
       width: '680px',
       data: unitSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -68,14 +68,14 @@ export class PotentialAdminComponent implements OnInit {
   deletePotential(event: Event, potentialId) {
     event.preventDefault();
     const unitSelected = this.ListPotential.filter(
-      (data) => data.id === potentialId
-    );
-    const dialogRef = this.dialog.open(DeletePotentialComponent, {
+      data => data.id === potentialId
+    ),
+     dialogRef = this.dialog.open(DeletePotentialComponent, {
       width: '680px',
       data: unitSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }

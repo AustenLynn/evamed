@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartOptions, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { MatCardModule } from '@angular/material/card';
@@ -35,26 +35,26 @@ export class RadialChartComponent implements OnInit {
 
   public radarChartOptions: ChartOptions = {
     responsive: true,
-    layout:{
+    layout: {
       padding: 0,
     },
     plugins: {
-      legend:{
-        display:false,
+      legend: {
+        display: false,
       },
       tooltip: { enabled: false },
       datalabels: {
         display: false
       }
     },
-    scales:{
+    scales: {
       r: {
         pointLabels: {
           font: {
             size: 12,
           }
         },
-        ticks:{
+        ticks: {
           font: {
             size: 7,
           }
@@ -75,17 +75,17 @@ export class RadialChartComponent implements OnInit {
     console.log("Radar");
   }
 
-  cargarLabels(ID:string){
+  cargarLabels(ID:string) {
     this.radarChartLabels = [];
-    this.subtitulo=ID;
+    this.subtitulo = ID;
     this.inputProyect.forEach(proyecto => {
       Object.keys(proyecto.Datos).forEach(indicador => {
-        if (indicador === ID){
+        if (indicador === ID) {
           Object.keys(proyecto.Datos[indicador]).forEach(element => {
-            let auxAbr=""
+            let auxAbr = ""
             this.impactos.forEach(impacto => {
-              let auxNameImpacto = this.ajustarNombre(impacto['name_complete_potential_type']);
-              if(element === auxNameImpacto){
+              const auxNameImpacto = this.ajustarNombre(impacto['name_complete_potential_type']);
+              if(element === auxNameImpacto) {
                 auxAbr = impacto['name_potential_type']
               }
             });
@@ -99,16 +99,16 @@ export class RadialChartComponent implements OnInit {
     this.chartData['labels'] = this.radarChartLabels;
   }
 
-  cargarDatos(ID:string){
+  cargarDatos(ID:string) {
     this.radarChartData = [];
-    let auxlabel = ['Producción', 'Construccion', 'Uso', 'FinDeVida'];
-    let auxdata=[];
-    let auxdatos=[]
-    let datos=[]
-    let bcolor='';
-    let pcolor='';
+    const auxlabel = ['Producción', 'Construccion', 'Uso', 'FinDeVida'];
+    let auxdata = [],
+     auxdatos = [],
+     datos = [],
+     bcolor = '',
+     pcolor = '';
     this.cargarLabels(ID);
-    this.subtitulo=ID;
+    this.subtitulo = ID;
 
     Object.keys(auxlabel).forEach(indicador => {
       if (auxlabel[indicador] === ID) {
@@ -119,8 +119,7 @@ export class RadialChartComponent implements OnInit {
        //console.log(suma)
     this.inputProyect.forEach(proyecto => {
       console.log(proyecto)
-      let suma = 0;
-      let valores_suma = [];
+      const valores_suma = [];
       Object.keys(proyecto.Datos[auxlabel[0]]).forEach(element => {
         valores_suma[element] = 0;
       });
@@ -134,7 +133,7 @@ export class RadialChartComponent implements OnInit {
         if (auxlabel[indicador] === ID) {
           auxdatos = proyecto.Datos[auxlabel[indicador]]
           Object.keys(proyecto.Datos[auxlabel[indicador]]).forEach(element => {
-            datos = [...datos, ((auxdatos[element]*100)/valores_suma[element]).toFixed(2)];
+            datos = [...datos, ((auxdatos[element] * 100) / valores_suma[element]).toFixed(2)];
           });
         }
       });
@@ -151,35 +150,35 @@ export class RadialChartComponent implements OnInit {
         }
       ];
       this.radarChartData.push({ labels: this.chartData['labels'], datasets: auxdata });
-      datos=[];
-      auxdata=[];
-      auxdatos=[];
+      datos = [];
+      auxdata = [];
+      auxdatos = [];
     });
 
   }
 
   ajustarNombre(name: string) {
-    let help = name;
-    let spacios=0;
-    let numC=0;
-    let maxlinea=0;
-    for (let i of help){
-      if(i===' '){
-        spacios=spacios+1;
-        if(spacios==1 && maxlinea >= 9){
+    let help = name,
+     spacios = 0,
+     numC = 0,
+     maxlinea = 0;
+    for (const i of help) {
+      if(i === ' ') {
+        spacios = spacios + 1;
+        if(spacios == 1 && maxlinea >= 9) {
           help = [help.slice(0, numC), '\n', help.slice(numC)].join('');
-          spacios=0;
+          spacios = 0;
           maxlinea = 0;
-          numC=numC+1;
+          numC = numC + 1;
         }
-        if(spacios==2){
+        if(spacios == 2) {
           help = [help.slice(0, numC), '\n', help.slice(numC)].join('');
-          spacios=0;
-          numC=numC+1;
+          spacios = 0;
+          numC = numC + 1;
         }
       }
-      maxlinea=maxlinea+1;
-      numC=numC+1;
+      maxlinea = maxlinea + 1;
+      numC = numC + 1;
     }
 
     return help

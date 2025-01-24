@@ -27,7 +27,7 @@ export class AddPotentialComponent implements OnInit {
   ) {
     this.buildForm();
 
-    this.materialsService.getUnits().subscribe((data) => {
+    this.materialsService.getUnits().subscribe(data => {
       this.units = data;
     });
   }
@@ -52,7 +52,7 @@ export class AddPotentialComponent implements OnInit {
       const potentialType = this.form.value;
       this.materialsService
         .addPotentialTypes(potentialType)
-        .subscribe((data) => {
+        .subscribe(data => {
           console.log(data);
           this.onNoClick();
         });

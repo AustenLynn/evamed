@@ -46,8 +46,8 @@ export class AddNewProjectComponent implements OnInit {
 
   select(id) {
     this.catalogoCiudades = [];
-    this.catalogsService.getCities().subscribe((data) => {
-      data.map((item) => {
+    this.catalogsService.getCities().subscribe(data => {
+      data.map(item => {
         if (item.state_id === id) {
           this.catalogoCiudades.push(item);
         }

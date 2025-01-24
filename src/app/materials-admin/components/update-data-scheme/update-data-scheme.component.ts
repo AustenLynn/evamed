@@ -37,9 +37,9 @@ export class UpdateDataSchemeComponent implements OnInit {
 
   unit_id: number;
 
-  unit_name: string = 'Seleccione potencial de impacto ambiental';
+  unit_name = 'Seleccione potencial de impacto ambiental';
 
-  loading: boolean = true;
+  loading = true;
 
   constructor(
     private materialsService: MaterialsService,
@@ -49,13 +49,13 @@ export class UpdateDataSchemeComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.buildForm();
-    this.materialsService.getUnits().subscribe((data) => {
+    this.materialsService.getUnits().subscribe(data => {
       this.units = data;
     });
-    this.materialsService.getStandards().subscribe((data) => {
+    this.materialsService.getStandards().subscribe(data => {
       this.ListStandards = data;
     });
-    this.materialsService.getPotentialTypes().subscribe((data) => {
+    this.materialsService.getPotentialTypes().subscribe(data => {
       this.ListPotential = data;
     });
   }
@@ -65,9 +65,9 @@ export class UpdateDataSchemeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.analisisService.getMaterialSchemeData().subscribe((data) => {
+    this.analisisService.getMaterialSchemeData().subscribe(data => {
       const schema = data.filter(
-        (schemaSelected) => schemaSelected.id === this.data.id
+        schemaSelected => schemaSelected.id === this.data.id
       );
       this.id = schema[0].id;
       this.standard_id = schema[0].standard_id;
@@ -97,7 +97,7 @@ export class UpdateDataSchemeComponent implements OnInit {
           standard_id: this.standard_id,
           unit_id: this.unit_id,
         })
-        .subscribe((newScheme) => {
+        .subscribe(newScheme => {
           console.log(newScheme);
           this.onNoClick();
         });
@@ -106,17 +106,17 @@ export class UpdateDataSchemeComponent implements OnInit {
 
   potentialSelected(potentialId) {
     const potentialData = this.ListPotential.filter(
-      (data) => data.id === potentialId
-    );
+      data => data.id === potentialId
+    ),
 
-    const unitData = this.units.filter(
-      (data) => data.name_unit == potentialData[0].unit_potential_type
+     unitData = this.units.filter(
+      data => data.name_unit == potentialData[0].unit_potential_type
     );
 
     try {
       this.unit_id = unitData[0].id;
       this.unit_name = unitData[0].name_unit;
-    } catch (e) {
+    } catch {
       this.unit_id = null;
       this.unit_name = 'No se encontró coincidencia con unidades';
     }

@@ -29,7 +29,7 @@ export class DeletePotentialComponent implements OnInit {
 
   deletePotential(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deletePotentialType(id).subscribe((data) => {
+    this.materialsService.deletePotentialType(id).subscribe(() => {
       this.onNoClick();
     });
   }

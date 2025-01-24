@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="container-principal" *ngIf="countProjectList === 0">
-      <div class="btn-primer-producto" (click)="openDialogANP()">
+      <div class="btn-primer-producto" (click)="openDialogANP()" (keypress)="openDialogANP()" tabindex="1">
         <div class="plus">+</div>
         <div class="message-plus">Crea tu primer proyecto</div>
       </div>
@@ -46,12 +46,12 @@
             {{project.name_project}}
           </div>
           <div class="date-tag">
-           <ng-template [ngIf]="project.use_id==1"><div>Habitacional</div></ng-template>
-            <ng-template [ngIf]="project.use_id==2"><div>Comercial</div></ng-template>
-            <ng-template [ngIf]="project.use_id==3"><div>Oficinas</div></ng-template>
-            <ng-template [ngIf]="project.use_id==4"><div>Industrial</div></ng-template>
-            <ng-template [ngIf]="project.use_id==5"><div>Educacional</div></ng-template>
-            <ng-template [ngIf]="project.use_id==6"><div>Hospitalario</div></ng-template>
+            <ng-template [ngIf]="project.use_id===1"><div>Habitacional</div></ng-template>
+            <ng-template [ngIf]="project.use_id===2"><div>Comercial</div></ng-template>
+            <ng-template [ngIf]="project.use_id===3"><div>Oficinas</div></ng-template>
+            <ng-template [ngIf]="project.use_id===4"><div>Industrial</div></ng-template>
+            <ng-template [ngIf]="project.use_id===5"><div>Educacional</div></ng-template>
+            <ng-template [ngIf]="project.use_id===6"><div>Hospitalario</div></ng-template>
           </div>
         </div>
       </div>

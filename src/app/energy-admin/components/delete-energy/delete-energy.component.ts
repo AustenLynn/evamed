@@ -27,7 +27,7 @@ export class DeleteEnergyComponent implements OnInit {
 
   deleteEnergy(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deleteTypeEnergy(id).subscribe((data) => {
+    this.materialsService.deleteTypeEnergy(id).subscribe(() => {
       this.onNoClick();
     });
   }

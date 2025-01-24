@@ -27,7 +27,7 @@ export class DeleteDataBaseComponent implements OnInit {
 
   deleteDbMaterial(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deleteDbMaterial(id).subscribe((data) => {
+    this.materialsService.deleteDbMaterial(id).subscribe(() => {
       this.onNoClick();
     });
   }

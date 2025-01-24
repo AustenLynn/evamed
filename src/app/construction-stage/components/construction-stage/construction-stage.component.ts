@@ -6,7 +6,6 @@ import { CatalogsService } from './../../../core/services/catalogs/catalogs.serv
 import { ConstructionStageService } from 'src/app/core/services/construction-stage/construction-stage.service';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { MatDialog } from '@angular/material/dialog';
-import { IntermedialComponent } from '../intermedial/intermedial.component';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 
 @Component({
@@ -35,7 +34,7 @@ export class ConstructionStageComponent implements OnInit {
   AC: any;
   DG: any;
   selectedSheet: any;
-  endSave: boolean = false;
+  endSave = false;
 
   constructor(
     private materialsService: MaterialsService,
@@ -44,42 +43,42 @@ export class ConstructionStageComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog
   ) {
-    this.catalogsService.getSourceInformation().subscribe((data) => {
+    this.catalogsService.getSourceInformation().subscribe(data => {
       // this.catalogoFuentes = data;
       const fuentes = [];
-      data.map((fuente) => {
+      data.map(fuente => {
         if (fuente.name_source_information !== 'Mexicaniuh - CADIS') {
           fuentes.push(fuente);
         }
       });
       this.catalogoFuentes = fuentes;
     });
-    this.catalogsService.getEnergyUnits().subscribe((data) => {
-      let energia = [];
-      data.map((unidad) => {
+    this.catalogsService.getEnergyUnits().subscribe(data => {
+      const energia = [];
+      data.map(unidad => {
         if (unidad.name_energy_unit === 'Hrs') {
           energia.push(unidad);
         }
       });
       this.catalogoUnidadEnergia = energia;
     });
-    this.catalogsService.getVolumeUnits().subscribe((data) => {
+    this.catalogsService.getVolumeUnits().subscribe(data => {
       this.catalogoUnidadVolumen = data;
     });
-    this.catalogsService.getBulkUnits().subscribe((data) => {
+    this.catalogsService.getBulkUnits().subscribe(data => {
       this.catalogoUnidadMasa = data;
     });
   }
 
   ngOnInit() {
-    const PDP = JSON.parse(sessionStorage.getItem('primaryDataProject'));
-    const data = JSON.parse(sessionStorage.getItem('dataProject'));
+    const PDP = JSON.parse(sessionStorage.getItem('primaryDataProject')),
+     data = JSON.parse(sessionStorage.getItem('dataProject'));
 
     this.nameProject = PDP.name_project;
     this.projectId = PDP.id;
 
     this.sheetNames = [];
-    data.sheetNames.map((sheetname) => {
+    data.sheetNames.map(sheetname => {
       if (
         sheetname !== 'Muros InterioresBis' &&
         sheetname !== 'Inicio' &&
@@ -98,7 +97,7 @@ export class ConstructionStageComponent implements OnInit {
   onGroupsChange(options: MatListOption[]) {
     let selectedSheet;
     // map these MatListOptions to their values
-    options.map((option) => {
+    options.map(option => {
       selectedSheet = option.value;
     });
     // take index of selection
@@ -198,14 +197,13 @@ export class ConstructionStageComponent implements OnInit {
     }
   }
 
-  onNgModelChange(event) {}
+  onNgModelChange() {}
 
   async saveStepTwo() {
     try {
       await Object.entries(this.EC).forEach(([key, ec]) => {
-        let ecAny: any;
-        ecAny = ec;
-        ecAny.map((data) => {
+        const ecAny: any = ec;
+        ecAny.map(data => {
           this.constructionStageService
             .addConstructiveSistemElement({
               quantity: data.cantidad,
@@ -217,7 +215,7 @@ export class ConstructionStageComponent implements OnInit {
               bulk_unit_id: null,
               source_information_id: data.fuente,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('Success EC!!!!!!!');
               console.log(data);
             });
@@ -229,9 +227,8 @@ export class ConstructionStageComponent implements OnInit {
 
     try {
       await Object.entries(this.AC).forEach(([key, ec]) => {
-        let ecAny: any;
-        ecAny = ec;
-        ecAny.map((data) => {
+        const ecAny: any = ec;
+        ecAny.map(data => {
           this.constructionStageService
             .addConstructiveSistemElement({
               quantity: data.cantidad,
@@ -243,7 +240,7 @@ export class ConstructionStageComponent implements OnInit {
               bulk_unit_id: null,
               source_information_id: data.fuente,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('Success AC!!!!!');
               console.log(data);
             });
@@ -255,9 +252,8 @@ export class ConstructionStageComponent implements OnInit {
 
     try {
       await Object.entries(this.DG).forEach(([key, ec]) => {
-        let ecAny: any;
-        ecAny = ec;
-        ecAny.map((data) => {
+        const ecAny: any = ec;
+        ecAny.map(data => {
           this.constructionStageService
             .addConstructiveSistemElement({
               quantity: data.cantidad,
@@ -269,7 +265,7 @@ export class ConstructionStageComponent implements OnInit {
               bulk_unit_id: data.unidad,
               source_information_id: data.fuente,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('Success DG!!!!!');
               console.log(data);
             });
@@ -289,16 +285,16 @@ export class ConstructionStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepTwo();
         }
-        this.materialsService.getMaterialSchemeProyects().subscribe((msp) => {
+        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
           const schemaFilter = msp.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('materials-stage');
           } else {
@@ -317,23 +313,23 @@ export class ConstructionStageComponent implements OnInit {
     this.router.navigateByUrl('construction-stage');
   }
 
-  
-  goToUsageStage() { 
+
+  goToUsageStage() {
     const dialogRef = this.dialog.open(PassStepComponent, {
       width: '680px',
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepTwo();
         }
-        this.materialsService.getACR().subscribe((acr) => {
+        this.materialsService.getACR().subscribe(acr => {
           const schemaFilter = acr.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('usage-stage');
           } else {
@@ -354,16 +350,16 @@ export class ConstructionStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepTwo();
         }
-        this.materialsService.getEDCP().subscribe((edcp) => {
+        this.materialsService.getEDCP().subscribe(edcp => {
           const schemaFilter = edcp.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
-    
+
           if (schemaFilter.length === 0) {
             this.router.navigateByUrl('end-life-stage');
           } else {
@@ -376,13 +372,13 @@ export class ConstructionStageComponent implements OnInit {
         });
       }
     });
-  } 
+  }
 
   continue() {
     this.saveStepTwo();
-    this.materialsService.getACR().subscribe((acr) => {
+    this.materialsService.getACR().subscribe(acr => {
       const schemaFilter = acr.filter(
-        (schema) => schema.project_id === this.projectId
+        schema => schema.project_id === this.projectId
       );
 
       if (schemaFilter.length === 0) {

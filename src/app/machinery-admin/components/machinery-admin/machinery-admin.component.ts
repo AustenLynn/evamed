@@ -22,7 +22,7 @@ export class MachineryAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.materialsService.getMachinery().subscribe((data) => {
+    this.materialsService.getMachinery().subscribe(data => {
       this.machineryList = data;
     });
   }
@@ -38,7 +38,7 @@ export class MachineryAdminComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -46,14 +46,14 @@ export class MachineryAdminComponent implements OnInit {
   deleteMachinery(event: Event, unitId) {
     event.preventDefault();
     const machinerySelected = this.machineryList.filter(
-      (data) => data.id === unitId
-    );
-    const dialogRef = this.dialog.open(DeleteMachineryComponent, {
+      data => data.id === unitId
+    ),
+     dialogRef = this.dialog.open(DeleteMachineryComponent, {
       width: '680px',
       data: machinerySelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }

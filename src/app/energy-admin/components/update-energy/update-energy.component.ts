@@ -39,28 +39,28 @@ export class UpdateEnergyComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.buildForm();
-    this.materialsService.getPotentialTypes().subscribe((data) => {
+    this.materialsService.getPotentialTypes().subscribe(data => {
       this.potentialTypeList = data;
     });
-    this.materialsService.getUnits().subscribe((data) => {
+    this.materialsService.getUnits().subscribe(data => {
       this.units = data;
     });
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params) => {
-      this.materialsService.getTypeEnergy().subscribe((data) => {
+      this.materialsService.getTypeEnergy().subscribe(data => {
         const energyFiltered = data.filter(
-          (energy) => energy.id === parseInt(params.id)
+          energy => energy.id === parseInt(params.id)
         );
 
-        energyFiltered.map((energy) => {
+        energyFiltered.map(energy => {
           this.id = energy.id;
           this.form.patchValue(energy);
           this.potentialList = [];
-          this.materialsService.getTypeEnergyData().subscribe((data) => {
+          this.materialsService.getTypeEnergyData().subscribe(data => {
             const potentialList = data.filter(
-              (potential) => potential.type_energy_id === energy.id
+              potential => potential.type_energy_id === energy.id
             );
             this.potentialList = potentialList;
             console.log(this.potentialList);
@@ -86,7 +86,7 @@ export class UpdateEnergyComponent implements OnInit {
       const energy = this.form.value;
       this.materialsService
         .updateTypeEnergy(this.id, energy)
-        .subscribe((newProduct) => {
+        .subscribe(() => {
           this.ngOnInit();
           this.router.navigate(['./admin-energy/']);
         });
@@ -100,7 +100,7 @@ export class UpdateEnergyComponent implements OnInit {
       data: { type_energy_id: this.id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -112,7 +112,7 @@ export class UpdateEnergyComponent implements OnInit {
       data: { ...element },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -120,28 +120,28 @@ export class UpdateEnergyComponent implements OnInit {
   deletePotential(event: Event, potentialId: number) {
     event.preventDefault();
     const potentialSelected = this.potentialList.filter(
-      (data) => data.id === potentialId
-    );
-    const dialogRef = this.dialog.open(DeletePotentialEnergyComponent, {
+      data => data.id === potentialId
+    ),
+     dialogRef = this.dialog.open(DeletePotentialEnergyComponent, {
       width: '680px',
       data: potentialSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   getPotential(id: number) {
     const potencial = this.potentialTypeList.filter(
-      (potencial) => potencial.id === id
+      potencial => potencial.id === id
     );
 
     return potencial[0].name_complete_potential_type;
   }
 
   getUnit(id: number) {
-    const unit = this.units.filter((unit) => unit.id === id);
+    const unit = this.units.filter(unit => unit.id === id);
 
     return unit[0].name_unit;
   }

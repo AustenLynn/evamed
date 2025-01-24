@@ -47,35 +47,35 @@ export class ConstructionStageUpdateComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog
   ) {
-    this.catalogsService.getSourceInformation().subscribe((data) => {
+    this.catalogsService.getSourceInformation().subscribe(data => {
       const fuentes = [];
-      data.map((fuente) => {
+      data.map(fuente => {
         if (fuente.name_source_information !== 'Mexicaniuh - CADIS') {
           fuentes.push(fuente);
         }
       });
       this.catalogoFuentes = fuentes;
     });
-    this.catalogsService.getEnergyUnits().subscribe((data) => {
-      let energia = [];
-      data.map((unidad) => {
+    this.catalogsService.getEnergyUnits().subscribe(data => {
+      const energia = [];
+      data.map(unidad => {
         if (unidad.name_energy_unit === 'Hrs') {
           energia.push(unidad);
         }
       });
       this.catalogoUnidadEnergia = energia;
     });
-    this.catalogsService.getVolumeUnits().subscribe((data) => {
+    this.catalogsService.getVolumeUnits().subscribe(data => {
       this.catalogoUnidadVolumen = data;
     });
-    this.catalogsService.getBulkUnits().subscribe((data) => {
+    this.catalogsService.getBulkUnits().subscribe(data => {
       this.catalogoUnidadMasa = data;
     });
     this.constructionStageService
       .getConstructiveSystemElement()
-      .subscribe((data) => {
+      .subscribe(data => {
         const CSE = [];
-        data.map((item) => {
+        data.map(item => {
           if (
             item.project_id ===
             parseInt(localStorage.getItem('idProyectoConstrucción'), 10)
@@ -94,7 +94,7 @@ export class ConstructionStageUpdateComponent implements OnInit {
 
   ngOnInit() {
     //carga de imagenes
-    let images = [
+    const images = [
       '../../../../assets/map/2.jpg',
       '../../../../assets/map/4.jpg',
       '../../../../assets/map/5.jpg',
@@ -129,33 +129,33 @@ export class ConstructionStageUpdateComponent implements OnInit {
   }
 
   preload(array) {
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
       this.IMGP[i] = new Image();
       this.IMGP[i].src = array[i];
     }
   }
 
   trunc(x, posiciones = 0) {
-    var s = x.toString();
-    var l = s.length;
-    var decimalLength = s.indexOf('.') + 1;
-    var numStr = s.substr(0, decimalLength + posiciones);
+    const s = x.toString(),
+    //let l = s.length;
+      decimalLength = s.indexOf('.') + 1,
+      numStr = s.substr(0, decimalLength + posiciones);
     return Number(numStr);
   }
 
   onGroupsChange(options: MatListOption[]) {
     let selectedSheet;
     // map these MatListOptions to their values
-    options.map((option) => {
+    options.map(option => {
       selectedSheet = option.value;
     });
     // take index of selection
     this.indexSheet = this.sheetNames.indexOf(selectedSheet);
 
     // map data exist to edit
-    let getDataEC = [];
+    const getDataEC = [];
 
-    this.CSE.map((item) => {
+    this.CSE.map(item => {
       const prevData = [];
       if (item.section_id === this.indexSheet + 1) {
         switch (item.constructive_process_id) {
@@ -244,10 +244,9 @@ export class ConstructionStageUpdateComponent implements OnInit {
     console.log('entra al proceso de OnSaveEC!!!!!!!!!!!!!!!!!!!!!!');
 
     Object.entries(this.EC).forEach(([key, ec]) => {
-      let ecAny: any;
-      ecAny = ec;
+      const ecAny: any = ec;
       if (this.indexSheet === parseInt(key)) {
-        ecAny.map((data) => {
+        ecAny.map(data => {
           console.log(data);
           if (data.id !== undefined) {
             this.constructionStageService
@@ -271,11 +270,11 @@ export class ConstructionStageUpdateComponent implements OnInit {
                 bulk_unit_id: null,
                 source_information_id: data.fuente,
               })
-              .subscribe((data) => {
+              .subscribe(data => {
                 console.log(`Se agregó ${data.id}`);
               });
           } catch (e) {
-            console.log('No hay que eliminar');
+            console.log('No hay que eliminar', e);
           }
         });
       }
@@ -333,7 +332,7 @@ export class ConstructionStageUpdateComponent implements OnInit {
     }
   }
 
-  onNgModelChange(event) {}
+  onNgModelChange() {}
 
   saveStepTwo() {
     console.log('update steep two');
@@ -345,11 +344,11 @@ export class ConstructionStageUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
-        this.materialsService.getMaterialSchemeProyects().subscribe((msp) => {
+        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
           const schemaFilter = msp.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
@@ -373,11 +372,11 @@ export class ConstructionStageUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
-        this.materialsService.getACR().subscribe((acr) => {
+        this.materialsService.getACR().subscribe(acr => {
           const schemaFilter = acr.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
@@ -398,11 +397,11 @@ export class ConstructionStageUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
-        this.materialsService.getEDCP().subscribe((edcp) => {
+        this.materialsService.getEDCP().subscribe(edcp => {
           const schemaFilter = edcp.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
@@ -424,7 +423,7 @@ export class ConstructionStageUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       // this.ngOnInit();
     });
   }

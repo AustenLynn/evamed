@@ -36,9 +36,9 @@ export class EndLifeUpdateComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog
   ) {
-    this.catalogsService.getSourceInformation().subscribe((data) => {
+    this.catalogsService.getSourceInformation().subscribe(data => {
       const fuentes = [];
-      data.map((fuente) => {
+      data.map(fuente => {
         if (fuente.name_source_information !== 'Mexicaniuh - CADIS') {
           fuentes.push(fuente);
         }
@@ -51,18 +51,18 @@ export class EndLifeUpdateComponent implements OnInit {
         this.nameProject = data.name_project;
         this.projectId = data.id;
       });
-    this.catalogsService.getEnergyUnits().subscribe((data) => {
-      let energia = [];
-      data.map((unidad) => {
+    this.catalogsService.getEnergyUnits().subscribe(data => {
+      const energia = [];
+      data.map(unidad => {
         if (unidad.name_energy_unit === 'Hrs') {
           energia.push(unidad);
         }
       });
       this.catalogoUnidadEnergia = energia;
     });
-    this.endLifeService.getECDP().subscribe((data) => {
+    this.endLifeService.getECDP().subscribe(data => {
       const ECDP = [];
-      data.map((item) => {
+      data.map(item => {
         if (
           item.project_id ===
           parseInt(localStorage.getItem('idProyectoConstrucción'), 10)
@@ -97,14 +97,14 @@ export class EndLifeUpdateComponent implements OnInit {
   onGroupsChange(options: MatListOption[]) {
     let selectedSheet;
     // map these MatListOptions to their values
-    options.map((option) => {
+    options.map(option => {
       selectedSheet = option.value;
     });
     // take index of selection
     this.indexSheet = this.sheetNames.indexOf(selectedSheet);
 
     // map data exist to edit
-    let getDataECPD = [];
+    const getDataECPD = [];
 
     this.ECDP.map((item: any) => {
       const prevData = [];
@@ -134,8 +134,8 @@ export class EndLifeUpdateComponent implements OnInit {
 
     this.selectedSheet = selectedSheet;
 
-    this.dataArrayEC === undefined ? (this.dataArrayEC = []) : this.dataArrayEC;
-    this.dataArrayTD === undefined ? (this.dataArrayTD = []) : this.dataArrayTD;
+    this.dataArrayEC = this.dataArrayEC === undefined ? (this.dataArrayEC = []) : this.dataArrayEC;
+    this.dataArrayTD = this.dataArrayTD === undefined ? (this.dataArrayTD = []) : this.dataArrayTD;
 
     if (this.dataArrayEC.length === 0) {
       this.dataArrayEC.push([]);
@@ -194,10 +194,9 @@ export class EndLifeUpdateComponent implements OnInit {
     }
 
     Object.entries(this.EC).forEach(([key, ec]) => {
-      let ecAny: any;
-      ecAny = ec;
+      const ecAny: any = ec;
       if (this.indexSheet === parseInt(key)) {
-        ecAny.map((data) => {
+        ecAny.map(data => {
           if (data.id !== undefined) {
             this.endLifeService.deleteECDP(data.id).subscribe(() => {
               console.log(`Se eliminó ${data.id}`);
@@ -215,11 +214,11 @@ export class EndLifeUpdateComponent implements OnInit {
                   10
                 ),
               })
-              .subscribe((data) => {
+              .subscribe(data => {
                 console.log(data);
               });
           } catch (e) {
-            console.log('No hay que eliminar***');
+            console.log('No hay que eliminar***', e);
           }
         });
       }
@@ -234,11 +233,11 @@ export class EndLifeUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
-        this.materialsService.getMaterialSchemeProyects().subscribe((msp) => {
+        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
           const schemaFilter = msp.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
@@ -258,11 +257,11 @@ export class EndLifeUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
-        this.materialsService.getConstructionStage().subscribe((cse) => {
+        this.materialsService.getConstructionStage().subscribe(cse => {
           const schemaFilter = cse.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
@@ -284,11 +283,11 @@ export class EndLifeUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
-        this.materialsService.getACR().subscribe((acr) => {
+        this.materialsService.getACR().subscribe(acr => {
           const schemaFilter = acr.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
@@ -315,7 +314,7 @@ export class EndLifeUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       // this.ngOnInit();
     });
   }

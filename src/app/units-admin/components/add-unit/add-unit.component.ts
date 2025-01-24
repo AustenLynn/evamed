@@ -40,7 +40,7 @@ export class AddUnitComponent implements OnInit {
     event.preventDefault();
     if (this.form.valid) {
       const unit = this.form.value;
-      this.materialsService.addUnit(unit).subscribe((data) => {
+      this.materialsService.addUnit(unit).subscribe(() => {
         this.onNoClick();
       });
     }

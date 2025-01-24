@@ -18,7 +18,7 @@ export class AnalisisService {
     return this.http
       .get<any>(environment.api_electricity_consumption_deconstructive_process)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -26,7 +26,7 @@ export class AnalisisService {
 
   getUsefulLife() {
     return this.http.get<any>(environment.api_useful_life).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -36,7 +36,7 @@ export class AnalisisService {
 
   getTypeEnergy() {
     return this.http.get<any>(environment.api_type_energy).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -44,7 +44,7 @@ export class AnalisisService {
 
   getTypeEnergyData() {
     return this.http.get<any>(environment.api_type_energy_data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -54,7 +54,7 @@ export class AnalisisService {
     return this.http
       .get<any>(environment.api_electricity_consumption_data)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -62,7 +62,7 @@ export class AnalisisService {
 
   getAnnualConsumptionRequired() {
     return this.http.get<any>(environment.api_annual_consumption_required).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -70,7 +70,7 @@ export class AnalisisService {
 
   getSourceInformation() {
     return this.http.get<any>(environment.api_source_information).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -78,7 +78,7 @@ export class AnalisisService {
 
   getSourceInformationData() {
     return this.http.get<any>(environment.api_source_information_data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -86,7 +86,7 @@ export class AnalisisService {
 
   getConstructiveSystemElement() {
     return this.http.get<any>(environment.api_construction_stage).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -94,7 +94,7 @@ export class AnalisisService {
 
   getPotentialTypes() {
     return this.http.get<any>(environment.api_potetnial_types).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -102,7 +102,7 @@ export class AnalisisService {
 
   getStandars() {
     return this.http.get<any>(environment.api_standards).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -110,7 +110,7 @@ export class AnalisisService {
 
   getMaterialSchemeProyect() {
     return this.http.get<any>(environment.api_scheme_project).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -118,7 +118,7 @@ export class AnalisisService {
 
   getMaterialSchemeData() {
     return this.http.get<any>(environment.api_material_scheme_data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -128,7 +128,7 @@ export class AnalisisService {
     return this.http
       .put(`${environment.api_material_scheme_data}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -136,7 +136,7 @@ export class AnalisisService {
 
   addMaterialSchemeData(data: object) {
     return this.http.post<any>(environment.api_material_scheme_data, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -144,7 +144,7 @@ export class AnalisisService {
 
   getSectionsList() {
     return this.http.get<any>(environment.api_sections).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -152,7 +152,7 @@ export class AnalisisService {
 
   getMaterials() {
     return this.http.get<any>(environment.api_materials).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -160,7 +160,7 @@ export class AnalisisService {
 
   getPotentialTransport() {
     return this.http.get<any>(environment.api_potential_transport).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -168,7 +168,7 @@ export class AnalisisService {
 
   getConversion() {
     return this.http.get<any>(environment.api_conversions).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -176,7 +176,7 @@ export class AnalisisService {
 
   getDB() {
     return this.http.get<any>(environment.api_db_material).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );

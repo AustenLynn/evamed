@@ -13,7 +13,7 @@ export class ConstructionStageService {
     return this.http
       .post<any>(environment.api_construction_stage, projectData)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -21,7 +21,7 @@ export class ConstructionStageService {
 
   getConstructiveSystemElement() {
     return this.http.get<any>(environment.api_construction_stage).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -29,7 +29,7 @@ export class ConstructionStageService {
 
   deleteConstructiveSystemElement(id: number) {
     return this.http.delete(`${environment.api_construction_stage}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );

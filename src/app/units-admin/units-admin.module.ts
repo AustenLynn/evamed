@@ -25,7 +25,7 @@ import { DeleteUnitComponent } from './components/delete-unit/delete-unit.compon
         MaterialModule,
         FormsModule,
         ReactiveFormsModule,
-    ],providers: [provideCharts(withDefaultRegisterables())],
+    ], providers: [provideCharts(withDefaultRegisterables())],
     exports: [
         UnitsAdminComponent,
         AddUnitComponent,

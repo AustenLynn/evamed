@@ -40,7 +40,7 @@ export class AddDataBaseComponent implements OnInit {
     event.preventDefault();
     if (this.form.valid) {
       const dataBase = this.form.value;
-      this.materialsService.addDbMaterial(dataBase).subscribe((data) => {
+      this.materialsService.addDbMaterial(dataBase).subscribe(() => {
         this.onNoClick();
       });
     }

@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(private cartService: CartService, private router: Router) {
     this.total$ = this.cartService.cart$.pipe(
-      map((products) => products.length)
+      map(products => products.length)
     );
   }
 

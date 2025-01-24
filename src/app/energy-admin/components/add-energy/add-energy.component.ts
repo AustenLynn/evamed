@@ -40,7 +40,7 @@ export class AddEnergyComponent implements OnInit {
     event.preventDefault();
     if (this.form.valid) {
       const energy = this.form.value;
-      this.materialsService.addTypeEnergy(energy).subscribe((data) => {
+      this.materialsService.addTypeEnergy(energy).subscribe(() => {
         this.onNoClick();
       });
     }

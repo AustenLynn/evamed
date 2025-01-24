@@ -4,7 +4,7 @@ import { CompararComponent } from './component/comparar/comparar.component';
 
 const routes: Routes = [
   {
-    path:'',
+    path: '',
     component: CompararComponent,
   }
 ];

@@ -15,19 +15,19 @@
         <div class="mdl-stepper-bar-right"></div>
       </div>
       <div class="mdl-stepper-step step-two">
-        <div class="mdl-stepper-circle" (click)="goToConstructionStage()"></div>
+        <div class="mdl-stepper-circle" (click)="goToConstructionStage()" (keypress)="goToConstructionStage()" tabindex="1"></div>
         <div class="mdl-stepper-tag">Construcción</div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
       </div>
       <div class="mdl-stepper-step step-three">
-        <div class="mdl-stepper-circle" (click)="goToUsageStage()"></div>
+        <div class="mdl-stepper-circle" (click)="goToUsageStage()" (keypress)="goToUsageStage()" tabindex="2"></div>
         <div class="mdl-stepper-tag">Uso</div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
       </div>
       <div class="mdl-stepper-step step-four">
-        <div class="mdl-stepper-circle" (click)="goToEndLife()"></div>
+        <div class="mdl-stepper-circle" (click)="goToEndLife()" (keypress)="goToEndLife()" tabindex="3"></div>
         <div class="mdl-stepper-tag">Fin de vida</div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
@@ -85,7 +85,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsRevit"
-            (ngModelChange)="onNgModelChangeRevit($event)">
+            (ngModelChange)="onNgModelChangeRevit()">
             <mat-list-option *ngFor="let sc of ListSCRevit" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option" [selected]="sc.checked">
               <div style="
@@ -94,21 +94,21 @@
                   align-items: center;
                 ">
                 <div style="display: flex; align-items: center; width: 65.8%" (click)="showMaterials(sc, 'revit-user')"
-                  class="item-by-list">
+                  class="item-by-list" (keypress)="showMaterials(sc, 'revit-user')" tabindex="4">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
                 </div>
                 <div class="container-options">
-                  <button class="custom-button-icon" mat-icon-button (click)="removeMaterial($event, sc, 'revit-user')">
+                  <button class="custom-button-icon" mat-icon-button (click)="removeMaterial($event)">
                     <mat-icon class="custom-icon">restore_from_trash</mat-icon>
                   </button>
                   <button class="custom-button-icon" mat-icon-button
-                    (click)="restoreMaterial($event, sc, 'revit-user')">
+                    (click)="restoreMaterial($event)">
                     <mat-icon class="custom-icon">restore_page</mat-icon>
                   </button>
                   <button class="custom-button-icon" mat-icon-button
-                    (click)="duplicateMaterial($event, sc, 'revit-user')">
+                    (click)="duplicateMaterial($event)">
                     <mat-icon class="custom-icon">control_point_duplicate</mat-icon>
                   </button>
                 </div>
@@ -125,7 +125,7 @@
           </mat-expansion-panel-header>
 
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsDynamo"
-            (ngModelChange)="onNgModelChangeDynamo($event)">
+            (ngModelChange)="onNgModelChangeDynamo()">
             <mat-list-option *ngFor="let sc of ListSCDynamo" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option">
               <div style="
@@ -134,19 +134,19 @@
                   align-items: center;
                 ">
                 <div style="display: flex; align-items: center; width: 65.8%" (click)="showMaterials(sc, 'dynamo')"
-                  class="item-by-list">
+                  class="item-by-list" (keypress)="showMaterials(sc, 'dynamo')" tabindex="5">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
                 </div>
                 <div class="container-options">
-                  <button class="custom-button-icon" mat-icon-button (click)="removeMaterial($event, sc, 'dynamo')">
+                  <button class="custom-button-icon" mat-icon-button (click)="removeMaterial($event)">
                     <mat-icon class="custom-icon">restore_from_trash</mat-icon>
                   </button>
-                  <button class="custom-button-icon" mat-icon-button (click)="restoreMaterial($event, sc, 'dynamo')">
+                  <button class="custom-button-icon" mat-icon-button (click)="restoreMaterial($event)">
                     <mat-icon class="custom-icon">restore_page</mat-icon>
                   </button>
-                  <button class="custom-button-icon" mat-icon-button (click)="duplicateMaterial($event, sc, 'dynamo')">
+                  <button class="custom-button-icon" mat-icon-button (click)="duplicateMaterial($event)">
                     <mat-icon class="custom-icon">control_point_duplicate</mat-icon>
                   </button>
                 </div>
@@ -162,7 +162,7 @@
             <mat-panel-title> Creados por el usuario </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsUsuario"
-            (ngModelChange)="onNgModelChangeUser($event)">
+            (ngModelChange)="onNgModelChangeUser()">
             <mat-list-option *ngFor="let sc of ListSCUsuario" [value]="sc" [disableRipple]="true"
               checkboxPosition="before">
               <div style="
@@ -170,19 +170,20 @@
                   justify-content: space-between;
                   align-items: center;
                 ">
-                <div style="display: flex; align-items: center; width: 65.8%" (click)="showMaterials(sc, 'user')">
+                <div style="display: flex; align-items: center; width: 65.8%" (click)="showMaterials(sc, 'user')"
+                  (keypress)="showMaterials(sc, 'user')" tabindex="6">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
                 </div>
                 <div>
-                  <button class="custom-button-icon" mat-icon-button (click)="removeMaterial($event, sc, 'user')">
+                  <button class="custom-button-icon" mat-icon-button (click)="removeMaterial($event)">
                     <mat-icon class="custom-icon">restore_from_trash</mat-icon>
                   </button>
-                  <button class="custom-button-icon" mat-icon-button (click)="restoreMaterial($event, sc, 'user')">
+                  <button class="custom-button-icon" mat-icon-button (click)="restoreMaterial($event)">
                     <mat-icon class="custom-icon">restore_page</mat-icon>
                   </button>
-                  <button class="custom-button-icon" mat-icon-button (click)="duplicateMaterial($event, sc, 'user')">
+                  <button class="custom-button-icon" mat-icon-button (click)="duplicateMaterial($event)">
                     <mat-icon class="custom-icon">control_point_duplicate</mat-icon>
                   </button>
                 </div>
@@ -236,7 +237,7 @@
         <!--Form material-->
         <div class="container-details" *ngIf="selectedMaterial">
           <div class="header-form">
-            <span class="return" (click)="onReturnListMaterials()">
+            <span class="return" (click)="onReturnListMaterials()" (keypress)="onReturnListMaterials()" tabindex="7">
               < </span>
                 <span class="title">Edición de material</span>
           </div>
@@ -370,7 +371,7 @@
             </div>
             <div class="Row">
               <div class="Col">
-                <div class="button-read" (click)="goToSearchInfo()">
+                <div class="button-read" (click)="goToSearchInfo()" (keypress)="goToSearchInfo()" tabindex="8">
                   {{ dataMaterialSelected.materialSelectedDB }}
                   <mat-icon>edit</mat-icon>
                 </div>
@@ -384,7 +385,7 @@
           <div class="form-search">
             <div class="Row">
               <div class="Col">
-                <span class="return" (click)="returnMaterialData()">
+                <span class="return" (click)="returnMaterialData()" (keypress)="returnMaterialData()" tabindex="9">
                   < </span>
                     <h3>Realiza tu búsqueda</h3>
               </div>
@@ -410,14 +411,15 @@
                   <mat-tab label="EPD's">
                     <div *ngIf="!showEPD">
                       <div *ngFor="let item of EPDS">
-                        <div (click)="showDetailEPD($event, item)" class="item-material">
+                        <div (click)="showDetailEPD($event, item)" class="item-material"
+                          (keypress)="showDetailEPD($event, item)" tabindex="10">
                           {{ item.name_material }}
                           <img src="../../../../assets/logos/EPD.png" class="logoList" alt="" />
                         </div>
                       </div>
                     </div>
                     <div class="material-target" *ngIf="showEPD">
-                      <span class="return" (click)="returnListEpds()">
+                      <span class="return" (click)="returnListEpds()" (keypress)="returnListEpds()" tabindex="11">
                         < </span>
                           <h2 class="title">{{ dataMaterialSelected.name }}</h2>
                           <p>
@@ -580,19 +582,22 @@
 
                   <mat-tab label="Base de datos">
                     <div *ngIf="showListMaterials">
-                      <div class="item-material" (click)="showMexicanIuh()">
+                      <div class="item-material" (click)="showMexicanIuh()" (keypress)="showMexicanIuh()" tabindex="12">
                         mexicaniuh
                       </div>
-                      <div class="item-material" (click)="showEPIC()">EPiC</div>
+                      <div class="item-material" (click)="showEPIC()" (keypress)="showEPIC" tabindex="13">
+                        EPiC
+                      </div>
                     </div>
 
                     <div *ngIf="
                         !showMexican && !showMaterial && !showListMaterials
                       ">
-                      <span class="return" (click)="returnDatabaseList()">
+                      <span class="return" (click)="returnDatabaseList()" (keypress)="returnDatabaseList()" tabindex="14">
                         < </span>
                           <div *ngFor="let item of EPiC">
-                            <div (click)="showDetailMaterial($event, item)" class="item-material">
+                            <div (click)="showDetailMaterial($event, item)" class="item-material"
+                              (keypress)="showDetailMaterial($event, item)" tabindex="15">
                               {{ item.name_material }} -
                               <span class="epic">EPiC</span>
                             </div>
@@ -600,10 +605,11 @@
                     </div>
 
                     <div *ngIf="showMexican && !showMaterial && !showListMaterials">
-                      <span class="return" (click)="returnDatabaseList()">
+                      <span class="return" (click)="returnDatabaseList()" (keypress)="returnDatabaseList()" tabindex="16">
                         < </span>
                           <div *ngFor="let item of mexicaniuh">
-                            <div (click)="showDetailMaterial($event, item)" class="item-material">
+                            <div (click)="showDetailMaterial($event, item)" class="item-material"
+                              (keypress)="showDetailMaterial($event, item)" tabindex="17">
                               {{ item.name_material }} -
                               <span class="epic">mexicaniuh</span>
                             </div>
@@ -611,7 +617,7 @@
                     </div>
 
                     <div class="material-target" *ngIf="showMaterial">
-                      <span class="return" (click)="returnListDB()">
+                      <span class="return" (click)="returnListDB()" (keypress)="returnListDB()" tabindex="18">
                         < </span>
                           <h2 class="title">{{ dataMaterialSelected.name }}</h2>
                           <button mat-button class="yellow-button custom-continue" (click)="

@@ -29,7 +29,7 @@ export class AddPotentialTransportComponent implements OnInit {
   ) {
     this.buildForm();
     this.transport_id = data.transport_id;
-    this.materialsService.getPotentialTypes().subscribe((data) => {
+    this.materialsService.getPotentialTypes().subscribe(data => {
       this.ListPotential = data;
     });
   }
@@ -56,7 +56,7 @@ export class AddPotentialTransportComponent implements OnInit {
           ...potential,
           transport_id: this.transport_id,
         })
-        .subscribe((newScheme) => {
+        .subscribe(() => {
           this.onNoClick();
         });
     }

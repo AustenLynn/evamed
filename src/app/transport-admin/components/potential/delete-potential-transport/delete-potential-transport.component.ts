@@ -26,7 +26,7 @@ export class DeletePotentialTransportComponent implements OnInit {
 
   deletePotential(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deletePotentialTransport(id).subscribe((data) => {
+    this.materialsService.deletePotentialTransport(id).subscribe(() => {
       this.onNoClick();
     });
   }

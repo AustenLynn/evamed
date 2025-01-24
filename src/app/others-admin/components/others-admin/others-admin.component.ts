@@ -24,7 +24,7 @@ export class OthersAdminComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((data) => {
+    this.userService.getUsers().subscribe(data => {
       this.users = data;
       this.counter = data.length;
     });

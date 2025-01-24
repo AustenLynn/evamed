@@ -23,7 +23,7 @@ export class UnitsAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.materialsService.getUnits().subscribe((data) => {
+    this.materialsService.getUnits().subscribe(data => {
       this.units = data;
     });
   }
@@ -38,33 +38,33 @@ export class UnitsAdminComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   updateUnit(event: Event, unitId) {
     event.preventDefault();
-    const unitSelected = this.units.filter((data) => data.id === unitId);
-    const dialogRef = this.dialog.open(UpdateUnitComponent, {
+    const unitSelected = this.units.filter(data => data.id === unitId),
+     dialogRef = this.dialog.open(UpdateUnitComponent, {
       width: '680px',
       data: unitSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   deleteUnit(event: Event, unitId) {
     event.preventDefault();
-    const unitSelected = this.units.filter((data) => data.id === unitId);
-    const dialogRef = this.dialog.open(DeleteUnitComponent, {
+    const unitSelected = this.units.filter(data => data.id === unitId),
+     dialogRef = this.dialog.open(DeleteUnitComponent, {
       width: '680px',
       data: unitSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }

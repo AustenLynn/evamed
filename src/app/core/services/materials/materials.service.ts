@@ -11,7 +11,7 @@ export class MaterialsService {
 
   getMaterialSchemeProyects() {
     return this.http.get<any>(environment.api_scheme_project).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -19,7 +19,7 @@ export class MaterialsService {
 
   getConstructionStage() {
     return this.http.get<any>(environment.api_construction_stage).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -27,7 +27,7 @@ export class MaterialsService {
 
   getACR() {
     return this.http.get<any>(environment.api_annual_consumption_required).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -37,7 +37,7 @@ export class MaterialsService {
     return this.http
       .get<any>(environment.api_electricity_consumption_deconstructive_process)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -45,7 +45,7 @@ export class MaterialsService {
 
   getMaterials() {
     return this.http.get<any>(environment.api_materials).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -55,7 +55,7 @@ export class MaterialsService {
     return this.http
       .get<any>(environment.api_materials + '?search=' + material)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -63,7 +63,7 @@ export class MaterialsService {
 
   addMaterial(data: object) {
     return this.http.post<any>(environment.api_materials, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -71,7 +71,7 @@ export class MaterialsService {
 
   deleteMaterial(id: number) {
     return this.http.delete(`${environment.api_materials}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -81,7 +81,7 @@ export class MaterialsService {
     return this.http
       .delete(`${environment.api_material_scheme_data}${id}/`)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -89,7 +89,7 @@ export class MaterialsService {
 
   updateMaterial(id: string, changes) {
     return this.http.put(`${environment.api_materials}${id}/`, changes).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -102,7 +102,7 @@ export class MaterialsService {
         //'https://evamed-rest-api.herokuapp.com/api-projects/material-scheme-data/',
       )
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -114,7 +114,7 @@ export class MaterialsService {
         `https://evamed-rest-api.herokuapp.com/api-projects/material-scheme-data/${id}/`
       )
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -127,7 +127,7 @@ export class MaterialsService {
         schemeData
       )
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -135,7 +135,7 @@ export class MaterialsService {
 
   getUnits() {
     return this.http.get<any>(environment.api_units).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -143,7 +143,7 @@ export class MaterialsService {
 
   addUnit(data: object) {
     return this.http.post<any>(environment.api_units, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -151,7 +151,7 @@ export class MaterialsService {
 
   updateUnit(id: string, changes) {
     return this.http.put(`${environment.api_units}${id}/`, changes).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -159,7 +159,7 @@ export class MaterialsService {
 
   deleteUnit(id: number) {
     return this.http.delete(`${environment.api_units}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -167,7 +167,7 @@ export class MaterialsService {
 
   getPotentialTypes() {
     return this.http.get<any>(environment.api_potetnial_types).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -175,7 +175,7 @@ export class MaterialsService {
 
   addPotentialTypes(data: object) {
     return this.http.post<any>(environment.api_potetnial_types, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -185,7 +185,7 @@ export class MaterialsService {
     return this.http
       .put(`${environment.api_potetnial_types}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -193,7 +193,7 @@ export class MaterialsService {
 
   deletePotentialType(id: number) {
     return this.http.delete(`${environment.api_potetnial_types}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -201,7 +201,7 @@ export class MaterialsService {
 
   getStandards() {
     return this.http.get<any>(environment.api_standards).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -209,7 +209,7 @@ export class MaterialsService {
 
   getDbMaterials() {
     return this.http.get<any>(environment.api_db_material).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -217,7 +217,7 @@ export class MaterialsService {
 
   addDbMaterial(data: object) {
     return this.http.post<any>(environment.api_db_material, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -225,7 +225,7 @@ export class MaterialsService {
 
   updateDbMaterial(id: string, changes) {
     return this.http.put(`${environment.api_db_material}${id}/`, changes).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -233,7 +233,7 @@ export class MaterialsService {
 
   deleteDbMaterial(id: number) {
     return this.http.delete(`${environment.api_db_material}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -241,7 +241,7 @@ export class MaterialsService {
 
   getTransports() {
     return this.http.get<any>(environment.api_transports).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -249,7 +249,7 @@ export class MaterialsService {
 
   addTransport(data: object) {
     return this.http.post<any>(environment.api_transports, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -257,7 +257,7 @@ export class MaterialsService {
 
   updateTransport(id: string, changes) {
     return this.http.put(`${environment.api_transports}${id}/`, changes).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -265,7 +265,7 @@ export class MaterialsService {
 
   deleteTransport(id: number) {
     return this.http.delete(`${environment.api_transports}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -273,7 +273,7 @@ export class MaterialsService {
 
   getPotentialTransport() {
     return this.http.get<any>(environment.api_potential_transport).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -281,7 +281,7 @@ export class MaterialsService {
 
   addPotentialTransport(data: object) {
     return this.http.post<any>(environment.api_potential_transport, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -291,7 +291,7 @@ export class MaterialsService {
     return this.http
       .put(`${environment.api_potential_transport}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -301,7 +301,7 @@ export class MaterialsService {
     return this.http
       .delete(`${environment.api_potential_transport}${id}/`)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -309,7 +309,7 @@ export class MaterialsService {
 
   getMachinery() {
     return this.http.get<any>(environment.api_source_information).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -317,7 +317,7 @@ export class MaterialsService {
 
   addMachinery(data: object) {
     return this.http.post<any>(environment.api_source_information, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -327,7 +327,7 @@ export class MaterialsService {
     return this.http
       .put(`${environment.api_source_information}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -335,7 +335,7 @@ export class MaterialsService {
 
   deleteMachinery(id: number) {
     return this.http.delete(`${environment.api_source_information}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -343,7 +343,7 @@ export class MaterialsService {
 
   getMachineryPotential() {
     return this.http.get<any>(environment.api_source_information_data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -353,7 +353,7 @@ export class MaterialsService {
     return this.http
       .post<any>(environment.api_source_information_data, data)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -363,7 +363,7 @@ export class MaterialsService {
     return this.http
       .put(`${environment.api_source_information_data}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -373,7 +373,7 @@ export class MaterialsService {
     return this.http
       .delete(`${environment.api_source_information_data}${id}/`)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -381,7 +381,7 @@ export class MaterialsService {
 
   getTypeEnergy() {
     return this.http.get<any>(environment.api_type_energy).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -389,7 +389,7 @@ export class MaterialsService {
 
   addTypeEnergy(data: object) {
     return this.http.post<any>(environment.api_type_energy, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -397,7 +397,7 @@ export class MaterialsService {
 
   updateTypeEnergy(id: string, changes) {
     return this.http.put(`${environment.api_type_energy}${id}/`, changes).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -405,7 +405,7 @@ export class MaterialsService {
 
   deleteTypeEnergy(id: number) {
     return this.http.delete(`${environment.api_type_energy}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -413,7 +413,7 @@ export class MaterialsService {
 
   getTypeEnergyData() {
     return this.http.get<any>(environment.api_type_energy_data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -421,7 +421,7 @@ export class MaterialsService {
 
   addTypeEnergyData(data: object) {
     return this.http.post<any>(environment.api_type_energy_data, data).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -431,7 +431,7 @@ export class MaterialsService {
     return this.http
       .put(`${environment.api_type_energy_data}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -439,7 +439,7 @@ export class MaterialsService {
 
   deleteTypeEnergyData(id: number) {
     return this.http.delete(`${environment.api_type_energy_data}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );

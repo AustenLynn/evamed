@@ -11,7 +11,7 @@ export class ProjectsService {
 
   addProject(projectData: object) {
     return this.http.post<any>(environment.api_projects, projectData).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -19,7 +19,7 @@ export class ProjectsService {
 
   getProjectById(id: string) {
     return this.http.get(`${environment.api_projects}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -27,7 +27,7 @@ export class ProjectsService {
 
   updateProyect(id: string, changes) {
     return this.http.put(`${environment.api_projects}${id}/`, changes).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -35,7 +35,7 @@ export class ProjectsService {
 
   deleteProject(id: number) {
     return this.http.delete(`${environment.api_projects}${id}/`).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -43,7 +43,7 @@ export class ProjectsService {
 
   addSchemeProject(schemeData: object) {
     return this.http.post<any>(environment.api_scheme_project, schemeData).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -53,7 +53,7 @@ export class ProjectsService {
     return this.http
       .post<any>(environment.api_scheme_project_original, schemeData)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -61,7 +61,7 @@ export class ProjectsService {
 
   getMaterialSchemeProyect() {
     return this.http.get<any>(environment.api_scheme_project).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -71,7 +71,7 @@ export class ProjectsService {
     return this.http
       .put(`${environment.api_scheme_project}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -79,7 +79,7 @@ export class ProjectsService {
 
   getMaterialSchemeProyectOrigin() {
     return this.http.get<any>(environment.api_scheme_project_original).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -87,7 +87,7 @@ export class ProjectsService {
 
   getProjects() {
     return this.http.get<any>(environment.api_projects).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -98,7 +98,7 @@ export class ProjectsService {
     return this.http
       .get<any>(environment.api_projects + '?search=' + project)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );

@@ -60,12 +60,12 @@ export class MaterialsAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.materialsService.getMaterials().subscribe((data) => {
+    this.materialsService.getMaterials().subscribe(data => {
       this.materialList = data;
       this.inmutableList = data;
     });
-    this.materialsService.getDbMaterials().subscribe((data) => {
-      data.map((db) => {
+    this.materialsService.getDbMaterials().subscribe(data => {
+      data.map(db => {
         this.filters.push(db);
       });
     });
@@ -87,7 +87,7 @@ export class MaterialsAdminComponent implements OnInit {
       data: { id, name_material },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -111,7 +111,7 @@ export class MaterialsAdminComponent implements OnInit {
   }
 
   filterByDataBase(filter) {
-    return this.inmutableList.filter((res) => res.database_from === filter);
+    return this.inmutableList.filter(res => res.database_from === filter);
   }
 
   selectFilter(filter) {

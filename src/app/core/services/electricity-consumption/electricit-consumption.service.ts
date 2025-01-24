@@ -11,7 +11,7 @@ export class ElectricitConsumptionService {
 
   getACR() {
     return this.http.get<any>(environment.api_annual_consumption_required).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -21,7 +21,7 @@ export class ElectricitConsumptionService {
     return this.http
       .post<any>(environment.api_annual_consumption_required, acrData)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -31,7 +31,7 @@ export class ElectricitConsumptionService {
     return this.http
       .get<any>(environment.api_electricity_consumption_data)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -41,7 +41,7 @@ export class ElectricitConsumptionService {
     return this.http
       .post<any>(environment.api_electricity_consumption_data, ECD)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -53,7 +53,7 @@ export class ElectricitConsumptionService {
     return this.http
       .delete(`${environment.api_annual_consumption_required}${id}/`)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -65,7 +65,7 @@ export class ElectricitConsumptionService {
     return this.http
       .delete(`${environment.api_electricity_consumption_data}${id}/`)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -75,7 +75,7 @@ export class ElectricitConsumptionService {
     return this.http
       .put(`${environment.api_annual_consumption_required}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -85,7 +85,7 @@ export class ElectricitConsumptionService {
     return this.http
       .put(`${environment.api_electricity_consumption_data}${id}/`, changes)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -95,7 +95,7 @@ export class ElectricitConsumptionService {
     return this.http
       .get<any>(`${environment.api_electricity_consumption_data}${id}/`)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );

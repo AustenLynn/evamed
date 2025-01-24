@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap  } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { environment } from './../../../../environments/environment';
 
 
@@ -18,7 +18,7 @@ export class UserService {
       environment.api_users,
       userData
     ).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -26,7 +26,7 @@ export class UserService {
 
   getUsers() {
     return this.http.get<any>(environment.api_users).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -36,7 +36,7 @@ export class UserService {
     return this.http.get<any>(
       environment.api_users + '?search=' + email,
     ).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );

@@ -27,7 +27,7 @@ export class DeleteTransportComponent implements OnInit {
 
   deleteTransport(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deleteTransport(id).subscribe((data) => {
+    this.materialsService.deleteTransport(id).subscribe(() => {
       this.onNoClick();
     });
   }

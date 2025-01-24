@@ -9,13 +9,13 @@
   <nav class="nav-steps">
     <div class="mdl-stepper-horizontal-alternative">
       <div class="mdl-stepper-step step-one-selected">
-        <div class="mdl-stepper-circle" (click)="goToMaterialStage()"></div>
+        <div class="mdl-stepper-circle" (click)="goToMaterialStage()" (keypress)="goToMaterialStage()" tabindex="1"></div>
         <div class="mdl-stepper-tag"> Producción </div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
       </div>
       <div class="mdl-stepper-step step-two">
-        <div class="mdl-stepper-circle" (click)="goToConstructionStage()"></div>
+        <div class="mdl-stepper-circle" (click)="goToConstructionStage()" (keypress)="goToConstructionStage()" tabindex="2"></div>
         <div class="mdl-stepper-tag"> Construcción </div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
@@ -27,7 +27,7 @@
         <div class="mdl-stepper-bar-right"></div>
       </div>
       <div class="mdl-stepper-step step-four">
-        <div class="mdl-stepper-circle" (click)="goToEndLife()"></div>
+        <div class="mdl-stepper-circle" (click)="goToEndLife()" (keypress)="goToEndLife()" tabindex="3"></div>
         <div class="mdl-stepper-tag"> Fin de vida </div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
@@ -46,17 +46,17 @@
       </div>
       <div class="custom-inputs-data">
         <div>
-          <label class="label-small-input">
+          <span class="label-small-input">
             Cantidad
-          </label>
+          </span>
           <mat-form-field appearance="fill">
             <input class="input-general" [(ngModel)]="cantidad" name="cantidad" matInput type="text">
           </mat-form-field>
         </div>
         <div>
-          <label class="label-small-input">
+          <span class="label-small-input">
             Unidad
-          </label>
+          </span>
           <mat-form-field appearance="outline">
             <mat-label>Seleccione una opción</mat-label>
             <mat-select [(ngModel)]="unidad" name="fuente" hideSingleSelectionIndicator>
@@ -90,9 +90,9 @@
             <div class="Tab-container">
               <div class="Row top-0">
                 <div class="Col principal">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Tipo
-                  </label>
+                  </span>
                   <mat-form-field appearance="outline" class="custom-formField">
                     <mat-label>Seleccione una opción</mat-label>
                     <mat-select [(ngModel)]="tipoMixElectrico" name="fuente" hideSingleSelectionIndicator panelWidth="">
@@ -105,9 +105,9 @@
               </div>
               <div class="Row top-0">
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Cantidad
-                  </label>
+                  </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="cantidadMixElectrico"
                       (ngModelChange)="changeCantidadME(cantidadMixElectrico)" name="cantidad" matInput type="text">
@@ -115,9 +115,9 @@
                 </div>
 
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Unidad
-                  </label>
+                  </span>
                   <mat-form-field appearance="outline">
                     <mat-label>Seleccione una opción</mat-label>
                     <mat-select [(ngModel)]="unidadMixElectrico" name="fuente" hideSingleSelectionIndicator>
@@ -129,9 +129,9 @@
                 </div>
 
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Porcentaje
-                  </label>
+                  </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="porcentajeMixElectrico"
                       (ngModelChange)="changePorcentajeME(porcentajeMixElectrico)" name="cantidad" matInput type="text">
@@ -155,9 +155,9 @@
             <div class="Tab-container">
               <div class="Row top-0">
                 <div class="Col principal">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Tipo
-                  </label>
+                  </span>
                   <mat-form-field appearance="outline" class="custom-formField">
                     <mat-label>Seleccione una opción</mat-label>
                     <mat-select [(ngModel)]="tipoCombustible" name="fuente" hideSingleSelectionIndicator panelWidth="">
@@ -171,9 +171,9 @@
 
               <div class="Row top-0">
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Cantidad
-                  </label>
+                  </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="cantidadCombustible"
                       (ngModelChange)="changeCantidadC(cantidadCombustible)" name="cantidad" matInput type="text">
@@ -181,9 +181,9 @@
                 </div>
 
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Unidad
-                  </label>
+                  </span>
                   <mat-form-field appearance="outline">
                     <mat-label>Seleccione una opción</mat-label>
                     <mat-select [(ngModel)]="unidadCombustible" name="fuente" hideSingleSelectionIndicator>
@@ -195,9 +195,9 @@
                 </div>
 
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Porcentaje
-                  </label>
+                  </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="porcentajeCombustible"
                       (ngModelChange)="changePorcentajeC(porcentajeCombustible)" name="cantidad" matInput type="text">
@@ -219,9 +219,9 @@
             <div class="Tab-container">
               <div class="Row top-0">
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Cantidad
-                  </label>
+                  </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="cantidadPanelesFotovoltaicos"
                       (ngModelChange)="changeCantidadPF(cantidadPanelesFotovoltaicos)" name="cantidad" matInput type="text">
@@ -229,9 +229,9 @@
                 </div>
 
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Unidad
-                  </label>
+                  </span>
                   <mat-form-field appearance="outline">
                     <mat-label>Seleccione una opción</mat-label>
                     <mat-select [(ngModel)]="unidadPanelesFotovoltaicos" name="fuente" hideSingleSelectionIndicator>
@@ -243,9 +243,9 @@
                 </div>
 
                 <div class="Col secundary">
-                  <label class="label-small-input">
+                  <span class="label-small-input">
                     Porcentaje
-                  </label>
+                  </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="porcentajePanelesFotovoltaicos"
                       (ngModelChange)="changePorcentajePF(porcentajePanelesFotovoltaicos)" name="cantidad" matInput type="text">

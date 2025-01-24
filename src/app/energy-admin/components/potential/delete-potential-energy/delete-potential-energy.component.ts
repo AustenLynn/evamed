@@ -26,7 +26,7 @@ export class DeletePotentialEnergyComponent implements OnInit {
 
   deletePotential(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deleteTypeEnergyData(id).subscribe((data) => {
+    this.materialsService.deleteTypeEnergyData(id).subscribe(() => {
       this.onNoClick();
     });
   }

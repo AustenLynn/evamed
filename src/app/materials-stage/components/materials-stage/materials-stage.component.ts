@@ -37,9 +37,9 @@ export class MaterialsStageComponent implements OnInit {
   selectedOptionsRevit: string[] = [];
   selectedOptionsDynamo: string[] = [];
   selectedOptionsUsuario: string[] = [];
-  panelOpenFirst: boolean = true;
-  panelOpenSecond: boolean = true;
-  panelOpenThird: boolean = true;
+  panelOpenFirst = true;
+  panelOpenSecond = true;
+  panelOpenThird = true;
   allMaterials = [];
   nameProject: string;
   projectId: number;
@@ -66,21 +66,21 @@ export class MaterialsStageComponent implements OnInit {
   distanciaInicial: any;
   newConstructiveElement: string;
   newConstructiveSystem: string;
-  SCseleccionado: string = '';
+  SCseleccionado = '';
   materialData: any;
   EPDS: any;
   EPiC: any;
   mexicaniuh: any;
   showListMaterials: boolean;
   showMexican: boolean;
-  materialFiltrado: string = '';
+  materialFiltrado = '';
 
   myControl = new UntypedFormControl();
   options: Material[];
   filteredOptions: Observable<Material[]>;
 
   displayedColumns: string[] = ['Standard', 'Potencial', 'Valor', 'Unidad'];
-  endSave: boolean = false;
+  endSave = false;
 
   constructor(
     private materialsService: MaterialsService,
@@ -90,13 +90,13 @@ export class MaterialsStageComponent implements OnInit {
     public dialog: MatDialog,
     private analisis: AnalisisService
   ) {
-    this.materialsService.getMaterials().subscribe((data) => {
+    this.materialsService.getMaterials().subscribe(data => {
       this.materialsList = data;
       this.options = this.materialsList;
-      const EPDS = data.filter((res) => res.database_from === 'EPDs');
-      const EPIC = data.filter((res) => res.database_from === 'EPiC');
-      const mexicaniuh = data.filter(
-        (res) => res.database_from === 'mexicaniuh'
+      const EPDS = data.filter(res => res.database_from === 'EPDs'),
+       EPIC = data.filter(res => res.database_from === 'EPiC'),
+       mexicaniuh = data.filter(
+        res => res.database_from === 'mexicaniuh'
       );
       this.EPDS = EPDS.sort((a, b) =>
         a.name_material > b.name_material ? 1 : -1
@@ -108,13 +108,13 @@ export class MaterialsStageComponent implements OnInit {
         a.name_material > b.name_material ? 1 : -1
       );
     });
-    this.catalogsService.countriesCatalog().subscribe((data) => {
+    this.catalogsService.countriesCatalog().subscribe(data => {
       this.catalogoPaises = data;
     });
-    this.catalogsService.getStates().subscribe((data) => {
+    this.catalogsService.getStates().subscribe(data => {
       this.catalogoEstados = data;
     });
-    this.catalogsService.getTransports().subscribe((data) => {
+    this.catalogsService.getTransports().subscribe(data => {
       this.catalogoTransportesLocal = data;
       this.catalogoTransportesExtrangero = data;
     });
@@ -122,7 +122,7 @@ export class MaterialsStageComponent implements OnInit {
 
   ngOnInit() {
     //carga de imagenes
-    let images = [
+    const images = [
       '../../../../assets/map/2.jpg',
       '../../../../assets/map/4.jpg',
       '../../../../assets/map/5.jpg',
@@ -140,8 +140,8 @@ export class MaterialsStageComponent implements OnInit {
     // fragmento para autocompletado
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map((value) => (typeof value === 'string' ? value : value.name)),
-      map((name) => (name ? this._filter(name) : this.options.slice()))
+      map(value => (typeof value === 'string' ? value : value.name)),
+      map(name => (name ? this._filter(name) : this.options.slice()))
     );
 
     this.selectedMaterial = false;
@@ -151,12 +151,12 @@ export class MaterialsStageComponent implements OnInit {
     this.showMexican = false;
     this.showListMaterials = true;
 
-    const PDP = JSON.parse(sessionStorage.getItem('primaryDataProject'));
-    const data = JSON.parse(sessionStorage.getItem('dataProject'));
+    const PDP = JSON.parse(sessionStorage.getItem('primaryDataProject')),
+     data = JSON.parse(sessionStorage.getItem('dataProject'));
     this.ciudadOrigenSeleccionada = PDP.city_id_origin;
 
-    this.catalogsService.usefulLifeCatalog().subscribe((data) => {
-      data.map((item) => {
+    this.catalogsService.usefulLifeCatalog().subscribe(data => {
+      data.map(item => {
         if (item.id === PDP.useful_life_id) {
           this.vidaUtilSeleccionado = item.name_useful_life;
         }
@@ -166,7 +166,7 @@ export class MaterialsStageComponent implements OnInit {
     this.sheetNames = [];
     this.nameProject = PDP.name_project;
     this.projectId = PDP.id;
-    data.sheetNames.map((sheetname) => {
+    data.sheetNames.map(sheetname => {
       if (
         sheetname !== 'Muros InterioresBis' &&
         sheetname !== 'Inicio' &&
@@ -194,19 +194,19 @@ export class MaterialsStageComponent implements OnInit {
     const filterValue = name.toLowerCase();
 
     return this.options.filter(
-      (option) => option.name_material.toLowerCase().indexOf(filterValue) === 0
+      option => option.name_material.toLowerCase().indexOf(filterValue) === 0
     );
   }
 
   preload(array) {
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
       this.IMGP[i] = new Image();
       this.IMGP[i].src = array[i];
     }
   }
 
   onGroupsChange(options: MatListOption[]) {
-    options.map((option) => {
+    options.map(option => {
       this.selectedSheet = option.value;
     });
 
@@ -216,11 +216,11 @@ export class MaterialsStageComponent implements OnInit {
     }
     this.listData = this.contentData[this.indexSheet + 1];
 
-    const SCRevit = [];
-    const SCDynamo = [];
-    const SCUsuario = [];
+    const SCRevit = [],
+     SCDynamo = [],
+     SCUsuario = [];
 
-    this.listData.map((sc) => {
+    this.listData.map(sc => {
       if (sc.Origen === 'Modelo de Revit' || sc.Origen === 'Template EVAMED') {
         SCRevit.push(sc.Sistema_constructivo);
       }
@@ -256,25 +256,25 @@ export class MaterialsStageComponent implements OnInit {
     console.log('ON SELECTED MATERIAL!!!!!');
     console.log(this.dataMaterialSelected);
 
-    this.dataMaterialSelected.vidaUtil === undefined
+    this.dataMaterialSelected.vidaUtil = this.dataMaterialSelected.vidaUtil === undefined
       ? (this.dataMaterialSelected.vidaUtil = parseInt(
           this.vidaUtilSeleccionado,
           10
         ))
       : this.dataMaterialSelected.vidaUtil;
 
-    this.dataMaterialSelected.reemplazos === undefined
+      this.dataMaterialSelected.reemplazos = this.dataMaterialSelected.reemplazos === undefined
       ? (this.dataMaterialSelected.reemplazos = 0)
       : this.dataMaterialSelected.reemplazos;
 
     this.catalogoTransportesLocal = [];
-    this.catalogsService.getTransports().subscribe((data) => {
-      data.map((item) => {
+    this.catalogsService.getTransports().subscribe(data => {
+      data.map(item => {
         this.catalogoTransportesLocal.push(item);
       });
     });
 
-    this.materialsList.map((material) => {
+    this.materialsList.map(material => {
       if (material.name_material === this.dataMaterialSelected.Material) {
         this.dataMaterialSelected.name_material_db = material.name_material;
       }
@@ -314,8 +314,8 @@ export class MaterialsStageComponent implements OnInit {
 
   selectState(id) {
     this.catalogoCiudades = [];
-    this.catalogsService.getCities().subscribe((data) => {
-      data.map((item) => {
+    this.catalogsService.getCities().subscribe(data => {
+      data.map(item => {
         if (item.state_id === id) {
           this.catalogoCiudades.push(item);
         }
@@ -324,9 +324,9 @@ export class MaterialsStageComponent implements OnInit {
   }
 
   selectCountry(id) {
-    this.catalogsService.getExternalDistances().subscribe((data) => {
+    this.catalogsService.getExternalDistances().subscribe(data => {
       console.log(data)
-      data.map((item) => {
+      data.map(item => {
         let typeTransport = 'mar';
         if (id === item.id + 1) {
           switch (item.region) {
@@ -342,16 +342,16 @@ export class MaterialsStageComponent implements OnInit {
 
           this.catalogoTransportesExtrangero = [];
           if (typeTransport === 'terreste') {
-            this.catalogsService.getTransports().subscribe((data) => {
-              data.map((item) => {
+            this.catalogsService.getTransports().subscribe(data => {
+              data.map(item => {
                 // if (item.id >= 3) {
                 this.catalogoTransportesExtrangero.push(item);
                 // }
               });
             });
           } else {
-            this.catalogsService.getTransports().subscribe((data) => {
-              data.map((item) => {
+            this.catalogsService.getTransports().subscribe(data => {
+              data.map(item => {
                 if (item.id < 3) {
                   this.catalogoTransportesExtrangero.push(item);
                 }
@@ -363,7 +363,7 @@ export class MaterialsStageComponent implements OnInit {
     });
   }
 
-  onNgModelChangeRevit(event) {
+  onNgModelChangeRevit() {
     let i;
     for (i = 0; i <= this.sheetNames.length; i++) {
       if (this.indexSheet === i) {
@@ -372,7 +372,7 @@ export class MaterialsStageComponent implements OnInit {
     }
   }
 
-  onNgModelChangeDynamo(event) {
+  onNgModelChangeDynamo() {
     let i;
     for (i = 0; i <= this.sheetNames.length; i++) {
       if (this.indexSheet === i) {
@@ -381,14 +381,14 @@ export class MaterialsStageComponent implements OnInit {
     }
   }
 
-  onNgModelChangeUser(event) {
+  onNgModelChangeUser() {
     //  let i;
     //  for ( i = 0; i <= this.sheetNames.length; i++ ) {
     //    this.indexSheet === i ? this.SOU[i] = this.selectedOptionsUsuario : this.SOU[i];
     //  }
   }
 
-  onNgModelChangeMaterial(event) {
+  onNgModelChangeMaterial() {
     // console.log(this.selectedMaterial);
   }
 
@@ -397,8 +397,8 @@ export class MaterialsStageComponent implements OnInit {
 
     // Save Modelo Revit and Usuario
     await Object.entries(this.SOR).forEach(([key, value]) => {
-      this.contentData[parseInt(key, 10) + 1].map((data) => {
-        value.map((sc) => {
+      this.contentData[parseInt(key, 10) + 1].map(data => {
+        value.map(sc => {
           if (data.Sistema_constructivo === sc) {
             if (
               data.Origen === 'Modelo de Revit' ||
@@ -412,8 +412,8 @@ export class MaterialsStageComponent implements OnInit {
 
               this.materialsService
                 .searchMaterial(materialToSearch)
-                .subscribe((material) => {
-                  material.map((materialData) => {
+                .subscribe(material => {
+                  material.map(materialData => {
                     if (materialData.name_material === materialToSearch) {
                       this.projectsService
                         .addSchemeProject({
@@ -457,7 +457,7 @@ export class MaterialsStageComponent implements OnInit {
                           unit_text: data.Unidad,
                           description_material: data['Descripción de Material'],
                         })
-                        .subscribe((data) => {
+                        .subscribe(data => {
                           console.log(
                             'Success Modelo Revit o Template EVAMED!'
                           );
@@ -474,8 +474,8 @@ export class MaterialsStageComponent implements OnInit {
 
     // Save Dynamo
     await Object.entries(this.SOD).forEach(([key, value]) => {
-      this.contentData[parseInt(key, 10) + 1].map((data) => {
-        value.map((sc) => {
+      this.contentData[parseInt(key, 10) + 1].map(data => {
+        value.map(sc => {
           if (data.Sistema_constructivo === sc) {
             if (data.Origen === 'Opciones EVAMED') {
               let materialToSearch = data.Material;
@@ -486,8 +486,8 @@ export class MaterialsStageComponent implements OnInit {
 
               this.materialsService
                 .searchMaterial(materialToSearch)
-                .subscribe((material) => {
-                  material.map((materialData) => {
+                .subscribe(material => {
+                  material.map(materialData => {
                     if (materialData.name_material === materialToSearch) {
                       this.projectsService
                         .addSchemeProject({
@@ -531,7 +531,7 @@ export class MaterialsStageComponent implements OnInit {
                           unit_text: data.Unidad,
                           description_material: data['Descripción de Material'],
                         })
-                        .subscribe((data) => {
+                        .subscribe(data => {
                           console.log(
                             'Success Modelo Revit o Template EVAMED!'
                           );
@@ -553,10 +553,10 @@ export class MaterialsStageComponent implements OnInit {
     this.showSearch = false;
     this.showMaterial = false;
     const materiales = [];
-    let counterRevit = 1;
-    let countDynamo = 1;
+    let counterRevit = 1,
+     countDynamo = 1;
 
-    this.listData.map((data) => {
+    this.listData.map(data => {
       if (data.Sistema_constructivo === sc && origin === 'revit-user') {
         if (
           data.Origen === 'Modelo de Revit' ||
@@ -572,8 +572,8 @@ export class MaterialsStageComponent implements OnInit {
 
           this.materialsService
             .searchMaterial(materialABuscar)
-            .subscribe((material) => {
-              material.map((materialData) => {
+            .subscribe(material => {
+              material.map(materialData => {
                 if (materialData.name_material === materialABuscar) {
                   data.signal = true;
                 }
@@ -594,8 +594,8 @@ export class MaterialsStageComponent implements OnInit {
           }
           this.materialsService
             .searchMaterial(materialABuscar)
-            .subscribe((material) => {
-              material.map((materialData) => {
+            .subscribe(material => {
+              material.map(materialData => {
                 if (materialData.name_material === data.Material) {
                   data.signal = true;
                 }
@@ -617,8 +617,8 @@ export class MaterialsStageComponent implements OnInit {
     // this.dataMaterialSelected.registrationNumber = 'S-P-01927';
     // this.dataMaterialSelected.publicationDate = '202-04-01';
     // this.dataMaterialSelected.utilLife = '2025-04-01';
-    this.analisis.getMaterialSchemeData().subscribe((msds) => {
-      let msd = msds.filter((msd) => msd.material_id === material.id);
+    this.analisis.getMaterialSchemeData().subscribe(msds => {
+      let msd = msds.filter(msd => msd.material_id === material.id);
       msd = msd.sort((a, b) => {
         if (a.potential_type_id === b.potential_type_id) {
           return a.standard_id - b.standard_id;
@@ -649,8 +649,8 @@ export class MaterialsStageComponent implements OnInit {
     this.dataMaterialSelected.name = material.name_material;
     this.dataMaterialSelected.id = material.id;
     this.dataMaterialSelected.description = material.description;
-    this.analisis.getMaterialSchemeData().subscribe((msds) => {
-      let msd = msds.filter((msd) => msd.material_id === material.id);
+    this.analisis.getMaterialSchemeData().subscribe(msds => {
+      let msd = msds.filter(msd => msd.material_id === material.id);
       msd = msd.sort((a, b) => {
         if (a.potential_type_id === b.potential_type_id) {
           return a.standard_id - b.standard_id;
@@ -695,17 +695,17 @@ export class MaterialsStageComponent implements OnInit {
     this.showSearch = false;
   }
 
-  removeMaterial(event, sc, origin) {
+  removeMaterial(event) {
     event.stopPropagation();
     console.log('entra a remove materials');
   }
 
-  restoreMaterial(event, sc, origin) {
+  restoreMaterial(event) {
     event.stopPropagation();
     console.log('entra a restore material');
   }
 
-  duplicateMaterial(event, sc, origin) {
+  duplicateMaterial(event) {
     event.stopPropagation();
   }
 
@@ -725,14 +725,14 @@ export class MaterialsStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepOne();
         }
-        this.materialsService.getConstructionStage().subscribe((cse) => {
+        this.materialsService.getConstructionStage().subscribe(cse => {
           const schemaFilter = cse.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {
@@ -755,14 +755,14 @@ export class MaterialsStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepOne();
         }
-        this.materialsService.getACR().subscribe((acr) => {
+        this.materialsService.getACR().subscribe(acr => {
           const schemaFilter = acr.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {
@@ -785,14 +785,14 @@ export class MaterialsStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepOne();
         }
-        this.materialsService.getEDCP().subscribe((edcp) => {
+        this.materialsService.getEDCP().subscribe(edcp => {
           const schemaFilter = edcp.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {
@@ -811,9 +811,9 @@ export class MaterialsStageComponent implements OnInit {
 
   continue() {
     this.saveStepOne();
-    this.materialsService.getConstructionStage().subscribe((cse) => {
+    this.materialsService.getConstructionStage().subscribe(cse => {
       const schemaFilter = cse.filter(
-        (schema) => schema.project_id === this.projectId
+        schema => schema.project_id === this.projectId
       );
 
       if (schemaFilter.length === 0) {
@@ -844,7 +844,7 @@ export class MaterialsStageComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       this.sheetNames.push(result.newConstructiveElement);
       this.contentData.push([
         {
@@ -863,7 +863,7 @@ export class MaterialsStageComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       console.log(result);
     });
   }

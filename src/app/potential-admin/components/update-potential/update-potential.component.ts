@@ -29,7 +29,7 @@ export class UpdatePotentialComponent implements OnInit {
   ) {
     this.buildForm();
 
-    this.materialsService.getUnits().subscribe((data) => {
+    this.materialsService.getUnits().subscribe(data => {
       this.units = data;
     });
   }
@@ -57,7 +57,7 @@ export class UpdatePotentialComponent implements OnInit {
       const unit = this.form.value;
       this.materialsService
         .updatePotentialTypes(this.id, unit)
-        .subscribe((data) => {
+        .subscribe(() => {
           this.onNoClick();
         });
     }

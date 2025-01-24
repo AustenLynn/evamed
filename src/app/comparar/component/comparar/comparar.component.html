@@ -58,8 +58,8 @@
               </div>
               <div>
                 <mat-button-toggle-group hideSingleSelectionIndicator>
-                  <mat-button-toggle [disabled]="botones_grafica_activos" class="button-impactos" (click)="porcentaje(true,1)">%</mat-button-toggle>
-                  <mat-button-toggle [disabled]="botones_grafica_activos" class="button-impactos" (click)="porcentaje(false,1)">#</mat-button-toggle>
+                  <mat-button-toggle [disabled]="botones_grafica_activos" class="button-impactos" (click)="porcentaje(true)">%</mat-button-toggle>
+                  <mat-button-toggle [disabled]="botones_grafica_activos" class="button-impactos" (click)="porcentaje(false)">#</mat-button-toggle>
                 </mat-button-toggle-group>
               </div>
               <div>
@@ -247,7 +247,7 @@
               <div>
                 <p>Selecciona impacto ambiental</p>
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
-                  <mat-select class="select-impacto-ambiental" [(ngModel)]="selectedValue" (selectionChange)="selectImpactoAmbiental()" required hideSingleSelectionIndicator>
+                  <mat-select class="select-impacto-ambiental" [(ngModel)]="selectedValue" (selectionChange)="selectImpactoAmbiental()" required hideSingleSelectionIndicator panelWidth="">
                     <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
                       {{impacto.name_complete_potential_type}}
                     </mat-option>

@@ -14,7 +14,7 @@ export class IntermedialComponent implements OnInit {
   constructor(
     private router: Router,
     public dialogRef: MatDialogRef<IntermedialComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {}
+    @Inject(MAT_DIALOG_DATA) public data: object
   ) {}
 
   ngOnInit(): void {}

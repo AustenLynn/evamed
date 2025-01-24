@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import { FileSaverService } from 'ngx-filesaver';
 import { MatDialog } from '@angular/material/dialog';
 import { PrevStepsComponent } from 'src/app/to-do-file/components/prev-steps/prev-steps.component';
-import { ViewChild, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
+import { ViewChild, ElementRef, Renderer2 } from '@angular/core';
 type AOA = any[][];
 
 @Component({
@@ -33,10 +33,10 @@ export class ToDoFileComponent implements OnInit {
 
   onFileChange(evt: any) {
     console.log('acción de botón!!!!!');
-    const asTitle = this.title.nativeElement;
-    const asImage = this.image.nativeElement;
+    const asTitle = this.title.nativeElement,
+     asImage = this.image.nativeElement,
 
-    var file = (<HTMLInputElement>document.getElementById('file')).files[0]
+     file = (document.getElementById('file') as HTMLInputElement).files[0]
       .name;
     this.renderer2.setProperty(asTitle, 'innerHTML', file);
 
@@ -54,8 +54,8 @@ export class ToDoFileComponent implements OnInit {
     const reader: FileReader = new FileReader();
     reader.onload = (e: any) => {
       /* read workbook */
-      const bstr: string = e.target.result;
-      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+      const bstr: string = e.target.result,
+       wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
       /* assingable */
       let partialData: AOA = [];
       const totalData = [];
@@ -77,7 +77,7 @@ export class ToDoFileComponent implements OnInit {
       sessionStorage.setItem('dataProject', JSON.stringify(toRead));
       // this.router.navigateByUrl('materials-stage');
     };
-    reader.readAsBinaryString(target.files[0]);
+    reader.readAsArrayBuffer(target.files[0]);
   }
 
   onDownloadWindows() {
@@ -87,7 +87,7 @@ export class ToDoFileComponent implements OnInit {
         observe: 'response',
         responseType: 'blob',
       })
-      .subscribe((res) => {
+      .subscribe(res => {
         this.fileSaverService.save(res.body, fileName);
       });
     return;
@@ -100,7 +100,7 @@ export class ToDoFileComponent implements OnInit {
         observe: 'response',
         responseType: 'blob',
       })
-      .subscribe((res) => {
+      .subscribe(res => {
         this.fileSaverService.save(res.body, fileName);
       });
     return;
@@ -113,7 +113,7 @@ export class ToDoFileComponent implements OnInit {
         observe: 'response',
         responseType: 'blob',
       })
-      .subscribe((res) => {
+      .subscribe(res => {
         this.fileSaverService.save(res.body, fileName);
       });
     return;

@@ -48,36 +48,36 @@ export class UpdateMaterialComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.buildForm();
-    this.materialsService.getUnits().subscribe((data) => {
+    this.materialsService.getUnits().subscribe(data => {
       this.units = data;
     });
-    this.materialsService.getStandards().subscribe((data) => {
+    this.materialsService.getStandards().subscribe(data => {
       this.ListStandards = data;
     });
-    this.materialsService.getPotentialTypes().subscribe((data) => {
+    this.materialsService.getPotentialTypes().subscribe(data => {
       this.ListPotential = data;
     });
 
-    this.materialsService.getDbMaterials().subscribe((data) => {
+    this.materialsService.getDbMaterials().subscribe(data => {
       this.ListDatabases = data;
     });
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params) => {
-      this.materialsService.getMaterials().subscribe((data) => {
+      this.materialsService.getMaterials().subscribe(data => {
         const materialFiltered = data.filter(
-          (material) => material.id === parseInt(params.id)
+          material => material.id === parseInt(params.id)
         );
 
         // Filtrado de Esquema de material
-        materialFiltered.map((material) => {
+        materialFiltered.map(material => {
           this.id = material.id;
           this.form.patchValue(material);
           this.ListSchemeData = [];
-          this.analisisService.getMaterialSchemeData().subscribe((msds) => {
+          this.analisisService.getMaterialSchemeData().subscribe(msds => {
             const ListSchemeData = msds.filter(
-              (msd) => msd.material_id === material.id
+              msd => msd.material_id === material.id
             );
 
             this.ListSchemeData = ListSchemeData.sort((a, b) => {
@@ -108,7 +108,7 @@ export class UpdateMaterialComponent implements OnInit {
       const material = this.form.value;
       this.materialsService
         .updateMaterial(this.id, material)
-        .subscribe((newProduct) => {
+        .subscribe(() => {
           this.ngOnInit();
           this.router.navigate(['./admin-materials']);
         });
@@ -122,21 +122,21 @@ export class UpdateMaterialComponent implements OnInit {
   deleteSchema(event: Event, id: number) {
     event.preventDefault();
     const potentialSelected = this.ListSchemeData.filter(
-      (data) => data.id === id
-    );
-    const dialogRef = this.dialog.open(DeleteDataSchemeComponent, {
+      data => data.id === id
+    ),
+     dialogRef = this.dialog.open(DeleteDataSchemeComponent, {
       width: '680px',
       data: potentialSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   getPotential(id: number) {
     const potencial = this.ListPotential.filter(
-      (potencial) => potencial.id === id
+      potencial => potencial.id === id
     );
 
     return potencial[0].name_complete_potential_type;
@@ -144,14 +144,14 @@ export class UpdateMaterialComponent implements OnInit {
 
   getStandard(id: number) {
     const standard = this.ListStandards.filter(
-      (standard) => standard.id === id
+      standard => standard.id === id
     );
 
     return standard[0].name_standard;
   }
 
   getUnit(id: number) {
-    const unit = this.units.filter((unit) => unit.id === id);
+    const unit = this.units.filter(unit => unit.id === id);
 
     return unit[0].name_unit;
   }
@@ -163,7 +163,7 @@ export class UpdateMaterialComponent implements OnInit {
       data: { ...elem },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -176,7 +176,7 @@ export class UpdateMaterialComponent implements OnInit {
       data: { material_id: this.id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       console.log('entra a este proceso');
       this.ngOnInit();
     });

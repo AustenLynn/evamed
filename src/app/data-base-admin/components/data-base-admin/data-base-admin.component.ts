@@ -23,7 +23,7 @@ export class DataBaseAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.materialsService.getDbMaterials().subscribe((data) => {
+    this.materialsService.getDbMaterials().subscribe(data => {
       this.dataBases = data;
     });
   }
@@ -39,33 +39,33 @@ export class DataBaseAdminComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   updateDbMaterials(event: Event, unitId) {
     event.preventDefault();
-    const unitSelected = this.dataBases.filter((data) => data.id === unitId);
-    const dialogRef = this.dialog.open(UpdateDataBaseComponent, {
+    const unitSelected = this.dataBases.filter(data => data.id === unitId),
+     dialogRef = this.dialog.open(UpdateDataBaseComponent, {
       width: '680px',
       data: unitSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   deleteDbMaterials(event: Event, unitId) {
     event.preventDefault();
-    const unitSelected = this.dataBases.filter((data) => data.id === unitId);
-    const dialogRef = this.dialog.open(DeleteDataBaseComponent, {
+    const unitSelected = this.dataBases.filter(data => data.id === unitId),
+     dialogRef = this.dialog.open(DeleteDataBaseComponent, {
       width: '680px',
       data: unitSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }

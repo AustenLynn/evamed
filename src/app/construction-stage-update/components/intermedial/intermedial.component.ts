@@ -16,7 +16,7 @@ export class IntermedialComponent implements OnInit {
     private router: Router,
     private materialsService: MaterialsService,
     public dialogRef: MatDialogRef<IntermedialComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {}
+    @Inject(MAT_DIALOG_DATA) public data: object
   ) {}
 
   ngOnInit(): void {}
@@ -27,9 +27,9 @@ export class IntermedialComponent implements OnInit {
 
   continueStep(event: Event) {
     event.preventDefault();
-    this.materialsService.getACR().subscribe((acr) => {
+    this.materialsService.getACR().subscribe(acr => {
       const schemaFilter = acr.filter(
-        (schema) =>
+        schema =>
           schema.project_id == localStorage.getItem('idProyectoConstrucción')
       );
 

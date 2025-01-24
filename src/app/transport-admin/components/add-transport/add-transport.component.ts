@@ -40,7 +40,7 @@ export class AddTransportComponent implements OnInit {
     event.preventDefault();
     if (this.form.valid) {
       const transport = this.form.value;
-      this.materialsService.addTransport(transport).subscribe((data) => {
+      this.materialsService.addTransport(transport).subscribe(() => {
         this.onNoClick();
       });
     }

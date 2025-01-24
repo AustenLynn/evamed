@@ -13,7 +13,7 @@ export class EndLifeService {
     return this.http
       .post<any>(environment.api_treatment_of_generate_wasted, togwData)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -26,7 +26,7 @@ export class EndLifeService {
         ecdpData
       )
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -36,7 +36,7 @@ export class EndLifeService {
     return this.http
       .get<any>(environment.api_electricity_consumption_deconstructive_process)
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );
@@ -48,7 +48,7 @@ export class EndLifeService {
         `${environment.api_electricity_consumption_deconstructive_process}${id}/`
       )
       .pipe(
-        tap((data) => {
+        tap(data => {
           return data;
         })
       );

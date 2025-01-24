@@ -18,7 +18,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./home-evamed/home-evamed.module').then(
-            (m) => m.HomeEvamedModule
+            m => m.HomeEvamedModule
           ),
       },
       {
@@ -26,7 +26,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./to-do-file/to-do-file.module').then(
-            (m) => m.ToDoFileModule
+            m => m.ToDoFileModule
           ),
       },
       {
@@ -34,7 +34,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./materials-stage/materials-stage.module').then(
-            (m) => m.MaterialsStageModule
+            m => m.MaterialsStageModule
           ),
       },
       {
@@ -42,7 +42,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./construction-stage/construction-stage.module').then(
-            (m) => m.ConstructionStageModule
+            m => m.ConstructionStageModule
           ),
       },
       {
@@ -50,7 +50,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./usage-stage/usage-stage.module').then(
-            (m) => m.UsageStageModule
+            m => m.UsageStageModule
           ),
       },
       {
@@ -58,7 +58,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./end-life-stage/end-life-stage.module').then(
-            (m) => m.EndLifeStageModule
+            m => m.EndLifeStageModule
           ),
       },
       {
@@ -66,21 +66,21 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./end-life-update/end-life-update.module').then(
-            (m) => m.EndLifeUpdateModule
+            m => m.EndLifeUpdateModule
           ),
       },
       {
         path: 'resultados',
         canActivate: [AdminGuard],
         loadChildren: () =>
-          import('./comparar/comparar.module').then((m) => m.CompararModule),
+          import('./comparar/comparar.module').then(m => m.CompararModule),
       },
       {
         path: 'material-stage-update',
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./material-stage-update/material-stage-update.module').then(
-            (m) => m.MaterialStageUpdateModule
+            m => m.MaterialStageUpdateModule
           ),
       },
       {
@@ -89,14 +89,14 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             './construction-stage-update/construction-stage-update.module'
-          ).then((m) => m.ConstructionStageUpdateModule),
+          ).then(m => m.ConstructionStageUpdateModule),
       },
       {
         path: 'usage-stage-update',
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./usage-stage-update/usage-stage-update.module').then(
-            (m) => m.UsageStageUpdateModule
+            m => m.UsageStageUpdateModule
           ),
       },
       {
@@ -104,7 +104,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./materials-admin/materials-admin.module').then(
-            (m) => m.MaterialsAdminModule
+            m => m.MaterialsAdminModule
           ),
       },
       {
@@ -112,7 +112,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./units-admin/units-admin.module').then(
-            (m) => m.UnitsAdminModule
+            m => m.UnitsAdminModule
           ),
       },
       {
@@ -120,7 +120,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./data-base-admin/data-base-admin.module').then(
-            (m) => m.DataBaseAdminModule
+            m => m.DataBaseAdminModule
           ),
       },
       {
@@ -128,7 +128,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./potential-admin/potential-admin.module').then(
-            (m) => m.PotentialAdminModule
+            m => m.PotentialAdminModule
           ),
       },
       {
@@ -136,7 +136,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./transport-admin/transport-admin.module').then(
-            (m) => m.TransportAdminModule
+            m => m.TransportAdminModule
           ),
       },
       {
@@ -144,7 +144,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./machinery-admin/machinery-admin.module').then(
-            (m) => m.MachineryAdminModule
+            m => m.MachineryAdminModule
           ),
       },
       {
@@ -152,7 +152,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./energy-admin/energy-admin.module').then(
-            (m) => m.EnergyAdminModule
+            m => m.EnergyAdminModule
           ),
       },
       {
@@ -160,7 +160,7 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./others-admin/others-admin.module').then(
-            (m) => m.OthersAdminModule
+            m => m.OthersAdminModule
           ),
       },
       {
@@ -168,34 +168,34 @@ const routes: Routes = [
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./principal-admin/principal-admin.module').then(
-            (m) => m.PrincipalAdminModule
+            m => m.PrincipalAdminModule
           ),
       },
       {
         path: 'about',
         canActivate: [AdminGuard],
         loadChildren: () =>
-          import('./about/about.module').then((m) => m.AboutModule),
+          import('./about/about.module').then(m => m.AboutModule),
       },
       {
         path: 'user-manual',
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./user-manual/user-manual.module').then(
-            (m) => m.UserManualModule
+            m => m.UserManualModule
           ),
       },
     ],
   },
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
   {
     path: '**',
     loadChildren: () =>
       import('./page-not-found/page-not-found.module').then(
-        (m) => m.PageNotFoundModule
+        m => m.PageNotFoundModule
       ),
   },
 ];

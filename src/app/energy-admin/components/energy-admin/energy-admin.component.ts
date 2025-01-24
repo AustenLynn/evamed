@@ -22,7 +22,7 @@ export class EnergyAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.materialsService.getTypeEnergy().subscribe((data) => {
+    this.materialsService.getTypeEnergy().subscribe(data => {
       this.energyList = data;
     });
   }
@@ -38,20 +38,20 @@ export class EnergyAdminComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   deleteEnergy(event: Event, unitId) {
     event.preventDefault();
-    const energySelected = this.energyList.filter((data) => data.id === unitId);
-    const dialogRef = this.dialog.open(DeleteEnergyComponent, {
+    const energySelected = this.energyList.filter(data => data.id === unitId),
+     dialogRef = this.dialog.open(DeleteEnergyComponent, {
       width: '680px',
       data: energySelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }

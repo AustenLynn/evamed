@@ -25,7 +25,7 @@ export class DeleteDataSchemeComponent implements OnInit {
 
   deletePotential(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deleteMaterialSchemeData(id).subscribe((data) => {
+    this.materialsService.deleteMaterialSchemeData(id).subscribe(() => {
       this.onNoClick();
     });
   }

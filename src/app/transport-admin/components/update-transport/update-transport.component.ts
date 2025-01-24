@@ -31,25 +31,25 @@ export class UpdateTransportComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.buildForm();
-    this.materialsService.getPotentialTypes().subscribe((data) => {
+    this.materialsService.getPotentialTypes().subscribe(data => {
       this.potentialTypeList = data;
     });
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params) => {
-      this.materialsService.getTransports().subscribe((data) => {
+      this.materialsService.getTransports().subscribe(data => {
         const transportFiltered = data.filter(
-          (transporte) => transporte.id === parseInt(params.id)
+          transporte => transporte.id === parseInt(params.id)
         );
 
-        transportFiltered.map((transport) => {
+        transportFiltered.map(transport => {
           this.id = transport.id;
           this.form.patchValue(transport);
           this.potentialList = [];
-          this.materialsService.getPotentialTransport().subscribe((data) => {
+          this.materialsService.getPotentialTransport().subscribe(data => {
             const potentialList = data.filter(
-              (potential) => potential.transport_id === transport.id
+              potential => potential.transport_id === transport.id
             );
             this.potentialList = potentialList;
           });
@@ -70,7 +70,7 @@ export class UpdateTransportComponent implements OnInit {
       const transport = this.form.value;
       this.materialsService
         .updateTransport(this.id, transport)
-        .subscribe((newProduct) => {
+        .subscribe(() => {
           this.ngOnInit();
           this.router.navigate(['./admin-transports/']);
         });
@@ -88,7 +88,7 @@ export class UpdateTransportComponent implements OnInit {
       data: { transport_id: this.id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -96,14 +96,14 @@ export class UpdateTransportComponent implements OnInit {
   updatePotential(event: Event, potentialId) {
     event.preventDefault();
     const potentialSelected = this.potentialList.filter(
-      (data) => data.id === potentialId
-    );
-    const dialogRef = this.dialog.open(UpdatePotentialTransportComponent, {
+      data => data.id === potentialId
+    ),
+     dialogRef = this.dialog.open(UpdatePotentialTransportComponent, {
       width: '680px',
       data: potentialSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
@@ -111,21 +111,21 @@ export class UpdateTransportComponent implements OnInit {
   deletePotential(event: Event, potentialId) {
     event.preventDefault();
     const potentialSelected = this.potentialList.filter(
-      (data) => data.id === potentialId
-    );
-    const dialogRef = this.dialog.open(DeletePotentialTransportComponent, {
+      data => data.id === potentialId
+    ),
+     dialogRef = this.dialog.open(DeletePotentialTransportComponent, {
       width: '680px',
       data: potentialSelected,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit();
     });
   }
 
   getPotential(id: number) {
     const potencial = this.potentialTypeList.filter(
-      (potencial) => potencial.id === id
+      potencial => potencial.id === id
     );
 
     return potencial[0].name_complete_potential_type;

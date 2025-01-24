@@ -27,7 +27,7 @@ export class DeleteUnitComponent implements OnInit {
 
   deleteUnit(event: Event, id: number) {
     event.preventDefault();
-    this.materialsService.deleteUnit(id).subscribe((data) => {
+    this.materialsService.deleteUnit(id).subscribe(() => {
       this.onNoClick();
     });
   }

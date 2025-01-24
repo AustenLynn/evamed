@@ -108,6 +108,7 @@
             <a
               mat-raised-button
               (click)="openModalSchema($event, element)"
+              (keypress)="openModalSchema($event, element)" tabindex="1"
             >Editar
           </a>
             <button mat-raised-button color="warn" (click)="deleteSchema($event, element.id)">Eliminar</button>

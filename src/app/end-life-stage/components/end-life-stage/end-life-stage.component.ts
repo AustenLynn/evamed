@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { MatListOption } from '@angular/material/list';
-//import 'rxjs/add/operator/filter';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -36,7 +35,7 @@ export class EndLifeStageComponent implements OnInit {
   catalogoFuentes: any;
   catalogoUnidadEnergia: [];
   selectedSheet: any;
-  endSave: boolean = false;
+  endSave = false;
 
   constructor(
     private router: Router,
@@ -45,20 +44,20 @@ export class EndLifeStageComponent implements OnInit {
     private materialsService: MaterialsService,
     public dialog: MatDialog
   ) {
-    this.catalogsService.getSourceInformation().subscribe((data) => {
+    this.catalogsService.getSourceInformation().subscribe(data => {
       const fuentes = [];
-      data.map((fuente) => {
+      data.map(fuente => {
         if (fuente.name_source_information !== 'Mexicaniuh - CADIS') {
           fuentes.push(fuente);
         }
       });
       this.catalogoFuentes = fuentes;
     });
-    this.catalogsService.getEnergyUnits().subscribe((data) => {
+    this.catalogsService.getEnergyUnits().subscribe(data => {
       // console.log('lógica de unidades!!!!');
       // console.log(data);
-      let energia = [];
-      data.map((unidad) => {
+      const energia = [];
+      data.map(unidad => {
         if (unidad.name_energy_unit === 'Hrs') {
           energia.push(unidad);
         }
@@ -68,13 +67,13 @@ export class EndLifeStageComponent implements OnInit {
   }
 
   ngOnInit() {
-    const data = JSON.parse(sessionStorage.getItem('dataProject'));
-    const PDP = JSON.parse(sessionStorage.getItem('primaryDataProject'));
+    const data = JSON.parse(sessionStorage.getItem('dataProject')),
+     PDP = JSON.parse(sessionStorage.getItem('primaryDataProject'));
 
     this.sheetNames = [];
     this.nameProject = PDP.name_project;
     this.projectId = PDP.id;
-    data.sheetNames.map((sheetname) => {
+    data.sheetNames.map(sheetname => {
       if (
         sheetname !== 'Muros InterioresBis' &&
         sheetname !== 'Inicio' &&
@@ -109,7 +108,7 @@ export class EndLifeStageComponent implements OnInit {
   onGroupsChange(options: MatListOption[]) {
     let selectedSheet;
     // map these MatListOptions to their values
-    options.map((option) => {
+    options.map(option => {
       selectedSheet = option.value;
     });
     // take index of selection
@@ -124,8 +123,8 @@ export class EndLifeStageComponent implements OnInit {
 
     this.selectedSheet = selectedSheet;
 
-    this.dataArrayEC === undefined ? (this.dataArrayEC = []) : this.dataArrayEC;
-    this.dataArrayTD === undefined ? (this.dataArrayTD = []) : this.dataArrayTD;
+    this.dataArrayEC = this.dataArrayEC === undefined ? (this.dataArrayEC = []) : this.dataArrayEC;
+    this.dataArrayTD = this.dataArrayTD === undefined ? (this.dataArrayTD = []) : this.dataArrayTD;
 
     if (this.dataArrayEC.length === 0) {
       this.dataArrayEC.push([]);
@@ -136,13 +135,13 @@ export class EndLifeStageComponent implements OnInit {
     }
   }
 
-  onNgModelChange(event) {
+  onNgModelChange() {
     // console.log('on ng model change', event);
   }
 
   showMaterials(event, sc) {
     const materiales = [];
-    this.listData.map((data) => {
+    this.listData.map(data => {
       if (data.Sistema_constructivo === sc) {
         materiales.push(data.Material);
       }
@@ -181,9 +180,8 @@ export class EndLifeStageComponent implements OnInit {
     console.log('confirm step 4');
     try {
       await Object.entries(this.EC).forEach(([key, ec]) => {
-        let ecAny: any;
-        ecAny = ec;
-        ecAny.map((data) => {
+        const ecAny: any = ec;
+        ecAny.map(data => {
           console.log('Fin de vida!!!');
           console.log(data);
           this.endLifeService
@@ -194,7 +192,7 @@ export class EndLifeStageComponent implements OnInit {
               section_id: parseInt(key, 10) + 1,
               project_id: this.projectId,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log(data);
             });
         });
@@ -214,7 +212,7 @@ export class EndLifeStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       // this.ngOnInit();
 
       this.endSave = true;
@@ -228,14 +226,14 @@ export class EndLifeStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepFour();
         }
-        this.materialsService.getMaterialSchemeProyects().subscribe((msp) => {
+        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
           const schemaFilter = msp.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {
@@ -258,14 +256,14 @@ export class EndLifeStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepFour();
         }
-        this.materialsService.getConstructionStage().subscribe((cse) => {
+        this.materialsService.getConstructionStage().subscribe(cse => {
           const schemaFilter = cse.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {
@@ -288,14 +286,14 @@ export class EndLifeStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if(result.save) {
           this.saveStepFour();
         }
-        this.materialsService.getACR().subscribe((acr) => {
+        this.materialsService.getACR().subscribe(acr => {
           const schemaFilter = acr.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {

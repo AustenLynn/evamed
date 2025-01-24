@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  AfterViewInit,
   ViewChild,
   Input,
   Output,
@@ -9,12 +10,8 @@ import {
 import { ChartOptions, ChartType, ChartDataset, ChartEvent } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
-
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { runInThisContext } from 'vm';
-import { element } from 'protractor';
-//import { convertToObject } from 'typescript';
-//import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
@@ -22,19 +19,19 @@ import { element } from 'protractor';
   standalone: true,
   imports: [BaseChartDirective, CommonModule],
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnInit, AfterViewInit {
   @ViewChild('MyChart') chartDir: BaseChartDirective;
   private canvas: any;
 
   @Input() inputProyects: any;
-  @Input('porcentaje') porcentaje: any;
+  @Input() porcentaje: any;
   @Input() showMe: boolean;
   @Input() Bandera_bar: boolean;
   @Input() Columna_seleccionada: string;
   @Input() banera_enfoqueSerie_externo: boolean;
   @Input() serie_input: string;
   @Input() bandera_enfoqueColumna: boolean;
-  @Input() elementoConstructivo: String;
+  @Input() elementoConstructivo: string;
   @Input() impactoAmbiental: any;
   @Input() impactos: any;
 
@@ -114,8 +111,8 @@ export class BarChartComponent implements OnInit {
     ChartDataLabels,
     {
       afterDraw: this.agregaTitulosProyectos.bind(this),
-      beforeInit: function (chart) {
-        chart.data.labels.forEach(function (e, i, a) {
+      beforeInit: chart => {
+        chart.data.labels.forEach( (e, i, a) => {
           if (/\n/.test(e)) {
             a[i] = e.split(/\n/);
           }
@@ -137,10 +134,10 @@ export class BarChartComponent implements OnInit {
     // Ya que se inicializa el componente
     //this.canvas = this.chartDir.chart.canvas;
     this.canvas = this.chartDir.ctx['canvas'];
-    this.canvas.addEventListener('mousemove', (e) => {
+    this.canvas.addEventListener('mousemove', e => {
       this.onHover(e);
     });
-    this.canvas.addEventListener('mousedown', (e) => {
+    this.canvas.addEventListener('mousedown', e => {
       this.onMouseDown(e);
     });
   }
@@ -176,7 +173,7 @@ export class BarChartComponent implements OnInit {
       };
     } else {
       this.barChartOptions.scales = {
-        y:{
+        y: {
             display: true,
             beginAtZero: true,
             stacked: true,
@@ -206,26 +203,26 @@ export class BarChartComponent implements OnInit {
     // se obtienen todos los indicadores en los proyectos
     this.barChartLabels = [];
     if (this.Bandera_bar) {
-      this.inputProyects.forEach((proyecto) => {
-        Object.keys(proyecto.Datos).forEach((indicador) => {
+      this.inputProyects.forEach(proyecto => {
+        Object.keys(proyecto.Datos).forEach(indicador => {
           if (!this.barChartLabels.includes(indicador)) {
             this.barChartLabels = [...this.barChartLabels, indicador];
           }
         });
       });
     } else {
-      this.inputProyects.forEach((proyecto) => {
-        Object.keys(proyecto.Datos).forEach((indicador) => {
+      this.inputProyects.forEach(proyecto => {
+        Object.keys(proyecto.Datos).forEach(indicador => {
           let auxAbr = '';
-          this.impactos.forEach((impacto) => {
-            let auxNameImpacto = this.ajustarNombre(
+          this.impactos.forEach(impacto => {
+            const auxNameImpacto = this.ajustarNombre(
               impacto['name_complete_potential_type']
             );
             if (indicador === auxNameImpacto) {
               auxAbr = impacto['name_potential_type'];
             }
           });
-          let auxIndicador = indicador.concat('\n(', auxAbr, ')');
+          const auxIndicador = indicador.concat('\n(', auxAbr, ')');
           if (!this.barChartLabels.includes(auxIndicador)) {
             this.barChartLabels = [...this.barChartLabels, auxIndicador];
           }
@@ -250,17 +247,17 @@ export class BarChartComponent implements OnInit {
     if (this.Bandera_bar) {
       //Sección para la gráfica de barras mostradas en los impactos ambientales por elementos constructivos
       let numElementos = 0;
-      this.inputProyects.forEach((proyecto, numProyecto) => {
-        const auxData = {};
-        const auxDatos = {};
-        const auxDataElementos = {};
-        const auxDatosElementos = {};
-        let niveles_existentes = [];
+      this.inputProyects.forEach(proyecto => {
+        const auxData = {},
+          auxDatos = {},
+          auxDataElementos = {},
+          auxDatosElementos = {},
+          niveles_existentes = [];
         this.auxElemntosData[proyecto.id] = {};
-        this.barChartLabels.forEach((indicador) => {
+        this.barChartLabels.forEach(indicador => {
           Object.keys(proyecto.Datos[indicador.toString()]).forEach(
             (element, index) => {
-              let helpn = 'n'.concat(index.toString());
+              const helpn = 'n'.concat(index.toString());
               auxDatos[helpn] = [];
               auxDatosElementos[helpn] = [];
               if (!niveles_existentes.includes(helpn)) {
@@ -277,15 +274,15 @@ export class BarChartComponent implements OnInit {
           let suma = 0;
           //creaición de los espacios para guardar los valores por niveles
           Object.keys(proyecto.Datos[indicador.toString()]).forEach(
-            (element, index) => {
+            element => {
               suma = suma + proyecto.Datos[indicador.toString()][element];
             }
           );
           //acomodar conforme porcentajes y en orden para niveles
-          let auxdatos = [];
-          let help = [];
+          let auxdatos = [],
+           help = [];
           Object.keys(proyecto.Datos[indicador.toString()]).forEach(
-            (element, index) => {
+            element => {
               help = [...help, proyecto.Datos[indicador.toString()][element]];
             }
           );
@@ -302,9 +299,9 @@ export class BarChartComponent implements OnInit {
           });
           auxdatos = auxdatos.reverse();
           //se guarda el nivel de cada elemento constructivo dependiendo del impacto ambiental
-          auxdatos.forEach((datoC, index) => {
+          auxdatos.forEach(datoC => {
             Object.keys(proyecto.Datos[indicador.toString()]).forEach(
-              (element) => {
+              element => {
                 if (datoC == proyecto.Datos[indicador.toString()][element]) {
                   this.auxElementos[indicador.toString()].push(element);
                   this.auxElemntosData[proyecto.id][indexLabel.toString()].push(
@@ -316,28 +313,28 @@ export class BarChartComponent implements OnInit {
           });
           //Pasar a porsentaje
           auxdatos.forEach((datoC, index) => {
-            let resultado = ((datoC * 100) / suma).toFixed(2);
+            const resultado = ((datoC * 100) / suma).toFixed(2);
             auxdatos[index] = resultado;
           });
 
           //se guardan por niveles dependiendo del impacto ambiental
           auxdatos.forEach((element, index) => {
-            let helpn = 'n'.concat(index.toString());
+            const helpn = 'n'.concat(index.toString());
             auxData[helpn] = element;
             auxDataElementos[helpn] =
               this.auxElementos[indicador.toString()][index];
           });
 
           //se llenan los niveles en orden
-          Object.keys(auxDatos).forEach((element) => {
-            Object.keys(auxData).forEach((valor) => {
+          Object.keys(auxDatos).forEach(element => {
+            Object.keys(auxData).forEach(valor => {
               if (element === valor) {
                 auxDatos[element].push(auxData[valor]);
               }
             });
           });
-          Object.keys(auxDatosElementos).forEach((element) => {
-            Object.keys(auxDataElementos).forEach((valor) => {
+          Object.keys(auxDatosElementos).forEach(element => {
+            Object.keys(auxDataElementos).forEach(valor => {
               if (element === valor) {
                 auxDatosElementos[element].push(auxDataElementos[valor]);
               }
@@ -347,7 +344,7 @@ export class BarChartComponent implements OnInit {
         this.auxColor = this.coloresGraph2Nuevo;
         this.auxColorBW = this.coloresBWGraph2Nuevo;
 
-        Object.keys(auxDatosElementos).forEach((etapa) => {
+        Object.keys(auxDatosElementos).forEach(etapa => {
           this.ElementosEnNiveles.push(auxDatosElementos[etapa]);
         });
         Object.keys(auxDatos).forEach((etapa, index) => {
@@ -365,16 +362,16 @@ export class BarChartComponent implements OnInit {
       });
     } else {
       datos = [];
-      this.inputProyects.forEach((proyecto) => {
+      this.inputProyects.forEach(proyecto => {
         const auxDatos = {
           Producción: [],
           Construccion: [],
           Uso: [],
           FinDeVida: [],
         };
-        this.barChartLabels.forEach((indicador) => {
-          let auxIndicador = this.reajusteNombre(indicador.toString());
-          Object.keys(auxDatos).forEach((etapa) => {
+        this.barChartLabels.forEach(indicador => {
+          const auxIndicador = this.reajusteNombre(indicador.toString());
+          Object.keys(auxDatos).forEach(etapa => {
             const indicadores = Object.keys(proyecto.Datos);
             if (
               !indicadores.includes(auxIndicador.toString()) ||
@@ -399,7 +396,7 @@ export class BarChartComponent implements OnInit {
           });
         });
         //console.log(auxDatos)
-        Object.keys(auxDatos).forEach((etapa) => {
+        Object.keys(auxDatos).forEach(etapa => {
           datos = [
             ...datos,
             {
@@ -432,11 +429,11 @@ export class BarChartComponent implements OnInit {
     }
   }
 
-  reajusteNombre(name: String) {
-    let help = name;
-    let aux = name;
-    let flag = true;
-    for (var _i = help.length - 1; _i >= 0; _i--) {
+  reajusteNombre(name: string) {
+    const help = name;
+    let aux = name,
+     flag = true;
+    for (let _i = help.length - 1; _i >= 0; _i--) {
       if (flag) {
         aux = aux.slice(0, _i);
       }
@@ -453,11 +450,11 @@ export class BarChartComponent implements OnInit {
     const labels = chart['$datalabels']['_labels'];
     this.centrosX = {};
     this.proyectos = [];
-    labels.some((label) => {
+    labels.some(label => {
       if (this.Bandera_bar) {
-        const proyecto = label['$context']['dataset'].stack.Nombre;
-        const elemento = label['_el'];
-        const x = elemento['_view'].x;
+        const proyecto = label['$context']['dataset'].stack.Nombre,
+         elemento = label['_el'],
+         x = elemento['_view'].x;
         if (this.centrosX[proyecto] == undefined) {
           this.centrosX[proyecto] = [];
           this.proyectos = [proyecto, ...this.proyectos];
@@ -468,9 +465,9 @@ export class BarChartComponent implements OnInit {
           }
         }
       } else {
-        const proyecto = label['$context']['dataset'].stack;
-        const elemento = label['_el'];
-        const x = elemento['_view'].x;
+        const proyecto = label['$context']['dataset'].stack,
+         elemento = label['_el'],
+         x = elemento['_view'].x;
 
         if (this.centrosX[proyecto] == undefined) {
           this.centrosX[proyecto] = [];
@@ -483,12 +480,12 @@ export class BarChartComponent implements OnInit {
     });
   }
 
-  private agregaTitulosProyectos(chart: any, context) {
+  private agregaTitulosProyectos(chart: any) {
     // Se agrega los titulos de las barras de varios proyectos (solo cuando son más de uno)
-    const ctx = chart.canvas.getContext('2d');
+    const ctx = chart.canvas.getContext('2d'),
     //const labels = chart['$datalabels']['_labels'];
-    const labels = this.barChartLabels;
-    const centroY = chart['boxes'][1].height / 2;
+    //const labels = this.barChartLabels;
+     centroY = chart['boxes'][1].height / 2;
 
 /*    this.iniciaPosiciones(chart);
     //if (chart['$datalabels']['_labels'].length == 0) {
@@ -505,7 +502,7 @@ export class BarChartComponent implements OnInit {
     // ctx.clearRect( 0, 0,this.canvas.width, chart['boxes'][1].height*3/4 );
 */
     this.proyectos.forEach((proyecto, index) => {
-      this.centrosX[proyecto].forEach((x) => {
+      this.centrosX[proyecto].forEach(x => {
         ctx.fillText((index + 1).toString(), x, centroY);
       });
     });
@@ -515,8 +512,8 @@ export class BarChartComponent implements OnInit {
 
   public onMouseDown(e: any) {
     const limiteInferior =
-      this.chartDir.chart.height - this.chartDir.chart['boxes'][2].height;
-    const limiteSuperior = this.chartDir.chart['boxes'][1].height;
+      this.chartDir.chart.height - this.chartDir.chart['boxes'][2].height,
+     limiteSuperior = this.chartDir.chart['boxes'][1].height;
 
     if (e.offsetY > limiteInferior) {
       // Control de click en etiquetas
@@ -535,7 +532,7 @@ export class BarChartComponent implements OnInit {
     const labels = this.chartDir.chart['$datalabels']['_labels'];
     let stack = null;
     if (!this.Bandera_bar) {
-      labels.some((label) => {
+      labels.some(label => {
         const elemento = label['_el'];
         if (elemento.inXRange(e.offsetX)) {
           stack = label['$context']['dataset'].stack;
@@ -545,7 +542,7 @@ export class BarChartComponent implements OnInit {
 
       if (this.lastClick !== stack) {
         this.barChartData.forEach((data, index) => {
-          let color = new Array(data.data.length);
+          const color = new Array(data.data.length);
           if (data.stack == stack) {
             color.fill(this.colores[data.label]);
           } else {
@@ -566,15 +563,15 @@ export class BarChartComponent implements OnInit {
   }
 
   public focusColumnas(seleccion: any) {
-    let selec = seleccion;
+    const selec = seleccion;
     if (this.lastClick !== seleccion.label) {
       if (this.Bandera_bar) {
         if (this.banderaImpacto) {
-          let nivelesAux = [];
-          let count = -1;
+          let nivelesAux = [],
+           count = -1;
           this.barChartData.forEach((datos, index) => {
             let color = new Array(datos.data.length);
-            let coloraux = [];
+            const coloraux = [];
             if (!nivelesAux.includes(datos.label)) {
               nivelesAux.push(datos.label);
               count += 1;
@@ -600,8 +597,8 @@ export class BarChartComponent implements OnInit {
             this.barChartData[index].hoverBackgroundColor = color;
           });
         } else {
-          let nivelesAux = [];
-          let count = -1;
+          let nivelesAux = [],
+           count = -1;
           this.barChartData.forEach((datos, index) => {
             let color = new Array(datos.data.length);
             if (!nivelesAux.includes(datos.label)) {
@@ -613,7 +610,7 @@ export class BarChartComponent implements OnInit {
               count = 0;
             }
             if (this.elementoConstructivo != ' ') {
-              let coloraux = [];
+              const coloraux = [];
               this.ElementosEnNiveles[index].forEach((element, ii) => {
                 if (ii == seleccion.index) {
                   if (element === this.elementoConstructivo) {
@@ -639,7 +636,7 @@ export class BarChartComponent implements OnInit {
         this.lastClick = seleccion.label;
       } else {
         this.barChartData.forEach((datos, index) => {
-          let color = new Array(datos.data.length);
+          const color = new Array(datos.data.length);
 
           color.fill(this.coloresBW[datos.label]);
           color[seleccion.index] = this.colores[datos.label];
@@ -653,6 +650,7 @@ export class BarChartComponent implements OnInit {
       this.showMe = false;
     } else {
       if (this.Bandera_bar) {
+        //
       } else {
         this.showMe = true;
       }
@@ -661,7 +659,7 @@ export class BarChartComponent implements OnInit {
     }
     if (this.Bandera_bar) {
       //aqui faltara uno que mande el color de los elementos constructivos
-      let aux = {
+      const aux = {
         niveles: this.auxElementos,
         seleccion: this.lastClick,
         color: this.auxColor,
@@ -672,7 +670,7 @@ export class BarChartComponent implements OnInit {
       this.ClickEvent.emit(aux);
     } else {
       if (this.lastClick !== null) {
-        let auxLast = this.lastClick.slice(0, -1);
+        const auxLast = this.lastClick.slice(0, -1);
         this.lastClickEvent.emit(auxLast);
       } else {
         this.lastClickEvent.emit(this.lastClick);
@@ -683,9 +681,9 @@ export class BarChartComponent implements OnInit {
   private getEtiquetaCercana(e: any) {
     // Obtiene la etiqueta mas cercana al click en el eje X de acuerdo con barChartLabels
     const etiquetas = this.chartDir.chart['boxes'][2]['_labelItems'];
-    let max = this.chartDir.chart.width;
-    let seleccion = '';
-    let indice = -1;
+    let max = this.chartDir.chart.width,
+     seleccion = '',
+     indice = -1;
 
     etiquetas.forEach((etiqueta, i) => {
       const distancia = Math.abs(etiqueta.x - e.offsetX);
@@ -722,8 +720,8 @@ export class BarChartComponent implements OnInit {
   public resetColores() {
     // Pone todas las series en color normal
     if (this.Bandera_bar) {
-      let nivelesAux = [];
-      let count = -1;
+      let nivelesAux = [],
+       count = -1;
       this.barChartData['datasets'].forEach((data, index) => {
         if (!nivelesAux.includes(data.label)) {
           nivelesAux.push(data.label);
@@ -750,12 +748,12 @@ export class BarChartComponent implements OnInit {
 
   public focusSeries(serie) {
     // Pone la serie seleccionada de color normal, el resto se pone en blanco y negro
-    let count = -1;
-    let nivelesAux = [];
+    let count = -1,
+     nivelesAux = [];
     this.barChartData['datasets'].forEach((datos, index) => {
       let color: any;
       if (this.Bandera_bar) {
-        let coloraux = [];
+        const coloraux = [];
         if (!nivelesAux.includes(datos.label)) {
           nivelesAux.push(datos.label);
           count += 1;
@@ -764,7 +762,7 @@ export class BarChartComponent implements OnInit {
           nivelesAux.push(datos.label);
           count = 0;
         }
-        this.ElementosEnNiveles[index].forEach((element) => {
+        this.ElementosEnNiveles[index].forEach(element => {
           if (element === serie) {
             coloraux.push(this.auxColor[count]);
           } else {
@@ -784,6 +782,7 @@ export class BarChartComponent implements OnInit {
       this.barChartData['datasets'][index].hoverBackgroundColor = color;
     });
     if (this.Bandera_bar) {
+      //
     } else {
       this.chartDir.update();
     }
@@ -806,11 +805,11 @@ export class BarChartComponent implements OnInit {
   public onChartClick(e: any): void {}
 
   ajustarNombre(name: string) {
-    let help = name;
-    let spacios = 0;
-    let numC = 0;
-    let maxlinea = 0;
-    for (let i of help) {
+    let help = name,
+     spacios = 0,
+     numC = 0,
+     maxlinea = 0;
+    for (const i of help) {
       if (i === ' ') {
         spacios = spacios + 1;
         if (spacios == 1 && maxlinea >= 9) {

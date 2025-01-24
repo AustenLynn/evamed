@@ -11,7 +11,7 @@ export class CatalogsService {
 
   getLocalDistances() {
     return this.http.get<any>(environment.api_local_distances).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -19,7 +19,7 @@ export class CatalogsService {
 
   getExternalDistances() {
     return this.http.get<any>(environment.api_exterternal_distances).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -27,7 +27,7 @@ export class CatalogsService {
 
   usesCatalog() {
     return this.http.get<any>(environment.api_uses).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -35,7 +35,7 @@ export class CatalogsService {
 
   countriesCatalog() {
     return this.http.get<any>(environment.api_countries).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -43,7 +43,7 @@ export class CatalogsService {
 
   typeProjectCatalog() {
     return this.http.get<any>(environment.api_type_project).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -51,7 +51,7 @@ export class CatalogsService {
 
   usefulLifeCatalog() {
     return this.http.get<any>(environment.api_useful_life).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -59,7 +59,7 @@ export class CatalogsService {
 
   housingSchemeCatalog() {
     return this.http.get<any>(environment.api_housing_scheme).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -67,7 +67,7 @@ export class CatalogsService {
 
   getSourceInformation() {
     return this.http.get<any>(environment.api_source_information).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -75,7 +75,7 @@ export class CatalogsService {
 
   getBulkUnits() {
     return this.http.get<any>(environment.api_bulk_units).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -83,7 +83,7 @@ export class CatalogsService {
 
   getEnergyUnits() {
     return this.http.get<any>(environment.api_energy_units).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -91,7 +91,7 @@ export class CatalogsService {
 
   getVolumeUnits() {
     return this.http.get<any>(environment.api_volume_units).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -99,7 +99,7 @@ export class CatalogsService {
 
   getTypeEnergy() {
     return this.http.get<any>(environment.api_type_energy).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -107,7 +107,7 @@ export class CatalogsService {
 
   getStates() {
     return this.http.get<any>(environment.api_states).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -115,7 +115,7 @@ export class CatalogsService {
 
   getCities() {
     return this.http.get<any>(environment.api_cities).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -123,7 +123,7 @@ export class CatalogsService {
 
   getTransports() {
     return this.http.get<any>(environment.api_transports).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -131,7 +131,7 @@ export class CatalogsService {
 
   getPotentialTypes() {
     return this.http.get<any>(environment.api_potetnial_types).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );
@@ -139,7 +139,7 @@ export class CatalogsService {
 
   getSections() {
     return this.http.get<any>(environment.api_sections).pipe(
-      tap((data) => {
+      tap(data => {
         return data;
       })
     );

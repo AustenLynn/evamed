@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 import { ElectricitConsumptionService } from './../../../core/services/electricity-consumption/electricit-consumption.service';
-import { IntermedialComponent } from '../intermedial/intermedial.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 
@@ -41,7 +40,7 @@ export class UsageStageComponent implements OnInit {
   catalogoUnidadEnergia: any;
   catalogoTipoEnergiaElectrica: any;
   catalogoTipoEnergiaCombustible: any;
-  endSave: boolean = false;
+  endSave = false;
 
   constructor(
     private materialsService: MaterialsService,
@@ -50,9 +49,9 @@ export class UsageStageComponent implements OnInit {
     private electricitConsumptionService: ElectricitConsumptionService,
     public dialog: MatDialog
   ) {
-    this.catalogsService.getEnergyUnits().subscribe((data) => {
-      let catalogoUnidades = [];
-      data.map((unidad) => {
+    this.catalogsService.getEnergyUnits().subscribe(data => {
+      const catalogoUnidades = [];
+      data.map(unidad => {
         if (unidad.name_energy_unit === 'kWh') {
           catalogoUnidades.push(unidad);
         }
@@ -60,11 +59,11 @@ export class UsageStageComponent implements OnInit {
       console.log(catalogoUnidades);
       this.catalogoUnidadEnergia = catalogoUnidades;
     });
-    this.catalogsService.getTypeEnergy().subscribe((data) => {
+    this.catalogsService.getTypeEnergy().subscribe(data => {
       // this.catalogoTipoEnergia = data;
-      const tipoEnergiaElectrica = [];
-      const tipoEnergiaCombustible = [];
-      data.map((tipo) => {
+      const tipoEnergiaElectrica = [],
+       tipoEnergiaCombustible = [];
+      data.map(tipo => {
         /*if (
           tipo.name_type_energy ===
             'Energía eléctrica, Bajo voltaje (MX)-ECOINVENT3' ||
@@ -141,7 +140,7 @@ export class UsageStageComponent implements OnInit {
         project_id: this.projectId,
         unit_id: this.unidad,
       })
-      .subscribe(async (data) => {
+      .subscribe(async data => {
         await this.electricitConsumptionService
           .addECD({
             quantity:
@@ -159,7 +158,7 @@ export class UsageStageComponent implements OnInit {
               this.tipoCombustible === undefined ? 11 : this.tipoCombustible,
             source: 'fuel',
           })
-          .subscribe((data) => {
+          .subscribe(data => {
             console.log('combustible!!!!!');
             console.log(data);
           });
@@ -182,7 +181,7 @@ export class UsageStageComponent implements OnInit {
               this.tipoMixElectrico === undefined ? 1 : this.tipoMixElectrico,
             source: 'electric',
           })
-          .subscribe((data) => {
+          .subscribe(data => {
             console.log('Mix electrico');
             console.log(data);
           });
@@ -204,7 +203,7 @@ export class UsageStageComponent implements OnInit {
             type: null,
             source: 'panels',
           })
-          .subscribe((data) => {
+          .subscribe(data => {
             console.log('paneles fotovoltaicos');
             console.log(data);
           });
@@ -218,14 +217,14 @@ export class UsageStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if (result.save) {
           this.saveStepThree();
         }
-        this.materialsService.getMaterialSchemeProyects().subscribe((msp) => {
+        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
           const schemaFilter = msp.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {
@@ -248,14 +247,14 @@ export class UsageStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if (result.save) {
           this.saveStepThree();
         }
-        this.materialsService.getConstructionStage().subscribe((cse) => {
+        this.materialsService.getConstructionStage().subscribe(cse => {
           const schemaFilter = cse.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {
@@ -282,14 +281,14 @@ export class UsageStageComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if (result.save) {
           this.saveStepThree();
         }
-        this.materialsService.getEDCP().subscribe((edcp) => {
+        this.materialsService.getEDCP().subscribe(edcp => {
           const schemaFilter = edcp.filter(
-            (schema) => schema.project_id === this.projectId
+            schema => schema.project_id === this.projectId
           );
 
           if (schemaFilter.length === 0) {
@@ -308,9 +307,9 @@ export class UsageStageComponent implements OnInit {
 
   continue() {
     this.saveStepThree();
-    this.materialsService.getEDCP().subscribe((edcp) => {
+    this.materialsService.getEDCP().subscribe(edcp => {
       const schemaFilter = edcp.filter(
-        (schema) => schema.project_id === this.projectId
+        schema => schema.project_id === this.projectId
       );
 
       if (schemaFilter.length === 0) {

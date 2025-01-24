@@ -20,9 +20,9 @@ export class PrevStepsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const data = JSON.parse(sessionStorage.getItem('dataProject'));
-    let constructiveSystems = [];
-    let materialsExcel = [];
+    const data = JSON.parse(sessionStorage.getItem('dataProject')),
+     constructiveSystems = [],
+      materialsExcel = [];
 
     data.data.map( item => {
       item.map(
@@ -36,28 +36,28 @@ export class PrevStepsComponent implements OnInit {
         }
       );
     });
-    let filterConstructiveSystems = constructiveSystems.filter(this.onlyUnique);
+    const filterConstructiveSystems = constructiveSystems.filter(this.onlyUnique);
     this.ConstructiveSystems = filterConstructiveSystems.length;
-    this.ConstructiveSystems=this.ConstructiveSystems-1;
-    
-    let filterMaterialsExcel = materialsExcel.filter(this.onlyUnique);
+    this.ConstructiveSystems = this.ConstructiveSystems - 1;
+
+    const filterMaterialsExcel = materialsExcel.filter(this.onlyUnique);
     this.TotalMaterialsDB = filterMaterialsExcel.length;
-    this.TotalMaterialsDB = this.TotalMaterialsDB -1;
-    
+    this.TotalMaterialsDB = this.TotalMaterialsDB - 1;
+
     this.TotalExistDB = 0
     filterMaterialsExcel.map( filteredMaterial => {
-      this.materialsService.getMaterials().subscribe( materials => { 
-        materials.map( material => { 
+      this.materialsService.getMaterials().subscribe( materials => {
+        materials.map( material => {
           if (material.name_material === filteredMaterial) {
             this.TotalExistDB++;
-          } 
+          }
         });
       });
     });
 
   }
 
-  onlyUnique(value, index, self) { 
+  onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
 

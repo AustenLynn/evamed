@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
-import { IntermedialComponent } from '../intermedial/intermedial.component';
+//import { IntermedialComponent } from '../intermedial/intermedial.component';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 import { ElectricitConsumptionService } from './../../../core/services/electricity-consumption/electricit-consumption.service';
 
@@ -53,14 +53,14 @@ export class UsageStageUpdateComponent implements OnInit {
     private electricitConsumptionService: ElectricitConsumptionService,
     public dialog: MatDialog
   ) {
-    this.catalogsService.getEnergyUnits().subscribe((data) => {
+    this.catalogsService.getEnergyUnits().subscribe(data => {
       this.catalogoUnidadEnergia = data;
     });
-    this.catalogsService.getTypeEnergy().subscribe((data) => {
+    this.catalogsService.getTypeEnergy().subscribe(data => {
       // this.catalogoTipoEnergia = data;
-      const tipoEnergiaElectrica = [];
-      const tipoEnergiaCombustible = [];
-      data.map((tipo) => {
+      const tipoEnergiaElectrica = [],
+       tipoEnergiaCombustible = [];
+      data.map(tipo => {
         /*if (
           tipo.name_type_energy ===
             'Energía eléctrica, Bajo voltaje (MX)-ECOINVENT3' ||
@@ -92,9 +92,9 @@ export class UsageStageUpdateComponent implements OnInit {
       this.catalogoTipoEnergiaCombustible = tipoEnergiaCombustible;
     });
 
-    this.electricitConsumptionService.getACR().subscribe((data) => {
+    this.electricitConsumptionService.getACR().subscribe(data => {
       const globalData = [];
-      data.map((item) => {
+      data.map(item => {
         if (
           item.project_id ===
           parseInt(localStorage.getItem('idProyectoConstrucción'), 10)
@@ -110,9 +110,9 @@ export class UsageStageUpdateComponent implements OnInit {
       this.CAID = globalData[0].id;
     });
 
-    this.electricitConsumptionService.getECD().subscribe((data) => {
+    this.electricitConsumptionService.getECD().subscribe(data => {
       this.ECD_IDS = [];
-      data.map((item) => {
+      data.map(item => {
         if (item.annual_consumption_required_id === this.CAID) {
           if (item.source === 'electric') {
             this.cantidadMixElectrico = this.trunc(item.quantity, 2);
@@ -326,13 +326,13 @@ export class UsageStageUpdateComponent implements OnInit {
         quantity: this.cantidad,
         unit_id: this.unidad,
       })
-      .subscribe((data) => {
+      .subscribe(data => {
         console.log('Se editó el ACR');
         console.log(data);
       });
 
-    await this.ECD_IDS.map((item) => {
-      this.electricitConsumptionService.getECDById(item).subscribe((data) => {
+    await this.ECD_IDS.map(item => {
+      this.electricitConsumptionService.getECDById(item).subscribe(data => {
         console.log(data);
         if (data.source === 'fuel') {
           this.electricitConsumptionService
@@ -343,7 +343,7 @@ export class UsageStageUpdateComponent implements OnInit {
               unit_id: this.unidadCombustible,
               type: this.tipoCombustible,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('update fuel');
               console.log(data);
             });
@@ -356,7 +356,7 @@ export class UsageStageUpdateComponent implements OnInit {
               unit_id: this.unidadMixElectrico,
               type: this.tipoMixElectrico,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('update electric');
               console.log(data);
             });
@@ -369,7 +369,7 @@ export class UsageStageUpdateComponent implements OnInit {
               unit_id: this.unidadPanelesFotovoltaicos,
               type: null,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('update panels');
               console.log(data);
             });
@@ -384,13 +384,13 @@ export class UsageStageUpdateComponent implements OnInit {
         quantity: this.cantidad,
         unit_id: this.unidad,
       })
-      .subscribe((data) => {
+      .subscribe(data => {
         console.log('Se editó el ACR');
         console.log(data);
       });
 
-    await this.ECD_IDS.map((item) => {
-      this.electricitConsumptionService.getECDById(item).subscribe((data) => {
+    await this.ECD_IDS.map(item => {
+      this.electricitConsumptionService.getECDById(item).subscribe(data => {
         console.log(data);
         if (data.source === 'fuel') {
           this.electricitConsumptionService
@@ -401,7 +401,7 @@ export class UsageStageUpdateComponent implements OnInit {
               unit_id: this.unidadCombustible,
               type: this.tipoCombustible,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('update fuel');
               console.log(data);
             });
@@ -414,7 +414,7 @@ export class UsageStageUpdateComponent implements OnInit {
               unit_id: this.unidadMixElectrico,
               type: this.tipoMixElectrico,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('update electric');
               console.log(data);
             });
@@ -427,7 +427,7 @@ export class UsageStageUpdateComponent implements OnInit {
               unit_id: this.unidadPanelesFotovoltaicos,
               type: null,
             })
-            .subscribe((data) => {
+            .subscribe(data => {
               console.log('update panels');
               console.log(data);
             });
@@ -435,9 +435,9 @@ export class UsageStageUpdateComponent implements OnInit {
       });
     });
 
-    await this.materialsService.getEDCP().subscribe((edcp) => {
+    await this.materialsService.getEDCP().subscribe(edcp => {
       const schemaFilter = edcp.filter(
-        (schema) =>
+        schema =>
           schema.project_id == localStorage.getItem('idProyectoConstrucción')
       );
 
@@ -455,14 +455,14 @@ export class UsageStageUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if (result.save) {
           this.saveUpdate();
         }
-        this.materialsService.getMaterialSchemeProyects().subscribe((msp) => {
+        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
           const schemaFilter = msp.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
@@ -483,14 +483,14 @@ export class UsageStageUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if (result.save) {
           this.saveUpdate();
         }
-        this.materialsService.getConstructionStage().subscribe((cse) => {
+        this.materialsService.getConstructionStage().subscribe(cse => {
           const schemaFilter = cse.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
@@ -507,10 +507,10 @@ export class UsageStageUpdateComponent implements OnInit {
   }
 
   trunc(x, positions = 0) {
-    var s = x.toString();
-    var l = s.length;
-    var decimalLength = s.indexOf('.') + 1;
-    var numStr = s.substr(0, decimalLength + positions);
+    const s = x.toString(),
+        //l = s.length,
+         decimalLength = s.indexOf('.') + 1,
+         numStr = s.substr(0, decimalLength + positions);
     return Number(numStr);
   }
 
@@ -520,14 +520,14 @@ export class UsageStageUpdateComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result.continue) {
         if (result.save) {
           this.saveStepThree();
         }
-        this.materialsService.getEDCP().subscribe((edcp) => {
+        this.materialsService.getEDCP().subscribe(edcp => {
           const schemaFilter = edcp.filter(
-            (schema) =>
+            schema =>
               schema.project_id ==
               localStorage.getItem('idProyectoConstrucción')
           );
