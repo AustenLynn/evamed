@@ -18,7 +18,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/evamed"
+              "base": "dist/evamed",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
