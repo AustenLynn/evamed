@@ -7,11 +7,10 @@ import { CommonModule } from '@angular/common';
 import subetapasInfo from 'src/app/calculos/Subetapas.json';
 
 @Component({
-  selector: 'app-pie-chart',
-  templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.scss'],
-  standalone: true,
-  imports: [BaseChartDirective, MatCardModule, CommonModule],
+    selector: 'app-pie-chart',
+    templateUrl: './pie-chart.component.html',
+    styleUrls: ['./pie-chart.component.scss'],
+    imports: [BaseChartDirective, MatCardModule, CommonModule]
 })
 export class PieChartComponent implements OnInit {
   @ViewChild('MyChart') chartDir: BaseChartDirective;

@@ -7,9 +7,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-constructive-element',
-  templateUrl: './add-constructive-element.component.html',
-  styleUrls: ['./add-constructive-element.component.scss']
+    selector: 'app-add-constructive-element',
+    templateUrl: './add-constructive-element.component.html',
+    styleUrls: ['./add-constructive-element.component.scss'],
+    standalone: false
 })
 export class AddConstructiveElementComponent implements OnInit {
 

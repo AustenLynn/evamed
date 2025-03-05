@@ -8,9 +8,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-delete-data-base',
-  templateUrl: './delete-data-base.component.html',
-  styleUrls: ['./delete-data-base.component.scss'],
+    selector: 'app-delete-data-base',
+    templateUrl: './delete-data-base.component.html',
+    styleUrls: ['./delete-data-base.component.scss'],
+    standalone: false
 })
 export class DeleteDataBaseComponent implements OnInit {
   constructor(

@@ -4,11 +4,10 @@ import { BaseChartDirective } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-bar-chart-simple',
-  templateUrl: './bar-chart-simple.component.html',
-  styleUrls: ['./bar-chart-simple.component.scss'],
-  standalone: true,
-  imports: [BaseChartDirective, CommonModule],
+    selector: 'app-bar-chart-simple',
+    templateUrl: './bar-chart-simple.component.html',
+    styleUrls: ['./bar-chart-simple.component.scss'],
+    imports: [BaseChartDirective, CommonModule]
 })
 export class BarChartSimpleComponent implements OnInit {
 

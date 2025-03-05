@@ -8,9 +8,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-delete-unit',
-  templateUrl: './delete-unit.component.html',
-  styleUrls: ['./delete-unit.component.scss'],
+    selector: 'app-delete-unit',
+    templateUrl: './delete-unit.component.html',
+    styleUrls: ['./delete-unit.component.scss'],
+    standalone: false
 })
 export class DeleteUnitComponent implements OnInit {
   constructor(

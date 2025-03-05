@@ -8,9 +8,10 @@ import { ViewChild, ElementRef, Renderer2 } from '@angular/core';
 type AOA = any[][];
 
 @Component({
-  selector: 'app-to-do-file',
-  templateUrl: './to-do-file.component.html',
-  styleUrls: ['./to-do-file.component.scss'],
+    selector: 'app-to-do-file',
+    templateUrl: './to-do-file.component.html',
+    styleUrls: ['./to-do-file.component.scss'],
+    standalone: false
 })
 export class ToDoFileComponent implements OnInit {
   fileName: string;

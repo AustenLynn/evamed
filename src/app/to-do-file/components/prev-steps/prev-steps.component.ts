@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 
 @Component({
-  selector: 'app-prev-steps',
-  templateUrl: './prev-steps.component.html',
-  styleUrls: ['./prev-steps.component.scss']
+    selector: 'app-prev-steps',
+    templateUrl: './prev-steps.component.html',
+    styleUrls: ['./prev-steps.component.scss'],
+    standalone: false
 })
 export class PrevStepsComponent implements OnInit {
   ConstructiveSystems: number;

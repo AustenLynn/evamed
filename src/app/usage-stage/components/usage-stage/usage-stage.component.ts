@@ -7,9 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 
 @Component({
-  selector: 'app-usage-stage',
-  templateUrl: './usage-stage.component.html',
-  styleUrls: ['./usage-stage.component.scss'],
+    selector: 'app-usage-stage',
+    templateUrl: './usage-stage.component.html',
+    styleUrls: ['./usage-stage.component.scss'],
+    standalone: false
 })
 export class UsageStageComponent implements OnInit {
   nameProject: string;

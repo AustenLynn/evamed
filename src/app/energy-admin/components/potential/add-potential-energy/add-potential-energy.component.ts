@@ -12,9 +12,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-potential-energy',
-  templateUrl: './add-potential-energy.component.html',
-  styleUrls: ['./add-potential-energy.component.scss'],
+    selector: 'app-add-potential-energy',
+    templateUrl: './add-potential-energy.component.html',
+    styleUrls: ['./add-potential-energy.component.scss'],
+    standalone: false
 })
 export class AddPotentialEnergyComponent implements OnInit {
   form: UntypedFormGroup;

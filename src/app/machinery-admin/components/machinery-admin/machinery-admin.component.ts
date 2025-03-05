@@ -6,9 +6,10 @@ import { DeleteMachineryComponent } from '../delete-machinery/delete-machinery.c
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-machinery-admin',
-  templateUrl: './machinery-admin.component.html',
-  styleUrls: ['./machinery-admin.component.scss'],
+    selector: 'app-machinery-admin',
+    templateUrl: './machinery-admin.component.html',
+    styleUrls: ['./machinery-admin.component.scss'],
+    standalone: false
 })
 export class MachineryAdminComponent implements OnInit {
   machineryList: any;

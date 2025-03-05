@@ -7,9 +7,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-delete-potential-energy',
-  templateUrl: './delete-potential-energy.component.html',
-  styleUrls: ['./delete-potential-energy.component.scss'],
+    selector: 'app-delete-potential-energy',
+    templateUrl: './delete-potential-energy.component.html',
+    styleUrls: ['./delete-potential-energy.component.scss'],
+    standalone: false
 })
 export class DeletePotentialEnergyComponent implements OnInit {
   constructor(

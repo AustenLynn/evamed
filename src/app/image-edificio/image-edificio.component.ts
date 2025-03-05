@@ -2,9 +2,10 @@ import { Component, ElementRef, OnInit, AfterViewInit, ViewChild } from '@angula
 import { EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-image-edificio',
-  templateUrl: './image-edificio.component.html',
-  styleUrls: ['./image-edificio.component.scss']
+    selector: 'app-image-edificio',
+    templateUrl: './image-edificio.component.html',
+    styleUrls: ['./image-edificio.component.scss'],
+    standalone: false
 })
 export class ImageEdificioComponent implements OnInit, AfterViewInit {
 

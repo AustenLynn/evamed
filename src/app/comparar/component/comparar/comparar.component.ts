@@ -33,19 +33,17 @@ import { UserService } from 'src/app/core/services/user/user.service';
 //import { createThis } from 'typescript';
 
 @Component({
-  selector: 'app-comparar',
-  templateUrl: './comparar.component.html',
-  styleUrls: ['./comparar.component.scss', './styleSU.scss', './styleSD.scss', './styleST.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
+    selector: 'app-comparar',
+    templateUrl: './comparar.component.html',
+    styleUrls: ['./comparar.component.scss', './styleSU.scss', './styleSD.scss', './styleST.scss'],
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+    ],
+    standalone: false
 })
 
 export class CompararComponent implements OnInit {

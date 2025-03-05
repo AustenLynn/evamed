@@ -10,9 +10,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-update-potential',
-  templateUrl: './update-potential.component.html',
-  styleUrls: ['./update-potential.component.scss'],
+    selector: 'app-update-potential',
+    templateUrl: './update-potential.component.html',
+    styleUrls: ['./update-potential.component.scss'],
+    standalone: false
 })
 export class UpdatePotentialComponent implements OnInit {
   form: UntypedFormGroup;

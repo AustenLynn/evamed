@@ -9,9 +9,10 @@ import { AddDataSchemeComponent } from '../add-data-scheme/add-data-scheme.compo
 import { DeleteDataSchemeComponent } from '../delete-data-scheme/delete-data-scheme.component';
 
 @Component({
-  selector: 'app-update-material',
-  templateUrl: './update-material.component.html',
-  styleUrls: ['./update-material.component.scss'],
+    selector: 'app-update-material',
+    templateUrl: './update-material.component.html',
+    styleUrls: ['./update-material.component.scss'],
+    standalone: false
 })
 export class UpdateMaterialComponent implements OnInit {
   form: UntypedFormGroup;

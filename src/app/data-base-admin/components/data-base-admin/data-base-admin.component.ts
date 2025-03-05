@@ -7,9 +7,10 @@ import { DeleteDataBaseComponent } from '../delete-data-base/delete-data-base.co
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-data-base-admin',
-  templateUrl: './data-base-admin.component.html',
-  styleUrls: ['./data-base-admin.component.scss'],
+    selector: 'app-data-base-admin',
+    templateUrl: './data-base-admin.component.html',
+    styleUrls: ['./data-base-admin.component.scss'],
+    standalone: false
 })
 export class DataBaseAdminComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'actions'];

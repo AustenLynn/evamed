@@ -6,9 +6,10 @@ import { AddEnergyComponent } from '../add-energy/add-energy.component';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-energy-admin',
-  templateUrl: './energy-admin.component.html',
-  styleUrls: ['./energy-admin.component.scss'],
+    selector: 'app-energy-admin',
+    templateUrl: './energy-admin.component.html',
+    styleUrls: ['./energy-admin.component.scss'],
+    standalone: false
 })
 export class EnergyAdminComponent implements OnInit {
   energyList: any;

@@ -6,9 +6,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-choose-type-of-project',
-  templateUrl: './choose-type-of-project.component.html',
-  styleUrls: ['./choose-type-of-project.component.scss'],
+    selector: 'app-choose-type-of-project',
+    templateUrl: './choose-type-of-project.component.html',
+    styleUrls: ['./choose-type-of-project.component.scss'],
+    standalone: false
 })
 export class ChooseTypeOfProjectComponent implements OnInit {
   options: string[] = ['Huella de carbono incorporado', 'Uso', 'Ciclo de vida'];

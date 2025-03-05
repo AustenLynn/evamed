@@ -8,9 +8,10 @@ import { UpdatePotentialTransportComponent } from '../potential/update-potential
 import { DeletePotentialTransportComponent } from '../potential/delete-potential-transport/delete-potential-transport.component';
 
 @Component({
-  selector: 'app-update-transport',
-  templateUrl: './update-transport.component.html',
-  styleUrls: ['./update-transport.component.scss'],
+    selector: 'app-update-transport',
+    templateUrl: './update-transport.component.html',
+    styleUrls: ['./update-transport.component.scss'],
+    standalone: false
 })
 export class UpdateTransportComponent implements OnInit {
   form: UntypedFormGroup;

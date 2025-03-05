@@ -13,11 +13,10 @@ import { CommonModule } from '@angular/common';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
-  selector: 'app-bar-chart',
-  templateUrl: './bar-chart.component.html',
-  styleUrls: ['./bar-chart.component.scss'],
-  standalone: true,
-  imports: [BaseChartDirective, CommonModule],
+    selector: 'app-bar-chart',
+    templateUrl: './bar-chart.component.html',
+    styleUrls: ['./bar-chart.component.scss'],
+    imports: [BaseChartDirective, CommonModule]
 })
 export class BarChartComponent implements OnInit, AfterViewInit {
   @ViewChild('MyChart') chartDir: BaseChartDirective;

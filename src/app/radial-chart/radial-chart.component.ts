@@ -5,11 +5,10 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-radial-chart',
-  templateUrl: './radial-chart.component.html',
-  styleUrls: ['./radial-chart.component.scss'],
-  standalone: true,
-  imports: [BaseChartDirective, MatCardModule, CommonModule],
+    selector: 'app-radial-chart',
+    templateUrl: './radial-chart.component.html',
+    styleUrls: ['./radial-chart.component.scss'],
+    imports: [BaseChartDirective, MatCardModule, CommonModule]
 })
 export class RadialChartComponent implements OnInit {
   @ViewChild('MyChart') chartDir: BaseChartDirective;

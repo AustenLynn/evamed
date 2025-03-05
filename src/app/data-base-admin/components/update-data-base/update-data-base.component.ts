@@ -9,9 +9,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-update-data-base',
-  templateUrl: './update-data-base.component.html',
-  styleUrls: ['./update-data-base.component.scss'],
+    selector: 'app-update-data-base',
+    templateUrl: './update-data-base.component.html',
+    styleUrls: ['./update-data-base.component.scss'],
+    standalone: false
 })
 export class UpdateDataBaseComponent implements OnInit {
   form: UntypedFormGroup;

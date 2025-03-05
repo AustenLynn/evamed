@@ -8,9 +8,10 @@ import { PassStepComponent } from '../pass-step/pass-step.component';
 import { ElectricitConsumptionService } from './../../../core/services/electricity-consumption/electricit-consumption.service';
 
 @Component({
-  selector: 'app-usage-stage-update',
-  templateUrl: './usage-stage-update.component.html',
-  styleUrls: ['./usage-stage-update.component.scss'],
+    selector: 'app-usage-stage-update',
+    templateUrl: './usage-stage-update.component.html',
+    styleUrls: ['./usage-stage-update.component.scss'],
+    standalone: false
 })
 export class UsageStageUpdateComponent implements OnInit {
   nameProject: string;

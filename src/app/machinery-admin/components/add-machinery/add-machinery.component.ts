@@ -8,9 +8,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-machinery',
-  templateUrl: './add-machinery.component.html',
-  styleUrls: ['./add-machinery.component.scss'],
+    selector: 'app-add-machinery',
+    templateUrl: './add-machinery.component.html',
+    styleUrls: ['./add-machinery.component.scss'],
+    standalone: false
 })
 export class AddMachineryComponent implements OnInit {
   form: UntypedFormGroup;

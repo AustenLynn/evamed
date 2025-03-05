@@ -12,9 +12,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-update-potential-energy',
-  templateUrl: './update-potential-energy.component.html',
-  styleUrls: ['./update-potential-energy.component.scss'],
+    selector: 'app-update-potential-energy',
+    templateUrl: './update-potential-energy.component.html',
+    styleUrls: ['./update-potential-energy.component.scss'],
+    standalone: false
 })
 export class UpdatePotentialEnergyComponent implements OnInit {
   form: UntypedFormGroup;

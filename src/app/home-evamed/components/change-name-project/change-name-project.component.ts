@@ -7,9 +7,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-change-name-project',
-  templateUrl: './change-name-project.component.html',
-  styleUrls: ['./change-name-project.component.scss']
+    selector: 'app-change-name-project',
+    templateUrl: './change-name-project.component.html',
+    styleUrls: ['./change-name-project.component.scss'],
+    standalone: false
 })
 export class ChangeNameProjectComponent implements OnInit {
 

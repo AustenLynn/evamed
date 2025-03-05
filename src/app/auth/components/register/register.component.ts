@@ -6,9 +6,10 @@ import { AuthService } from './../../../core/services/auth.service';
 import { CatalogsService } from './../../../core/services/catalogs/catalogs.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
+    standalone: false
 })
 export class RegisterComponent implements OnInit {
   form: UntypedFormGroup;

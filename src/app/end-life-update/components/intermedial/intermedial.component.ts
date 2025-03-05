@@ -3,12 +3,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-intermedial',
-  templateUrl: './intermedial.component.html',
-  styleUrls: ['./intermedial.component.scss'],
-  host: {
-    'stage': 'end-life-update'
-  }
+    selector: 'app-intermedial',
+    templateUrl: './intermedial.component.html',
+    styleUrls: ['./intermedial.component.scss'],
+    host: {
+        'stage': 'end-life-update'
+    },
+    standalone: false
 })
 export class IntermedialComponent implements OnInit {
   constructor(

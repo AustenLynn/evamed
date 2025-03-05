@@ -13,9 +13,10 @@ export interface Material {
 }
 
 @Component({
-  selector: 'app-materials-admin',
-  templateUrl: './materials-admin.component.html',
-  styleUrls: ['./materials-admin.component.scss'],
+    selector: 'app-materials-admin',
+    templateUrl: './materials-admin.component.html',
+    styleUrls: ['./materials-admin.component.scss'],
+    standalone: false
 })
 export class MaterialsAdminComponent implements OnInit {
   materialList: Material[];

@@ -8,9 +8,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-transport',
-  templateUrl: './add-transport.component.html',
-  styleUrls: ['./add-transport.component.scss'],
+    selector: 'app-add-transport',
+    templateUrl: './add-transport.component.html',
+    styleUrls: ['./add-transport.component.scss'],
+    standalone: false
 })
 export class AddTransportComponent implements OnInit {
   form: UntypedFormGroup;

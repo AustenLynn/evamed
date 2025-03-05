@@ -7,9 +7,10 @@ import { AddPotentialComponent } from '../add-potential/add-potential.component'
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-potential-admin',
-  templateUrl: './potential-admin.component.html',
-  styleUrls: ['./potential-admin.component.scss'],
+    selector: 'app-potential-admin',
+    templateUrl: './potential-admin.component.html',
+    styleUrls: ['./potential-admin.component.scss'],
+    standalone: false
 })
 export class PotentialAdminComponent implements OnInit {
   displayedColumns: string[] = [

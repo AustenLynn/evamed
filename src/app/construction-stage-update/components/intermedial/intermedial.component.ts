@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 
 @Component({
-  selector: 'app-intermedial',
-  templateUrl: './intermedial.component.html',
-  styleUrls: ['./intermedial.component.scss'],
-  host: {
-    'stage': 'construction-stage-update'
-  }
+    selector: 'app-intermedial',
+    templateUrl: './intermedial.component.html',
+    styleUrls: ['./intermedial.component.scss'],
+    host: {
+        'stage': 'construction-stage-update'
+    },
+    standalone: false
 })
 export class IntermedialComponent implements OnInit {
   constructor(

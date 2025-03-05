@@ -25,9 +25,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-new-project',
-  templateUrl: './add-new-project.component.html',
-  styleUrls: ['./add-new-project.component.scss'],
+    selector: 'app-add-new-project',
+    templateUrl: './add-new-project.component.html',
+    styleUrls: ['./add-new-project.component.scss'],
+    standalone: false
 })
 export class AddNewProjectComponent implements OnInit {
   catalogoCiudades: any;

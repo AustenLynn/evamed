@@ -7,9 +7,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-delete-potential-transport',
-  templateUrl: './delete-potential-transport.component.html',
-  styleUrls: ['./delete-potential-transport.component.scss'],
+    selector: 'app-delete-potential-transport',
+    templateUrl: './delete-potential-transport.component.html',
+    styleUrls: ['./delete-potential-transport.component.scss'],
+    standalone: false
 })
 export class DeletePotentialTransportComponent implements OnInit {
   constructor(

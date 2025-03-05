@@ -8,9 +8,10 @@ import { UpdatePotentialEnergyComponent } from '../potential/update-potential-en
 import { DeletePotentialEnergyComponent } from '../potential/delete-potential-energy/delete-potential-energy.component';
 
 @Component({
-  selector: 'app-update-energy',
-  templateUrl: './update-energy.component.html',
-  styleUrls: ['./update-energy.component.scss'],
+    selector: 'app-update-energy',
+    templateUrl: './update-energy.component.html',
+    styleUrls: ['./update-energy.component.scss'],
+    standalone: false
 })
 export class UpdateEnergyComponent implements OnInit {
   form: UntypedFormGroup;

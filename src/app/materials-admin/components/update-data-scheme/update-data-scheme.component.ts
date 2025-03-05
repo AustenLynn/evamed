@@ -14,9 +14,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-update-data-scheme',
-  templateUrl: './update-data-scheme.component.html',
-  styleUrls: ['./update-data-scheme.component.scss'],
+    selector: 'app-update-data-scheme',
+    templateUrl: './update-data-scheme.component.html',
+    styleUrls: ['./update-data-scheme.component.scss'],
+    standalone: false
 })
 export class UpdateDataSchemeComponent implements OnInit {
   form: UntypedFormGroup;

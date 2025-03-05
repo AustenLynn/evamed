@@ -12,12 +12,11 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-graficas-tercer-seccion',
-  templateUrl: './graficas-tercer-seccion.component.html',
-  styleUrls: ['./graficas-tercer-seccion.component.scss'],
-  standalone: true,
-  imports: [BaseChartDirective, MatTableModule, MatIconModule, MatButtonToggleModule,
-    MatButtonModule, MatCardModule, ScrollingModule, CommonModule],
+    selector: 'app-graficas-tercer-seccion',
+    templateUrl: './graficas-tercer-seccion.component.html',
+    styleUrls: ['./graficas-tercer-seccion.component.scss'],
+    imports: [BaseChartDirective, MatTableModule, MatIconModule, MatButtonToggleModule,
+        MatButtonModule, MatCardModule, ScrollingModule, CommonModule]
 })
 
 export class GraficasTercerSeccionComponent implements OnInit, AfterViewInit {

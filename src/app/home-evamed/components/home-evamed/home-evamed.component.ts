@@ -31,12 +31,11 @@ import { lastValueFrom } from 'rxjs';
 //import { formatNumber } from '@angular/common';
 
 @Component({
-  selector: 'app-home-evamed',
-  templateUrl: './home-evamed.component.html',
-  styleUrls: ['./home-evamed.component.scss'],
-  standalone: true,
-  imports: [BaseChartDirective, MatCardModule, MatSelectModule, FormsModule, MatFormFieldModule,
-    MatIconModule, MatButtonModule, MatButtonToggleModule, MatTabsModule, MatMenuModule, CommonModule],
+    selector: 'app-home-evamed',
+    templateUrl: './home-evamed.component.html',
+    styleUrls: ['./home-evamed.component.scss'],
+    imports: [BaseChartDirective, MatCardModule, MatSelectModule, FormsModule, MatFormFieldModule,
+        MatIconModule, MatButtonModule, MatButtonToggleModule, MatTabsModule, MatMenuModule, CommonModule]
 })
 export class HomeEvamedComponent implements OnInit {
   nombre: string;

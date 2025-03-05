@@ -7,9 +7,10 @@ import { DeleteUnitComponent } from '../delete-unit/delete-unit.component';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-units-admin',
-  templateUrl: './units-admin.component.html',
-  styleUrls: ['./units-admin.component.scss'],
+    selector: 'app-units-admin',
+    templateUrl: './units-admin.component.html',
+    styleUrls: ['./units-admin.component.scss'],
+    standalone: false
 })
 export class UnitsAdminComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name_unit', 'actions'];

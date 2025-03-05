@@ -6,9 +6,10 @@ export interface DialogData {
   id: number;
 }
 @Component({
-  selector: 'app-delete-data-scheme',
-  templateUrl: './delete-data-scheme.component.html',
-  styleUrls: ['./delete-data-scheme.component.scss'],
+    selector: 'app-delete-data-scheme',
+    templateUrl: './delete-data-scheme.component.html',
+    styleUrls: ['./delete-data-scheme.component.scss'],
+    standalone: false
 })
 export class DeleteDataSchemeComponent implements OnInit {
   constructor(

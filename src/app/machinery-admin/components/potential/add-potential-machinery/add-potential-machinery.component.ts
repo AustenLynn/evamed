@@ -12,9 +12,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-potential-machinery',
-  templateUrl: './add-potential-machinery.component.html',
-  styleUrls: ['./add-potential-machinery.component.scss'],
+    selector: 'app-add-potential-machinery',
+    templateUrl: './add-potential-machinery.component.html',
+    styleUrls: ['./add-potential-machinery.component.scss'],
+    standalone: false
 })
 export class AddPotentialMachineryComponent implements OnInit {
   form: UntypedFormGroup;

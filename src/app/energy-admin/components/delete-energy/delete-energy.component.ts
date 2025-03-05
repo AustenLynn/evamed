@@ -8,9 +8,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-delete-energy',
-  templateUrl: './delete-energy.component.html',
-  styleUrls: ['./delete-energy.component.scss'],
+    selector: 'app-delete-energy',
+    templateUrl: './delete-energy.component.html',
+    styleUrls: ['./delete-energy.component.scss'],
+    standalone: false
 })
 export class DeleteEnergyComponent implements OnInit {
   constructor(

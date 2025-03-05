@@ -2,12 +2,13 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-pass-step',
-  templateUrl: './pass-step.component.html',
-  styleUrls: ['./pass-step.component.scss'],
-  host: {
-    'stage': 'end-life-stage'
-  }
+    selector: 'app-pass-step',
+    templateUrl: './pass-step.component.html',
+    styleUrls: ['./pass-step.component.scss'],
+    host: {
+        'stage': 'end-life-stage'
+    },
+    standalone: false
 })
 export class PassStepComponent implements OnInit {
   constructor(

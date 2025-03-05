@@ -11,9 +11,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-potential',
-  templateUrl: './add-potential.component.html',
-  styleUrls: ['./add-potential.component.scss'],
+    selector: 'app-add-potential',
+    templateUrl: './add-potential.component.html',
+    styleUrls: ['./add-potential.component.scss'],
+    standalone: false
 })
 export class AddPotentialComponent implements OnInit {
   form: UntypedFormGroup;

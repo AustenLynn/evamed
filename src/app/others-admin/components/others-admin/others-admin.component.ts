@@ -3,9 +3,10 @@ import { UserService } from '../../../core/services/user/user.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-others-admin',
-  templateUrl: './others-admin.component.html',
-  styleUrls: ['./others-admin.component.scss'],
+    selector: 'app-others-admin',
+    templateUrl: './others-admin.component.html',
+    styleUrls: ['./others-admin.component.scss'],
+    standalone: false
 })
 export class OthersAdminComponent implements OnInit {
   displayedColumns: string[] = [

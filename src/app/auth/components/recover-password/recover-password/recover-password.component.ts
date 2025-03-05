@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
-  selector: 'app-recover-password',
-  templateUrl: './recover-password.component.html',
-  styleUrls: ['./recover-password.component.scss'],
+    selector: 'app-recover-password',
+    templateUrl: './recover-password.component.html',
+    styleUrls: ['./recover-password.component.scss'],
+    standalone: false
 })
 export class RecoverPasswordComponent implements OnInit {
   form: UntypedFormGroup;

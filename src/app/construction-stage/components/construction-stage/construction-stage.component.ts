@@ -9,9 +9,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 
 @Component({
-  selector: 'app-construction-stage',
-  templateUrl: './construction-stage.component.html',
-  styleUrls: ['./construction-stage.component.scss'],
+    selector: 'app-construction-stage',
+    templateUrl: './construction-stage.component.html',
+    styleUrls: ['./construction-stage.component.scss'],
+    standalone: false
 })
 export class ConstructionStageComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;

@@ -8,9 +8,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-data-base',
-  templateUrl: './add-data-base.component.html',
-  styleUrls: ['./add-data-base.component.scss'],
+    selector: 'app-add-data-base',
+    templateUrl: './add-data-base.component.html',
+    styleUrls: ['./add-data-base.component.scss'],
+    standalone: false
 })
 export class AddDataBaseComponent implements OnInit {
   form: UntypedFormGroup;

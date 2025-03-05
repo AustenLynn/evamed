@@ -14,9 +14,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-data-scheme',
-  templateUrl: './add-data-scheme.component.html',
-  styleUrls: ['./add-data-scheme.component.scss'],
+    selector: 'app-add-data-scheme',
+    templateUrl: './add-data-scheme.component.html',
+    styleUrls: ['./add-data-scheme.component.scss'],
+    standalone: false
 })
 export class AddDataSchemeComponent implements OnInit {
   form: UntypedFormGroup;

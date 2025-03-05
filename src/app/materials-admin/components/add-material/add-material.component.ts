@@ -4,9 +4,10 @@ import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 
 @Component({
-  selector: 'app-add-material',
-  templateUrl: './add-material.component.html',
-  styleUrls: ['./add-material.component.scss'],
+    selector: 'app-add-material',
+    templateUrl: './add-material.component.html',
+    styleUrls: ['./add-material.component.scss'],
+    standalone: false
 })
 export class AddMaterialComponent implements OnInit {
   addMaterialForm: UntypedFormGroup;

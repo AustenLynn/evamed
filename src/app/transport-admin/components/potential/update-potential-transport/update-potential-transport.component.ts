@@ -11,9 +11,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-update-potential-transport',
-  templateUrl: './update-potential-transport.component.html',
-  styleUrls: ['./update-potential-transport.component.scss'],
+    selector: 'app-update-potential-transport',
+    templateUrl: './update-potential-transport.component.html',
+    styleUrls: ['./update-potential-transport.component.scss'],
+    standalone: false
 })
 export class UpdatePotentialTransportComponent implements OnInit {
   form: UntypedFormGroup;

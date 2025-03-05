@@ -8,9 +8,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-add-energy',
-  templateUrl: './add-energy.component.html',
-  styleUrls: ['./add-energy.component.scss'],
+    selector: 'app-add-energy',
+    templateUrl: './add-energy.component.html',
+    styleUrls: ['./add-energy.component.scss'],
+    standalone: false
 })
 export class AddEnergyComponent implements OnInit {
   form: UntypedFormGroup;

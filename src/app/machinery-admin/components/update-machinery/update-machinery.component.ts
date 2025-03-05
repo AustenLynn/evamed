@@ -8,9 +8,10 @@ import { UpdatePotentialMachineryComponent } from '../potential/update-potential
 import { DeletePotentialMachineryComponent } from '../potential/delete-potential-machinery/delete-potential-machinery.component';
 
 @Component({
-  selector: 'app-update-machinery',
-  templateUrl: './update-machinery.component.html',
-  styleUrls: ['./update-machinery.component.scss'],
+    selector: 'app-update-machinery',
+    templateUrl: './update-machinery.component.html',
+    styleUrls: ['./update-machinery.component.scss'],
+    standalone: false
 })
 export class UpdateMachineryComponent implements OnInit {
   form: UntypedFormGroup;

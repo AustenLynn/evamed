@@ -20,9 +20,10 @@ export interface Material {
 }
 
 @Component({
-  selector: 'app-materials-stage',
-  templateUrl: './materials-stage.component.html',
-  styleUrls: ['./materials-stage.component.scss'],
+    selector: 'app-materials-stage',
+    templateUrl: './materials-stage.component.html',
+    styleUrls: ['./materials-stage.component.scss'],
+    standalone: false
 })
 export class MaterialsStageComponent implements OnInit {
   selectedSheet: any;

@@ -10,9 +10,10 @@ import { IntermedialComponent } from '../intermedial/intermedial.component';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 
 @Component({
-  selector: 'app-end-life-update',
-  templateUrl: './end-life-update.component.html',
-  styleUrls: ['./end-life-update.component.scss'],
+    selector: 'app-end-life-update',
+    templateUrl: './end-life-update.component.html',
+    styleUrls: ['./end-life-update.component.scss'],
+    standalone: false
 })
 export class EndLifeUpdateComponent implements OnInit {
   nameProject: string;

@@ -11,9 +11,10 @@ import { IntermedialComponent } from '../intermedial/intermedial.component';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 
 @Component({
-  selector: 'app-end-life-stage',
-  templateUrl: './end-life-stage.component.html',
-  styleUrls: ['./end-life-stage.component.scss'],
+    selector: 'app-end-life-stage',
+    templateUrl: './end-life-stage.component.html',
+    styleUrls: ['./end-life-stage.component.scss'],
+    standalone: false
 })
 export class EndLifeStageComponent implements OnInit {
   sheetNames: any;

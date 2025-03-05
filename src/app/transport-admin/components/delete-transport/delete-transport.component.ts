@@ -8,9 +8,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-delete-transport',
-  templateUrl: './delete-transport.component.html',
-  styleUrls: ['./delete-transport.component.scss'],
+    selector: 'app-delete-transport',
+    templateUrl: './delete-transport.component.html',
+    styleUrls: ['./delete-transport.component.scss'],
+    standalone: false
 })
 export class DeleteTransportComponent implements OnInit {
   constructor(

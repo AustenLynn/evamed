@@ -6,9 +6,10 @@ import { DeleteTransportComponent } from '../delete-transport/delete-transport.c
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-transport-admin',
-  templateUrl: './transport-admin.component.html',
-  styleUrls: ['./transport-admin.component.scss'],
+    selector: 'app-transport-admin',
+    templateUrl: './transport-admin.component.html',
+    styleUrls: ['./transport-admin.component.scss'],
+    standalone: false
 })
 export class TransportAdminComponent implements OnInit {
   transportList: any;
