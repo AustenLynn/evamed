@@ -5,6 +5,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import subetapasInfo from 'src/app/calculos/Subetapas.json';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
     selector: 'app-pie-chart',
@@ -46,6 +47,7 @@ export class PieChartComponent implements OnInit {
 
   public pieChartType = 'doughnut';
   public pieChartOptions = {
+    aspectRatio: 2,
     elements: { arc: { borderWidth: 0 } },
     hover: { mode: null },
     tooltips: { enabled: false },
@@ -57,11 +59,19 @@ export class PieChartComponent implements OnInit {
         }
       },
       legend: {
-        position: 'bottom',
+        display: false,
+      },
+      tooltip: {
+        enabled: false
       },
     }
   };
   public pieChartOptions_elementos = {
+    responsive: false,
+    maintainAspectRatio: false,
+    layout: {
+      padding: 0,
+    },
     events: ['click'],
     elements: { arc: { borderWidth: 0 } },
     tooltips: { enabled: false },
@@ -72,9 +82,15 @@ export class PieChartComponent implements OnInit {
         font: {
           size: 7,
         },
-      }
+      },
+      tooltip: {
+        enabled: false
+      },
     }
   }
+
+  public chartPlugins = [ChartDataLabels];
+
   public pieChartData = [];
   public pieChartLabels = [];
   public pieChartColor = [];
@@ -218,7 +234,7 @@ export class PieChartComponent implements OnInit {
         data: aux,
         backgroundColor: ColorDesplegado
       }];
-      this.pieChartData = [...this.pieChartData, auxdata];
+      this.pieChartData = [{ labels: [], datasets: auxdata }];
       this.showMe_elementos = true;
     }else if(this.Bandera_resultado == 2) {
       this.pieChartData = [];
@@ -254,7 +270,7 @@ export class PieChartComponent implements OnInit {
           }]
 
           this.pieChartColor = color;
-          this.pieChartData = [...this.pieChartData, auxdata];
+          this.pieChartData.push({ datasets: auxdata });
           this.pieChartLabels = [...this.pieChartLabels, auxdataLabel];
           datos = [];
           auxdataLabel = [];
@@ -272,7 +288,7 @@ export class PieChartComponent implements OnInit {
         data: [4, 6, 6, 10, 10, 4, 3, 4, 4],
         backgroundColor: color
       }];
-      this.pieChartData = [...this.pieChartData, auxdata];
+      this.pieChartData.push({datasets: auxdata});
     }
   }
   public onChartClick(e: any): void {
@@ -382,8 +398,7 @@ export class PieChartComponent implements OnInit {
         data: datos,
         backgroundColor: color
       }]
-
-      this.pieChartData = [...this.pieChartData, auxdata];
+      this.pieChartData.push({datasets: auxdata});
       datos = [];
     });
   }

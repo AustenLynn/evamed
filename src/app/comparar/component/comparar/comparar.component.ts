@@ -564,7 +564,7 @@ export class CompararComponent implements OnInit {
     grafica.instance.EstadoSeccion = this.estadoTercerSeccion;
     grafica.instance.unidades = this.potentialTypesList;
     grafica.instance.CambioEstadoTercerSeccion.subscribe(e =>
-      this.cambioEstadoTercerSección(e)
+      this.cambioEstadoTercerSeccion(e)
     );
   }
 
@@ -2311,7 +2311,7 @@ export class CompararComponent implements OnInit {
     this.cargaElementos = true;
   }
 
-  cambioEstadoTercerSección(cambio) {
+  cambioEstadoTercerSeccion(cambio) {
     Object.keys(this.estadoTercerSeccion).forEach(idP => {
       if (cambio['idProyecto'].toString() === idP) {
         if (cambio['cambioEn'] === 'CicloVida') {

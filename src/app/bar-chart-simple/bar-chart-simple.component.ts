@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
     selector: 'app-bar-chart-simple',
@@ -45,7 +46,7 @@ export class BarChartSimpleComponent implements OnInit {
   barChartLabelsSecond: BaseChartDirective["labels"] = ['Grava', 'Arena', 'Varilla', 'Cemento', 'Cal', 'Ladrillo'];
   barChartType: ChartType = 'bar';
   barChartLegend = false;
-  barChartPlugins = [];
+  barChartPlugins = [ChartDataLabels];
   showngraph = false;
 
   etapa = '';
@@ -91,7 +92,8 @@ export class BarChartSimpleComponent implements OnInit {
       data: auxdatos,
       backgroundColor: color
     }]
-    this.barChartDataSecond = [...this.barChartDataSecond, auxdata];
+    //this.barChartDataSecond = [...this.barChartDataSecond, auxdata];
+    this.barChartDataSecond = [{ labels: this.barChartLabelsSecond, datasets: auxdata }];
   }
 
   CargarDatosDispercion() {
@@ -162,7 +164,8 @@ export class BarChartSimpleComponent implements OnInit {
       data: aux,
       backgroundColor: ColorDesplegado
     }];
-    this.barChartDataSecond = [...this.barChartDataSecond, auxdata];
+    //this.barChartDataSecond = [...this.barChartDataSecond, auxdata];
+    this.barChartDataSecond = [{ labels: this.barChartLabelsSecond, datasets: auxdata }];
   }
 
   //Acomoda datos para mandar a llamar la siguiente gráfica

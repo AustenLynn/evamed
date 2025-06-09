@@ -118,6 +118,26 @@ export class BarChartComponent implements OnInit, AfterViewInit {
         });
       },
     },
+    { id: 'clickOnChart',
+      afterEvent: (chart, args) => {
+        const event = args.event;
+        if (event.type === 'click') {
+          const value = chart.scales.x.getValueForPixel(args.event.x),
+              label = chart.data.labels[value],
+              limiteSuperior = Object.values(this.chartDir.chart.scales).filter(s => s.id === 'y')[0].top,
+              limiteInferior = Object.values(this.chartDir.chart.scales).filter(s => s.id === 'y')[0].bottom;
+              if (event.y > limiteInferior) {
+                // Control de click en etiquetas
+                this.focusColumnas({ label: label, index: value });
+              } else if (event.y < limiteSuperior) {
+                // Control de click de Proyecto
+                this.focusProyecto(event);
+              } else {
+                //this.togglePorcentaje();
+              }
+        }
+      }
+    }
   ];
 
   public barChartData: ChartDataset[];
@@ -136,9 +156,9 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     this.canvas.addEventListener('mousemove', e => {
       this.onHover(e);
     });
-    this.canvas.addEventListener('mousedown', e => {
+    /*this.canvas.addEventListener('mousedown', e => {
       this.onMouseDown(e);
-    });
+    });*/
   }
 
   // configuración de datos (lectura de datos de entrada)
@@ -352,7 +372,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
             {
               data: auxDatos[etapa],
               label: etapa,
-              stack: proyecto,
+              stack: proyecto.Nombre,
               backgroundColor: this.coloresGraph2Nuevo[index],
               hoverBackgroundColor: this.coloresGraph2Nuevo[index],
             },
@@ -451,9 +471,10 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     this.proyectos = [];
     labels.some(label => {
       if (this.Bandera_bar) {
-        const proyecto = label['$context']['dataset'].stack.Nombre,
+        const proyecto = label['$context']['dataset'].stack,
          elemento = label['_el'],
-         x = elemento['_view'].x;
+         //x = elemento['_view'].x;
+         x = elemento.x;
         if (this.centrosX[proyecto] == undefined) {
           this.centrosX[proyecto] = [];
           this.proyectos = [proyecto, ...this.proyectos];
@@ -466,7 +487,8 @@ export class BarChartComponent implements OnInit, AfterViewInit {
       } else {
         const proyecto = label['$context']['dataset'].stack,
          elemento = label['_el'],
-         x = elemento['_view'].x;
+         //x = elemento['_view'].x;
+         x = elemento.x;
 
         if (this.centrosX[proyecto] == undefined) {
           this.centrosX[proyecto] = [];
@@ -482,16 +504,13 @@ export class BarChartComponent implements OnInit, AfterViewInit {
   private agregaTitulosProyectos(chart: any) {
     // Se agrega los titulos de las barras de varios proyectos (solo cuando son más de uno)
     const ctx = chart.canvas.getContext('2d'),
-    //const labels = chart['$datalabels']['_labels'];
-    //const labels = this.barChartLabels;
-     centroY = chart['boxes'][1].height / 2;
+      labels = chart['$datalabels']['_labels'],
+      centroY = chart['boxes'][2].height / 2;
 
-/*    this.iniciaPosiciones(chart);
-    //if (chart['$datalabels']['_labels'].length == 0) {
+    this.iniciaPosiciones(chart);
     if (labels.length == 0) {
       return;
     }
-    //ctx.font = chart['$datalabels']['_labels'][0]['_ctx'].font; //'30px Comic Sans MS';
     ctx.font = labels[0]['_ctx'].font; //'30px Comic Sans MS';
     ctx.fillStyle = 'gray';
     ctx.textAlign = 'center';
@@ -499,7 +518,6 @@ export class BarChartComponent implements OnInit, AfterViewInit {
       return;
     }
     // ctx.clearRect( 0, 0,this.canvas.width, chart['boxes'][1].height*3/4 );
-*/
     this.proyectos.forEach((proyecto, index) => {
       this.centrosX[proyecto].forEach(x => {
         ctx.fillText((index + 1).toString(), x, centroY);
@@ -509,7 +527,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
 
   // Control de eventos en la grafica
 
-  public onMouseDown(e: any) {
+  /*public onMouseDown(e: any) {
     const limiteInferior =
       this.chartDir.chart.height - this.chartDir.chart['boxes'][2].height,
      limiteSuperior = this.chartDir.chart['boxes'][1].height;
@@ -524,7 +542,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     } else {
       //this.togglePorcentaje();
     }
-  }
+  }*/
 
   private focusProyecto(e: any) {
     // Selecciona todas las barras de un proyecto cuando se hace click en el area superior de la grafica
@@ -533,25 +551,23 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     if (!this.Bandera_bar) {
       labels.some(label => {
         const elemento = label['_el'];
-        if (elemento.inXRange(e.offsetX)) {
+        if (elemento.inXRange(e.native.offsetX)) {
           stack = label['$context']['dataset'].stack;
           return true;
         }
       });
 
       if (this.lastClick !== stack) {
-        this.barChartData.forEach((data, index) => {
+        this.barChartData['datasets'].forEach((data, index) => {
           const color = new Array(data.data.length);
           if (data.stack == stack) {
             color.fill(this.colores[data.label]);
           } else {
             color.fill(this.coloresBW[data.label]);
           }
-
-          this.barChartData[index].backgroundColor = color;
-          this.barChartData[index].hoverBackgroundColor = color;
+          this.barChartData['datasets'][index].backgroundColor = color;
+          this.barChartData['datasets'][index].hoverBackgroundColor = color;
         });
-
         this.chartDir.update();
         this.lastClick = stack;
       } else {
@@ -562,13 +578,14 @@ export class BarChartComponent implements OnInit, AfterViewInit {
   }
 
   public focusColumnas(seleccion: any) {
+    // Selecciona todas las barras de una categoria cuando se hace click en la etiqueta
     const selec = seleccion;
     if (this.lastClick !== seleccion.label) {
       if (this.Bandera_bar) {
         if (this.banderaImpacto) {
           let nivelesAux = [],
-           count = -1;
-          this.barChartData.forEach((datos, index) => {
+          count = -1;
+          this.barChartData['datasets'].forEach((datos, index) => {
             let color = new Array(datos.data.length);
             const coloraux = [];
             if (!nivelesAux.includes(datos.label)) {
@@ -592,13 +609,13 @@ export class BarChartComponent implements OnInit, AfterViewInit {
             });
             color = coloraux;
 
-            this.barChartData[index].backgroundColor = color;
-            this.barChartData[index].hoverBackgroundColor = color;
+            this.barChartData['datasets'][index].backgroundColor = color;
+            this.barChartData['datasets'][index].hoverBackgroundColor = color;
           });
         } else {
           let nivelesAux = [],
            count = -1;
-          this.barChartData.forEach((datos, index) => {
+           this.barChartData['datasets'].forEach((datos, index) => {
             let color = new Array(datos.data.length);
             if (!nivelesAux.includes(datos.label)) {
               nivelesAux.push(datos.label);
@@ -626,22 +643,19 @@ export class BarChartComponent implements OnInit, AfterViewInit {
               color.fill(this.auxColorBW[count]);
               color[seleccion.index] = this.auxColor[count];
             }
-
-            this.barChartData[index].backgroundColor = color;
-            this.barChartData[index].hoverBackgroundColor = color;
+            this.barChartData['datasets'][index].backgroundColor = color;
+            this.barChartData['datasets'][index].hoverBackgroundColor = color;
           });
           this.chartDir.update();
         }
         this.lastClick = seleccion.label;
       } else {
-        this.barChartData.forEach((datos, index) => {
+        this.barChartData['datasets'].forEach((datos, index) => {
           const color = new Array(datos.data.length);
-
           color.fill(this.coloresBW[datos.label]);
           color[seleccion.index] = this.colores[datos.label];
-
-          this.barChartData[index].backgroundColor = color;
-          this.barChartData[index].hoverBackgroundColor = color;
+          this.barChartData['datasets'][index].backgroundColor = color;
+          this.barChartData['datasets'][index].hoverBackgroundColor = color;
         });
         this.chartDir.update();
         this.lastClick = seleccion.label;
@@ -677,7 +691,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private getEtiquetaCercana(e: any) {
+  /*private getEtiquetaCercana(e: any) {
     // Obtiene la etiqueta mas cercana al click en el eje X de acuerdo con barChartLabels
     const etiquetas = this.chartDir.chart['boxes'][2]['_labelItems'];
     let max = this.chartDir.chart.width,
@@ -693,7 +707,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
       }
     });
     return { label: seleccion, index: indice };
-  }
+  }*/
 
   public onHover(e: any) {
     // Controla el flujo de hover sobre los elementos de las barras
@@ -731,17 +745,18 @@ export class BarChartComponent implements OnInit, AfterViewInit {
           count = 0;
         }
         const color = this.auxColor[count];
-        this.barChartData['datasets'][index].backgroundColor = color;
-        this.barChartData['datasets'][index].hoverBackgroundColor = color;
+        // use [...[color]] to force a new array reference
+        this.barChartData['datasets'][index].backgroundColor = [...[color]];
+        this.barChartData['datasets'][index].hoverBackgroundColor = [...[color]];
       });
     } else {
       this.barChartData['datasets'].forEach((data, index) => {
         const color = this.colores[data.label];
-        this.barChartData['datasets'][index].backgroundColor = color;
-        this.barChartData['datasets'][index].hoverBackgroundColor = color;
+        // use [...[color]] to force a new array reference
+        this.barChartData['datasets'][index].backgroundColor = [...[color]];
+        this.barChartData['datasets'][index].hoverBackgroundColor = [...[color]];
       });
     }
-
     this.chartDir.update();
   }
 
@@ -769,6 +784,8 @@ export class BarChartComponent implements OnInit, AfterViewInit {
           }
         });
         color = coloraux;
+        // TODO: not sure when this color value is used.
+        // Need to check if color is an array or not and maybe cast it
       } else {
         //console.log(this.banera_enfoqueSerie_externo,serie);
         if (datos.label !== serie) {
@@ -777,8 +794,9 @@ export class BarChartComponent implements OnInit, AfterViewInit {
           color = this.colores[datos.label];
         }
       }
-      this.barChartData['datasets'][index].backgroundColor = color;
-      this.barChartData['datasets'][index].hoverBackgroundColor = color;
+      // use [...[color]] to force a new array reference
+      this.barChartData['datasets'][index].backgroundColor = [...[color]];
+      this.barChartData['datasets'][index].hoverBackgroundColor = [...[color]];
     });
     if (this.Bandera_bar) {
       //
@@ -787,7 +805,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public onChartHover( { event}: { event?: ChartEvent; } ): void {
+  public onChartHover( { event }: { event?: ChartEvent; } ): void {
     // Asigna el elemento de la grafica sobre el cual se hace hover
     this.hovered = this.chartDir['chart'].getElementsAtEventForMode(event.native, 'nearest', { intersect: true }, false)[0];
 
