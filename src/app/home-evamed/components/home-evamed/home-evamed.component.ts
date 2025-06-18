@@ -466,6 +466,11 @@ export class HomeEvamedComponent implements OnInit {
       this.auxDataProjectList.push(auxDatos);
     });
     this.cargaDatosCalculo = true;
+
+    // Trigger database "selection"
+    this.auxDataProjectList.forEach( (project, i) => {
+      this.ajusteUsoBaseDatos(project.DBList, i);
+    });
   }
 
   onlyUnique(value, index, self) {

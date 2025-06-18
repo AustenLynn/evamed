@@ -314,7 +314,10 @@ export class CompararComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Trigger database "selection"
+    this.ajusteUsoBaseDatos(this.DBList);
+  }
 
   //Regreso a la página de inicio
   returnHome() {
