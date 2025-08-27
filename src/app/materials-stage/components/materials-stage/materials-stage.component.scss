@@ -334,3 +334,8 @@ td.mat-mdc-cell:first-of-type,
 td.mat-mdc-footer-cell:first-of-type {
   padding-right: 24px !important;
 }
+
+.mat-icon-disabled-class {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

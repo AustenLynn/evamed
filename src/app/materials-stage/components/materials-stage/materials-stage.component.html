@@ -85,7 +85,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsRevit"
-            (ngModelChange)="onNgModelChangeRevit()">
+            (ngModelChange)="onNgModelChangeRevit()" (selectionChange)="onSCSelected($event)">
             <mat-list-option *ngFor="let sc of ListSCRevit" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option" [selected]="sc.checked">
               <div style="
@@ -93,8 +93,8 @@
                   justify-content: space-between;
                   align-items: center;
                 ">
-                <div style="display: flex; align-items: center; width: 65.8%" (click)="showMaterials(sc, 'revit-user')"
-                  class="item-by-list" (keypress)="showMaterials(sc, 'revit-user')" tabindex="4">
+                <div style="display: flex; align-items: center; width: 65.8%"
+                  class="item-by-list" tabindex="4">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
@@ -200,7 +200,8 @@
         <p>
           Materiales<span class="sc-selected"> {{ SCseleccionado }} </span>
         </p>
-        <button mat-icon-button>
+        <button mat-icon-button [disabled]="!SCseleccionado" [ngClass]="{ 'mat-icon-disabled-class': !SCseleccionado }"
+         (click)="addConstructiveMaterialDialog('Modelo de Revit')">
           <mat-icon>add_circle</mat-icon>
         </button>
       </div>
@@ -208,9 +209,10 @@
       <!--Contenedor de condicionales-->
       <div class="conditional-section">
         <!--Listado de materiales-->
+        <!-- TODO: add button to delete material -->
         <mat-selection-list #materials [multiple]="false" hideSingleSelectionIndicator
           (selectionChange)="onSelectedMaterial(materials.selectedOptions)"
-          *ngIf="!selectedMaterial && !showSearch">
+          *ngIf="shouldShowMaterials && !selectedMaterial && !showSearch">
           <mat-list-option *ngFor="let material of listMateriales | keyvalue" [value]="material">
             <div class="table-materials">
               <div class="col-key">{{ material.value.key }}.</div>
@@ -218,7 +220,7 @@
                 {{ material.value.Material }}
               </div>
               <div class="col-cantidad">
-                {{ material.value.Cantidad }}
+                {{ material.value.Cantidad | number:'1.2-2' }}
               </div>
               <div class="col-unidad">
                 {{ material.value.Unidad }}

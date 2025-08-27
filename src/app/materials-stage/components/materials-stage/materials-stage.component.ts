@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatListOption } from '@angular/material/list';
+import { MatSelectionListChange } from '@angular/material/list';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { ProjectsService } from './../../../core/services/projects/projects.service';
 import { Router } from '@angular/router';
@@ -9,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AddConstructiveElementComponent } from '../add-constructive-element/add-constructive-element.component';
 import { AddConstructiveSystemComponent } from '../add-constructive-system/add-constructive-system.component';
+import { AddConstructiveMaterialComponent } from '../add-constructive-material/add-constructive-material.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AnalisisService } from 'src/app/core/services/analisis/analisis.service';
 import { PassStepComponent } from '../pass-step/pass-step.component';
@@ -36,6 +38,7 @@ export class MaterialsStageComponent implements OnInit {
   ListSCUsuario: any;
   listMateriales: any;
   selectedOptionsRevit: string[] = [];
+  previousSelectedOptionsRevit: any[] = [];
   selectedOptionsDynamo: string[] = [];
   selectedOptionsUsuario: string[] = [];
   panelOpenFirst = true;
@@ -53,6 +56,7 @@ export class MaterialsStageComponent implements OnInit {
   selectedMaterial: boolean;
   showSearch: boolean;
   showMaterial: boolean;
+  shouldShowMaterials: boolean;
   showEPD: boolean;
   dataMaterialSelected: any;
   materialsList: any;
@@ -67,7 +71,9 @@ export class MaterialsStageComponent implements OnInit {
   distanciaInicial: any;
   newConstructiveElement: string;
   newConstructiveSystem: string;
+  newConstructiveMaterial: string;
   SCseleccionado = '';
+  currentPanelItem = '';
   materialData: any;
   EPDS: any;
   EPiC: any;
@@ -148,6 +154,7 @@ export class MaterialsStageComponent implements OnInit {
     this.selectedMaterial = false;
     this.showSearch = false;
     this.showMaterial = false;
+    this.shouldShowMaterials = true;
     this.showEPD = false;
     this.showMexican = false;
     this.showListMaterials = true;
@@ -207,6 +214,9 @@ export class MaterialsStageComponent implements OnInit {
   }
 
   onGroupsChange(options: MatListOption[]) {
+
+    this.clearMaterialsPanel();
+
     options.map(option => {
       this.selectedSheet = option.value;
     });
@@ -371,6 +381,33 @@ export class MaterialsStageComponent implements OnInit {
         this.SOR[i] = this.selectedOptionsRevit;
       }
     }
+
+    // Detect deselected items
+    const deselected = this.previousSelectedOptionsRevit.filter(
+      item => !this.selectedOptionsRevit.includes(item)
+    );
+
+    // Check if currently displayed SC was deselected
+    if (deselected.includes(this.currentPanelItem)) {
+      this.clearMaterialsPanel(); // Clear third panel
+    }
+
+    // Save current state
+    this.previousSelectedOptionsRevit = [...this.selectedOptionsRevit];
+  }
+
+  clearMaterialsPanel() {
+    this.currentPanelItem = null;
+    this.SCseleccionado = '';
+    this.selectedMaterial = false;
+    this.showSearch = false;
+    this.listMateriales = {};
+
+    // Optional: Reset visibility
+    this.shouldShowMaterials = false;
+    setTimeout(() => {
+      this.shouldShowMaterials = true;
+    }, 0);
   }
 
   onNgModelChangeDynamo() {
@@ -548,7 +585,17 @@ export class MaterialsStageComponent implements OnInit {
     });
   }
 
+onSCSelected(event: MatSelectionListChange) {
+  const selectedItem = event.options[0]?.value,
+        isSelected = event.options[0]?.selected;
+
+  if (isSelected) {
+    this.showMaterials(selectedItem, 'revit-user');
+  }
+}
+
   showMaterials(sc, origin) {
+    this.currentPanelItem = sc; // track currently shown item
     this.SCseleccionado = '/ ' + sc;
     this.selectedMaterial = false;
     this.showSearch = false;
@@ -866,6 +913,37 @@ export class MaterialsStageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
+    });
+  }
+
+  addConstructiveMaterialDialog(origin) {
+    const dialogRef = this.dialog.open(AddConstructiveMaterialComponent, {
+      width: '680px',
+      data: {
+        //newConstructiveMaterial: this.newConstructiveMaterial,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (Object.keys(result).length > 1) {
+        const mappedResult = {
+          'Administrador EPDs': "-",
+          'Base de datos': result.material?.database,
+          'Cantidad': result.cantidad,
+          'Descripción de Material': result.descripcion,
+          'Material': result.material?.name || result.name,
+          // TODO: considerar distancias
+          'Objetivo Geográfico': '-',
+          'Origen': origin,
+          'Sistema_constructivo': this.currentPanelItem,
+          'Unidad': result.unidad,
+          'reemplazos': result.reemplazos,
+          'vidaUtil': result.vidaUtil?.value
+        };
+
+        this.listData.push(mappedResult);
+        this.showMaterials(this.currentPanelItem, 'revit-user');
+      }
     });
   }
 }
