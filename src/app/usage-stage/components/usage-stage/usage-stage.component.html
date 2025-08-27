@@ -93,14 +93,30 @@
                   <span class="label-small-input">
                     Tipo
                   </span>
-                  <mat-form-field appearance="outline" class="custom-formField">
-                    <mat-label>Seleccione una opción</mat-label>
-                    <mat-select [(ngModel)]="tipoMixElectrico" name="fuente" hideSingleSelectionIndicator panelWidth="">
-                      <mat-option *ngFor="let tipo of catalogoTipoEnergiaElectrica" [value]="tipo.id">
-                        {{tipo.name_type_energy}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <div [matTooltip]="getEnergyType(tipoMixElectrico, 'electric')"
+                    matTooltipPosition="above" *ngIf="tipoMixElectrico">
+                    <mat-form-field appearance="outline" class="custom-formField">
+                      <mat-label>Seleccione una opción</mat-label>
+                      <mat-select [(ngModel)]="tipoMixElectrico" name="fuente" hideSingleSelectionIndicator
+                        panelWidth="" placeholder="Fuente">
+                        <mat-option *ngFor="let tipo of catalogoTipoEnergiaElectrica" [value]="tipo.id">
+                          {{tipo.name_type_energy}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <!-- When there's no selection, omit the tooltip -->
+                   <div *ngIf="!tipoMixElectrico">
+                    <mat-form-field appearance="outline" class="custom-formField">
+                      <mat-label>Seleccione una opción</mat-label>
+                      <mat-select [(ngModel)]="tipoMixElectrico" name="fuente" hideSingleSelectionIndicator
+                        panelWidth="" placeholder="Fuente">
+                        <mat-option *ngFor="let tipo of catalogoTipoEnergiaElectrica" [value]="tipo.id">
+                          {{tipo.name_type_energy}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
                 </div>
               </div>
               <div class="Row top-0">
@@ -158,14 +174,28 @@
                   <span class="label-small-input">
                     Tipo
                   </span>
-                  <mat-form-field appearance="outline" class="custom-formField">
-                    <mat-label>Seleccione una opción</mat-label>
-                    <mat-select [(ngModel)]="tipoCombustible" name="fuente" hideSingleSelectionIndicator panelWidth="">
-                      <mat-option *ngFor="let tipo of catalogoTipoEnergiaCombustible" [value]="tipo.id">
-                        {{tipo.name_type_energy}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <div [matTooltip]="getEnergyType(tipoCombustible, 'fuel')"
+                    matTooltipPosition="above" *ngIf="tipoCombustible">
+                    <mat-form-field appearance="outline" class="custom-formField">
+                      <mat-label>Seleccione una opción</mat-label>
+                      <mat-select [(ngModel)]="tipoCombustible" name="fuente" hideSingleSelectionIndicator panelWidth="">
+                        <mat-option *ngFor="let tipo of catalogoTipoEnergiaCombustible" [value]="tipo.id">
+                          {{tipo.name_type_energy}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <!-- When there's no selection, omit the tooltip -->
+                  <div *ngIf="!tipoCombustible">
+                    <mat-form-field appearance="outline" class="custom-formField">
+                      <mat-label>Seleccione una opción</mat-label>
+                      <mat-select [(ngModel)]="tipoCombustible" name="fuente" hideSingleSelectionIndicator panelWidth="">
+                        <mat-option *ngFor="let tipo of catalogoTipoEnergiaCombustible" [value]="tipo.id">
+                          {{tipo.name_type_energy}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
                 </div>
               </div>
 
