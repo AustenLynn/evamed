@@ -70,7 +70,7 @@
           <!--Expansion panel header-->
           <mat-expansion-panel-header class="custom-expansion-panel-header">
             <mat-panel-title class="custom-mat-panel-title">
-              1. Energía consumida durante el proceso constructivo
+              Energía consumida durante el proceso constructivo
             </mat-panel-title>
           </mat-expansion-panel-header>
           <!--Expansion panel form-field-->
@@ -80,14 +80,30 @@
                 <span class="label-small-input">
                   Fuente
                 </span>
-                <mat-form-field appearance="outline" class="custom-input">
-                  <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator panelWidth="">
-                    <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
-                      {{fuente.name_source_information}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <div [matTooltip]="getSelectedSourceName(data.fuente)"
+                  matTooltipPosition="above" *ngIf="data.fuente">
+                  <mat-form-field appearance="outline" class="custom-input">
+                    <mat-label>Seleccione una opción</mat-label>
+                    <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator
+                    panelWidth="" placeholder="Fuente">
+                      <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
+                        {{fuente.name_source_information}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <!-- When there's no selection, omit the tooltip -->
+                <div *ngIf="!data.fuente">
+                  <mat-form-field appearance="outline" class="custom-input">
+                    <mat-label>Seleccione una opción</mat-label>
+                    <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator
+                    panelWidth="" placeholder="Fuente">
+                      <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
+                        {{fuente.name_source_information}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
               </div>
               <div class="Col col-small-space">
                 <span class="label-small-input">
@@ -125,134 +141,6 @@
           </button>
 
           <button mat-button (click)="onSaveEC()">
-            <mat-icon>save</mat-icon>
-          </button>
-        </mat-expansion-panel>
-
-        <!--Expansion panel 2. -->
-        <mat-expansion-panel>
-          <!--Expansion panel header-->
-          <mat-expansion-panel-header class="custom-expansion-panel-header">
-            <mat-panel-title class="custom-mat-panel-title">
-              2. Agua consumida durante el proceso constructivo
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <!--Expansion panel form-field-->
-          <div *ngFor="let data of dataArrayAC; let i=index;">
-            <div class="Row top-0">
-              <div class="Col col-small-space">
-                <span class="label-small-input">
-                  Fuente
-                </span>
-                <mat-form-field appearance="outline">
-                  <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator panelWidth="">
-                    <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
-                      {{fuente.name_source_information}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="Col col-small-space">
-                <span class="label-small-input">
-                  Cantidad
-                </span>
-                <mat-form-field>
-                  <input class="input-general" [(ngModel)]="data.cantidad" name="cantidad{{i}}" matInput type="number">
-                </mat-form-field>
-              </div>
-              <div class="Col col-small-space">
-                <span class="label-small-input">
-                  Unidad
-                </span>
-                <mat-form-field appearance="outline">
-                  <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}" hideSingleSelectionIndicator>
-                    <mat-option *ngFor="let unidad of catalogoUnidadVolumen" [value]="unidad.id">
-                      {{unidad.name_volume_unit}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="Col col-small-space">
-                <div *ngIf="i !== 0">
-                  <button mat-button class="button-remove" (click)="removeFormAC(i)">
-                    <mat-icon>remove_circle</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--Actions-->
-          <button mat-button (click)="addFormAC()">
-            <mat-icon>add_circle</mat-icon>
-          </button>
-
-          <button mat-button (click)="onSaveAC()">
-            <mat-icon>save</mat-icon>
-          </button>
-        </mat-expansion-panel>
-
-        <!--Expansion panel 3. -->
-        <mat-expansion-panel>
-          <!--Expansion panel header-->
-          <mat-expansion-panel-header class="custom-expansion-panel-header">
-            <mat-panel-title class="custom-mat-panel-title">
-              3. Desechos generados durante el proceso constructivo
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <!--Expansion panel form-field-->
-          <div *ngFor="let data of dataArrayDG; let i=index;">
-            <div class="Row top-0">
-              <div class="Col col-small-space">
-                <span class="label-small-input">
-                  Fuente
-                </span>
-                <mat-form-field appearance="outline">
-                  <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator panelWidth="">
-                    <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
-                      {{fuente.name_source_information}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="Col col-small-space">
-                <span class="label-small-input">
-                  Cantidad
-                </span>
-                <mat-form-field>
-                  <input class="input-general" [(ngModel)]="data.cantidad" name="cantidad{{i}}" matInput type="number">
-                </mat-form-field>
-              </div>
-              <div class="Col col-small-space">
-                <span class="label-small-input">
-                  Unidad
-                </span>
-                <mat-form-field appearance="outline">
-                  <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}" hideSingleSelectionIndicator>
-                    <mat-option *ngFor="let unidad of catalogoUnidadVolumen" [value]="unidad.id">
-                      {{unidad.name_volume_unit}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="Col col-small-space">
-                <div *ngIf="i !== 0">
-                  <button mat-button class="button-remove" (click)="removeFormDG(i)">
-                    <mat-icon>remove_circle</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--Actions-->
-          <button mat-button (click)="addFormDG()">
-            <mat-icon>add_circle</mat-icon>
-          </button>
-
-          <button mat-button (click)="onSaveDG()">
             <mat-icon>save</mat-icon>
           </button>
         </mat-expansion-panel>

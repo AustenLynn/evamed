@@ -55,13 +55,15 @@ export class ConstructionStageComponent implements OnInit {
       this.catalogoFuentes = fuentes;
     });
     this.catalogsService.getEnergyUnits().subscribe(data => {
-      const energia = [];
+      /*const energia = [];
       data.map(unidad => {
         if (unidad.name_energy_unit === 'Hrs') {
           energia.push(unidad);
         }
       });
-      this.catalogoUnidadEnergia = energia;
+      this.catalogoUnidadEnergia = energia;*/
+      this.catalogoUnidadEnergia = data;
+      // TODO: get proper units for sources and dbs
     });
     this.catalogsService.getVolumeUnits().subscribe(data => {
       this.catalogoUnidadVolumen = data;
@@ -96,6 +98,7 @@ export class ConstructionStageComponent implements OnInit {
   }
 
   onGroupsChange(options: MatListOption[]) {
+    // TODO: Update energy panel title and clear previous added data
     let selectedSheet;
     // map these MatListOptions to their values
     options.map(option => {
@@ -226,7 +229,7 @@ export class ConstructionStageComponent implements OnInit {
       console.log(error);
     }
 
-    try {
+    /*try {
       await Object.entries(this.AC).forEach(([key, ec]) => {
         const ecAny: any = ec;
         ecAny.map(data => {
@@ -274,7 +277,7 @@ export class ConstructionStageComponent implements OnInit {
       });
     } catch (error) {
       console.log(error);
-    }
+    }*/
 
     //await this.showModal();
     // this.router.navigateByUrl('usage-stage');
@@ -394,4 +397,8 @@ export class ConstructionStageComponent implements OnInit {
     });
   }
 
+  getSelectedSourceName(value: any): string {
+    const selected = this.catalogoFuentes.find(option => option.id === value);
+    return selected ? selected.name_source_information : '';
+  }
 }
