@@ -1353,7 +1353,8 @@ export class HomeEvamedComponent implements OnInit {
               'estadoSeleccionado',
               result.estadoSeleccionado
             );
-            this.openDialogCTOP();
+            //this.openDialogCTOP(); // No abrir tipo de evalución e ir directo a do-files
+            this.router.navigateByUrl('do-files');
           });
       } catch {
         console.log('close modal');
