@@ -75,7 +75,7 @@ export class MaterialsStageComponent implements OnInit {
   SCseleccionado = '';
   currentPanelItem = '';
   materialData: any;
-  EPDS: any;
+  EPDS: Material[] = [];
   EPiC: any;
   mexicaniuh: any;
   showListMaterials: boolean;
@@ -85,6 +85,8 @@ export class MaterialsStageComponent implements OnInit {
   myControl = new UntypedFormControl();
   options: Material[];
   filteredOptions: Observable<Material[]>;
+  autocompletedMaterial: Material | null = null;
+  filteredEPDS: Material[] = [];
 
   displayedColumns: string[] = ['Standard', 'Potencial', 'Valor', 'Unidad'];
   endSave = false;
@@ -114,6 +116,8 @@ export class MaterialsStageComponent implements OnInit {
       this.mexicaniuh = mexicaniuh.sort((a, b) =>
         a.name_material > b.name_material ? 1 : -1
       );
+      // Initialize filteredEPDS here
+      this.filteredEPDS = [...this.EPDS];
     });
     this.catalogsService.countriesCatalog().subscribe(data => {
       this.catalogoPaises = data;
@@ -150,6 +154,14 @@ export class MaterialsStageComponent implements OnInit {
       map(value => (typeof value === 'string' ? value : value.name)),
       map(name => (name ? this._filter(name) : this.options.slice()))
     );
+
+    // Listen for clearing input to reset filteredEPDS
+    this.myControl.valueChanges.subscribe(value => {
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        this.autocompletedMaterial = null ;
+        this.filterEPDS(); // Reset the full EPD list
+      }
+    });
 
     this.selectedMaterial = false;
     this.showSearch = false;
@@ -197,13 +209,36 @@ export class MaterialsStageComponent implements OnInit {
     }
     return material && this.materialFiltrado;
   }*/
-    displayFn(material: Material | null): string {
-      if (material && typeof material === 'object' && 'name_material' in material) {
-        this.materialFiltrado = material.name_material;
-        return material && this.materialFiltrado;
-      }
-      return '';
+  displayFn(material: Material | null): string {
+    if (material && typeof material === 'object' && 'name_material' in material) {
+      this.materialFiltrado = material.name_material;
+      return material && this.materialFiltrado;
     }
+    return '';
+  }
+
+  onMaterialAutoCompleted(material: Material) {
+    this.autocompletedMaterial = material;
+    this.filterEPDS();
+  }
+
+  filterEPDS() {
+    if (this.autocompletedMaterial) {
+      this.filteredEPDS = this.EPDS.filter(
+        epd => epd.name_material === this.autocompletedMaterial?.name_material
+      );
+    } else {
+      this.filteredEPDS = [...this.EPDS];
+    }
+  }
+
+  // TODO: fix autocomplete for materials in other DBs
+
+  clearAutocomplete(): void {
+    this.myControl.setValue('');  // Clear the input box
+    this.autocompletedMaterial = null;  // Reset the selected material
+    this.filterEPDS();  // Reset the filtered EPD list to full
+  }
 
   private _filter(name: string): Material[] {
     const filterValue = name.toLowerCase();
@@ -737,13 +772,6 @@ onSCSelected(event: MatSelectionListChange) {
 
   returnMaterialData() {
     console.log('returnMaterialData-----');
-    /*if (this.dataMaterialSelected.materialFiltrado !== undefined) {
-      this.dataMaterialSelected.materialSelectedDB =
-        this.dataMaterialSelected.materialFiltrado.name_material;
-
-      this.dataMaterialSelected.name =
-        this.dataMaterialSelected.materialSelectedDB;
-    }*/
     const selectedName = this.dataMaterialSelected.materialFiltrado?.name_material
       ?? this.dataMaterialSelected.materialSelectedDB,
           selectedDescription = this.dataMaterialSelected?.description;

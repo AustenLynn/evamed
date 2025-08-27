@@ -397,8 +397,14 @@
                 <form class="example-form">
                   <mat-form-field class="example-full-width">
                     <input class="input-general-renuew" type="text" matInput [formControl]="myControl"
-                      [matAutocomplete]="auto"/>
-                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" hideSingleSelectionIndicator panelWidth="auto">
+                      [matAutocomplete]="auto" placeholder="Selecciona material"/>
+                    <button matSuffix mat-icon-button *ngIf="myControl.value" aria-label="Clear"
+                      (click)="clearAutocomplete()" tabindex="-1">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                        (optionSelected)="onMaterialAutoCompleted($event.option.value)"
+                        hideSingleSelectionIndicator panelWidth="auto">
                       @for (option of filteredOptions | async; track option) {
                         <mat-option [value]="option">{{ option.name_material }}</mat-option>
                       }
@@ -412,7 +418,7 @@
                 <mat-tab-group mat-align-tabs="start" disablePagination>
                   <mat-tab label="EPD's">
                     <div *ngIf="!showEPD">
-                      <div *ngFor="let item of EPDS">
+                      <div *ngFor="let item of filteredEPDS">
                         <div (click)="showDetailEPD($event, item)" class="item-material"
                           (keypress)="showDetailEPD($event, item)" tabindex="10">
                           {{ item.name_material }}
