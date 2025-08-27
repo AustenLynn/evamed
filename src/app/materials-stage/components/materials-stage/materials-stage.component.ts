@@ -191,12 +191,19 @@ export class MaterialsStageComponent implements OnInit {
   }
 
   // Lógica para autocompletado
-  displayFn(material: Material): string {
+  /*displayFn(material: Material): string {
     if (material !== null || material !== undefined) {
       this.materialFiltrado = material.name_material;
     }
     return material && this.materialFiltrado;
-  }
+  }*/
+    displayFn(material: Material | null): string {
+      if (material && typeof material === 'object' && 'name_material' in material) {
+        this.materialFiltrado = material.name_material;
+        return material && this.materialFiltrado;
+      }
+      return '';
+    }
 
   private _filter(name: string): Material[] {
     const filterValue = name.toLowerCase();
@@ -730,13 +737,21 @@ onSCSelected(event: MatSelectionListChange) {
 
   returnMaterialData() {
     console.log('returnMaterialData-----');
-    if (this.dataMaterialSelected.materialFiltrado !== undefined) {
+    /*if (this.dataMaterialSelected.materialFiltrado !== undefined) {
       this.dataMaterialSelected.materialSelectedDB =
         this.dataMaterialSelected.materialFiltrado.name_material;
 
       this.dataMaterialSelected.name =
         this.dataMaterialSelected.materialSelectedDB;
-    }
+    }*/
+    const selectedName = this.dataMaterialSelected.materialFiltrado?.name_material
+      ?? this.dataMaterialSelected.materialSelectedDB,
+          selectedDescription = this.dataMaterialSelected?.description;
+
+    this.dataMaterialSelected.materialSelectedDB = selectedName;
+    this.dataMaterialSelected.name = selectedName;
+    this.dataMaterialSelected.Material = selectedName;
+    this.dataMaterialSelected['Descripción de Material'] = selectedDescription;
 
     console.log(this.dataMaterialSelected);
     this.selectedMaterial = true;
