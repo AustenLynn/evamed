@@ -37,6 +37,7 @@ export class EndLifeStageComponent implements OnInit {
   catalogoUnidadEnergia: [];
   selectedSheet: any;
   endSave = false;
+  procesoSeleccionado = '';
 
   constructor(
     private router: Router,
@@ -134,6 +135,8 @@ export class EndLifeStageComponent implements OnInit {
     if (this.dataArrayTD.length === 0) {
       this.dataArrayTD.push([]);
     }
+
+    this.procesoSeleccionado = selectedSheet;
   }
 
   onNgModelChange() {
@@ -318,5 +321,10 @@ export class EndLifeStageComponent implements OnInit {
   continue() {
     this.saveStepFour();
     this.router.navigateByUrl('/home-evamed');
+  }
+
+  getSelectedSourceName(value: any): string {
+    const selected = this.catalogoFuentes.find(option => option.id === value);
+    return selected ? selected.name_source_information : '';
   }
 }
