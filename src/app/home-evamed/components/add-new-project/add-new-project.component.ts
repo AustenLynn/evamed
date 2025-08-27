@@ -15,7 +15,7 @@ export interface DialogData {
   paisSeleccionado: any;
   tipoSeleccionado: any;
   ciudadSeleccionada: any;
-  vidaUtilSeleccionado: string;
+  vidaUtilSeleccionado: number;
   esqHabitacionalSeleccionado: string;
   estadoSeleccionado: any;
   superficieConstruida: string;
@@ -43,7 +43,11 @@ export class AddNewProjectComponent implements OnInit {
     this.dialogRef.close(this.data);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!this.data.vidaUtilSeleccionado) {
+      this.data.vidaUtilSeleccionado = 1; // Que el valor predeterminado sea "50"
+    }
+  }
 
   select(id) {
     this.catalogoCiudades = [];
