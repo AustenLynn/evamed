@@ -31,11 +31,12 @@ export class ConstructionStageComponent implements OnInit {
   dataArrayEC = [];
   dataArrayAC = [];
   dataArrayDG = [];
-  EC: any;
+  EC: any[][] = [];
   AC: any;
   DG: any;
   selectedSheet: any;
   endSave = false;
+  procesoSeleccionado = '';
 
   constructor(
     private materialsService: MaterialsService,
@@ -98,8 +99,7 @@ export class ConstructionStageComponent implements OnInit {
   }
 
   onGroupsChange(options: MatListOption[]) {
-    // TODO: Update energy panel title and clear previous added data
-    let selectedSheet;
+    /*let selectedSheet;
     // map these MatListOptions to their values
     options.map(option => {
       selectedSheet = option.value;
@@ -120,7 +120,6 @@ export class ConstructionStageComponent implements OnInit {
       }
     }
 
-    this.selectedSheet = selectedSheet;
     if (this.dataArrayEC.length === 0) {
       this.addFormEC();
     }
@@ -129,6 +128,29 @@ export class ConstructionStageComponent implements OnInit {
     }
     if (this.dataArrayDG.length === 0) {
       this.addFormDG();
+    }*/
+
+    const selectedSheet = options[0]?.value;
+    this.procesoSeleccionado = selectedSheet;
+    if (!selectedSheet) {
+      console.warn('No hay grupo seleccionado');
+      return;
+    }
+
+    // Find the index of selected sheet
+    this.indexSheet = this.sheetNames.indexOf(selectedSheet);
+
+    // Defensive check
+    if (this.indexSheet < 0) {
+      console.warn('El grupo seleccionado no existe');
+      return;
+    }
+
+    // Assign data arrays if available
+    this.dataArrayEC = this.EC?.[this.indexSheet];
+
+    if (!this.dataArrayEC || this.dataArrayEC.length === 0) {
+      this.addFormEC();
     }
   }
 
