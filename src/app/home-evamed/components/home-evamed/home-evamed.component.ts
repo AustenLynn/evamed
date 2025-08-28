@@ -17,6 +17,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { MaterialsService } from '../../../core/services/materials/materials.service';
 import { AnalisisService } from '../../../core/services/analisis/analisis.service';
+import { SelectionService } from '../../../core/services/selection/selection.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule} from '@angular/forms';
@@ -217,7 +218,8 @@ export class HomeEvamedComponent implements OnInit {
     private constructionStageService: ConstructionStageService,
     private users: UserService,
     private endLifeService: EndLifeService,
-    private electricitConsumptionService: ElectricitConsumptionService
+    private electricitConsumptionService: ElectricitConsumptionService,
+    private selectionService: SelectionService,
   ) {
     this.catalogsService.usesCatalog().subscribe(data => {
       this.catalogoUsos = data;
@@ -1369,8 +1371,9 @@ export class HomeEvamedComponent implements OnInit {
     this.router.navigateByUrl('resultados');
   }
 
-  updateMaterial(id) {
+  updateMaterial(id, section) {
     localStorage.setItem('idProyectoConstrucción', id);
+    this.selectionService.setSection(section);
     this.router.navigateByUrl('material-stage-update');
   }
 

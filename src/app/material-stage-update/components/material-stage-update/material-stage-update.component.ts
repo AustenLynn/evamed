@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatListOption } from '@angular/material/list';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { ProjectsService } from './../../../core/services/projects/projects.service';
+import { SelectionService } from '../../../core/services/selection/selection.service';
+import { MatSelectionList } from '@angular/material/list';
 import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
 import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, take } from 'rxjs/operators';
 import { AnalisisService } from 'src/app/core/services/analisis/analisis.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PassStepComponent } from '../pass-step/pass-step.component';
@@ -23,12 +25,14 @@ export interface Material {
     styleUrls: ['./material-stage-update.component.scss'],
     standalone: false
 })
-export class MaterialStageUpdateComponent implements OnInit {
+export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
   selectedSheet: any;
   sheetNames: any;
   contentData: any;
-  listData2: any;
+  listData2: any[] = [];
   indexSheet: number;
+  pendingSection: string | { name_section: string } | null = null;
+  listDataReady = false;
   ListSCRevit: any;
   ListSCDynamo: any;
   ListSCUsuario: any;
@@ -64,6 +68,7 @@ export class MaterialStageUpdateComponent implements OnInit {
   EPDS: any;
   showMaterial: boolean;
   showListMaterials: boolean;
+  shouldShowMaterials: boolean;
   showMexican: boolean;
   showListEPIC: boolean;
   EPiC: any;
@@ -82,7 +87,9 @@ export class MaterialStageUpdateComponent implements OnInit {
     private catalogsService: CatalogsService,
     private analisis: AnalisisService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private selectionService: SelectionService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.materialsService.getMaterials().subscribe(data => {
       this.materialsList = data;
@@ -102,18 +109,7 @@ export class MaterialStageUpdateComponent implements OnInit {
         a.name_material > b.name_material ? 1 : -1
       );
     });
-    this.projectsService.getMaterialSchemeProyect().subscribe(data => {
-      const listData2 = [];
-      data.map(item => {
-        if (
-          item.project_id ===
-          parseInt(localStorage.getItem('idProyectoConstrucción'), 10)
-        ) {
-          listData2.push(item);
-        }
-      });
-      this.listData2 = listData2;
-    });
+
     this.catalogsService.countriesCatalog().subscribe(data => {
       this.catalogoPaises = data;
     });
@@ -141,7 +137,9 @@ export class MaterialStageUpdateComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+  @ViewChild('sheets') sheetsList!: MatSelectionList;
+
+  ngOnInit(): void {
     //carga de imagenes
     const images = [
       '../../../../assets/map/2.jpg',
@@ -186,7 +184,47 @@ export class MaterialStageUpdateComponent implements OnInit {
       'Otros',
     ];
 
+    this.projectsService.getMaterialSchemeProyect().subscribe(data => {
+      const projectId = parseInt(localStorage.getItem('idProyectoConstrucción') ?? '', 10);
+      this.listData2 = data.filter(item => item.project_id === projectId);
+
+      // Now that data is ready, trigger initial section selection
+      this.selectionService.section$.pipe(take(1)).subscribe(section => {
+        if (section) {
+          this.pendingSection = section;
+          if (this.listDataReady) {
+            this.selectSheetInUI(this.pendingSection);
+          }
+        }
+      });
+    });
+
     this.showSearch = false;
+  }
+
+  ngAfterViewInit(): void {
+    this.listDataReady = true;
+    if (this.pendingSection) {
+      this.selectSheetInUI(this.pendingSection);
+    }
+  }
+
+  selectSheetInUI(section: string | { name_section: string }): void {
+    const name = typeof section === 'string' ? section : section.name_section,
+          opt = this.sheetsList?.options?.toArray() ?? [],
+          matchingOption = opt.find(o => o.value === name);
+
+    if (matchingOption) {
+      // Prevent ExpressionChangedAfterItHasBeenCheckedError by delaying update
+      setTimeout(() => {
+        this.sheetsList.selectedOptions.clear();
+        this.sheetsList.selectedOptions.select(matchingOption);
+        this.onGroupsChange([matchingOption]); // simulate user click
+        //this.cdr.detectChanges(); // manually trigger change detection
+      });
+    } else {
+      console.warn('Sheet option not found:', name);
+    }
   }
 
   // Lógica para autocompletado
@@ -208,37 +246,65 @@ export class MaterialStageUpdateComponent implements OnInit {
       this.IMGP[i].src = array[i];
     }
   }
-  onGroupsChange(options: MatListOption[]) {
-    options.map(option => {
-      this.selectedSheet = option.value;
-    });
 
-    this.indexSheet = this.sheetNames.indexOf(this.selectedSheet);
-
-    const ListGetSCRevit = [],
-      ListGetSCDimano = [];
-    this.listData2.map(item => {
-      if (item.origin_id === 1 && this.indexSheet + 1 === item.section_id) {
-        ListGetSCRevit.push(item.construction_system);
-      }
-      if (item.origin_id === 2 && this.indexSheet + 1 === item.section_id) {
-        ListGetSCDimano.push(item.construction_system);
-      }
-    });
-
-    this.ListSCRevit = [...new Set(ListGetSCRevit)];
-    this.ListSCDynamo = [...new Set(ListGetSCDimano)];
-
-    let i;
-    for (i = 0; i <= this.sheetNames.length; i++) {
-      if (this.indexSheet === i && this.SOR !== undefined) {
-        this.selectedOptionsRevit = this.SOR[i];
-      }
-      if (this.indexSheet === i && this.SOD !== undefined) {
-        this.selectedOptionsDynamo = this.SOD[i];
-      }
-      // this.indexSheet === i && this.SOU !== undefined ? this.selectedOptionsUsuario = this.SOU[i] : this.selectedOptionsUsuario;
+  onGroupsChange(input: MatListOption[] | string | { id: number, name_section: string }): void {
+    // Determine selected sheet name
+    if (typeof input === 'string') {
+      this.selectedSheet = input;
+    } else if (Array.isArray(input)) {
+      this.selectedSheet = input[0]?.value ?? null;
+    } else if (typeof input === 'object' && input !== null && 'name_section' in input) {
+      this.selectedSheet = input.name_section;
     }
+
+    if (!this.selectedSheet) {
+      console.warn('No sheet selected');
+      return;
+    }
+
+    // Get index of selected sheet
+    this.indexSheet = this.sheetNames.indexOf(this.selectedSheet);
+    if (this.indexSheet < 0) {
+      console.warn('Selected sheet not found in sheetNames');
+      return;
+    }
+
+    // Reset UI panels
+    this.selectedMaterial = false;
+    this.showSearch = false;
+    this.listMateriales = {};
+    this.shouldShowMaterials = false;
+
+    // Delay updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => {
+      // Show materials panel after reset
+      this.shouldShowMaterials = true;
+      // Filter construction systems
+      const ListGetSCRevit: string[] = [],
+            ListGetSCDimano: string[] = [];
+      if (Array.isArray(this.listData2)) {
+        this.listData2.forEach(item => {
+          const sectionMatch = this.indexSheet + 1 === item.section_id;
+
+          if (item.origin_id === 1 && sectionMatch) {
+            ListGetSCRevit.push(item.construction_system);
+          }
+          if (item.origin_id === 2 && sectionMatch) {
+            ListGetSCDimano.push(item.construction_system);
+          }
+        });
+      }
+
+      this.ListSCRevit = [...new Set(ListGetSCRevit)];
+      this.ListSCDynamo = [...new Set(ListGetSCDimano)];
+
+      // Assign saved selections if available
+      this.selectedOptionsRevit = this.SOR?.[this.indexSheet] ?? [];
+      this.selectedOptionsDynamo = this.SOD?.[this.indexSheet] ?? [];
+      //this.selectedOptionsUsuario = this.SOU?.[this.indexSheet] ?? [];
+
+      this.cdr.detectChanges();
+    });
   }
 
   onNgModelChangeRevit() {
