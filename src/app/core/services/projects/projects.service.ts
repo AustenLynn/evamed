@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap, shareReplay } from 'rxjs/operators';
 import { environment } from './../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProjectsService {
+  private materialSchemeCache$: Observable<any[]> | null = null;
+
   constructor(private http: HttpClient) {}
 
   addProject(projectData: object) {
@@ -59,20 +62,33 @@ export class ProjectsService {
       );
   }
 
-  getMaterialSchemeProyect() {
-    return this.http.get<any>(environment.api_scheme_project).pipe(
-      tap(data => {
-        return data;
-      })
-    );
+  getMaterialSchemeProyect(): Observable<any[]> {
+    if (!this.materialSchemeCache$) {
+      this.materialSchemeCache$ = this.http.get<any[]>(environment.api_scheme_project).pipe(
+        tap( () => {
+        //tap(data => {
+          // console.log('Material scheme data loaded', data);
+        }),
+        shareReplay(1) // Cache the response and replay for new subscribers
+      );
+    }
+    return this.materialSchemeCache$;
   }
 
-  updateMaterialSchemeProject(id: string, changes) {
+  clearMaterialSchemeCache(): void {
+    this.materialSchemeCache$ = null;
+  }
+
+  updateMaterialSchemeProject(id: string, changes: any): Observable<any> {
     return this.http
       .put(`${environment.api_scheme_project}${id}/`, changes)
       .pipe(
-        tap(data => {
+        /*tap(data => {
           return data;
+        })*/
+       tap(() => {
+        // Invalidate cached data after a successful update
+        this.clearMaterialSchemeCache();
         })
       );
   }
