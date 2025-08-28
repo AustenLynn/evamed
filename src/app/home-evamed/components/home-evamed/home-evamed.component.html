@@ -161,13 +161,26 @@
               <div>
                 <div class="seccionUno">
                   <p>Selecciona impacto ambiental</p>
-                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
-                    <mat-select [(ngModel)]="auxDataProjectList[i].impactoCompleteSelect" (selectionChange)="selectImpactoAmbiental(auxDataProjectList[i].impactoCompleteSelect,i)" required hideSingleSelectionIndicator panelWidth="">
-                      <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
-                        {{impacto.name_complete_potential_type}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <div [matTooltip]="getSelectedImpactName(auxDataProjectList[i].impactoCompleteSelect)"
+                    matTooltipPosition="above" *ngIf="auxDataProjectList[i].impactoCompleteSelect">
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                      <mat-select [(ngModel)]="auxDataProjectList[i].impactoCompleteSelect" (selectionChange)="selectImpactoAmbiental(auxDataProjectList[i].impactoCompleteSelect,i)" required hideSingleSelectionIndicator panelWidth="">
+                        <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
+                          {{impacto.name_complete_potential_type}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <!-- When there's no selection, omit the tooltip -->
+                  <div *ngIf="!auxDataProjectList[i].impactoCompleteSelect">
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                      <mat-select [(ngModel)]="auxDataProjectList[i].impactoCompleteSelect" (selectionChange)="selectImpactoAmbiental(auxDataProjectList[i].impactoCompleteSelect,i)" required hideSingleSelectionIndicator panelWidth="">
+                        <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
+                          {{impacto.name_complete_potential_type}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
                   <p>Fases de ciclo de vida</p>
                   <ul>
                      <li> <button id="{{auxDataProjectList[i].idsBotones['Producción']}}" (click)="selectEtapa('Producción',i,auxDataProjectList[i].id)" mat-stroked-button class="button-info">

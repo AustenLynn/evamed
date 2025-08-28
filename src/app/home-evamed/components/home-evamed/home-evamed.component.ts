@@ -28,6 +28,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 //import { formatNumber } from '@angular/common';
 
 @Component({
@@ -35,7 +36,8 @@ import { lastValueFrom } from 'rxjs';
     templateUrl: './home-evamed.component.html',
     styleUrls: ['./home-evamed.component.scss'],
     imports: [BaseChartDirective, MatCardModule, MatSelectModule, FormsModule, MatFormFieldModule,
-        MatIconModule, MatButtonModule, MatButtonToggleModule, MatTabsModule, MatMenuModule, CommonModule]
+        MatIconModule, MatButtonModule, MatButtonToggleModule, MatTabsModule, MatMenuModule,
+        CommonModule, MatTooltipModule]
 })
 export class HomeEvamedComponent implements OnInit {
   nombre: string;
@@ -1385,5 +1387,10 @@ export class HomeEvamedComponent implements OnInit {
   updateUso(id) {
     localStorage.setItem('idProyectoConstrucción', id);
     this.router.navigateByUrl('usage-stage-update');
+  }
+
+  getSelectedImpactName(value: any): string {
+    const selected = this.catologoImpactoAmbiental.find(option => option.name_complete_potential_type === value);
+    return selected ? selected.name_complete_potential_type : '';
   }
 }
