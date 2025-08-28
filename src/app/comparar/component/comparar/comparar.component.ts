@@ -2336,4 +2336,9 @@ export class CompararComponent implements OnInit {
       }
     });
   }
+
+  getSelectedImpactName(value: any): string {
+    const selected = this.catologoImpactoAmbiental.find(option => option.name_complete_potential_type === value);
+    return selected ? selected.name_complete_potential_type : '';
+  }
 }

@@ -20,7 +20,7 @@ import { BarChartSimpleComponent } from '../bar-chart-simple/bar-chart-simple.co
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GraficasTercerSeccionComponent } from './component/graficas-tercer-seccion/graficas-tercer-seccion.component';
 import { ImageEdificioComponent } from '../image-edificio/image-edificio.component';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -50,6 +50,7 @@ import { ImageEdificioComponent } from '../image-edificio/image-edificio.compone
         BarChartComponent,
         BarChartSimpleComponent,
         GraficasTercerSeccionComponent,
+        MatTooltipModule,
     ],
     providers: [provideCharts(withDefaultRegisterables())],
     exports: [

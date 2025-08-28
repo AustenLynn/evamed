@@ -246,13 +246,26 @@
             <div class="div-elementos-constructivos">
               <div>
                 <p>Selecciona impacto ambiental</p>
-                <mat-form-field appearance="outline" subscriptSizing="dynamic">
-                  <mat-select class="select-impacto-ambiental" [(ngModel)]="selectedValue" (selectionChange)="selectImpactoAmbiental()" required hideSingleSelectionIndicator panelWidth="">
-                    <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
-                      {{impacto.name_complete_potential_type}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <div [matTooltip]="getSelectedImpactName(selectedValue)"
+                    matTooltipPosition="above" *ngIf="selectedValue">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-select class="select-impacto-ambiental" [(ngModel)]="selectedValue" (selectionChange)="selectImpactoAmbiental()" required hideSingleSelectionIndicator panelWidth="">
+                      <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
+                        {{impacto.name_complete_potential_type}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <!-- When there's no selection, omit the tooltip -->
+                 <div *ngIf="!selectedValue">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-select class="select-impacto-ambiental" [(ngModel)]="selectedValue" (selectionChange)="selectImpactoAmbiental()" required hideSingleSelectionIndicator panelWidth="">
+                      <mat-option *ngFor="let impacto of catologoImpactoAmbiental" [value]="impacto.name_complete_potential_type">
+                        {{impacto.name_complete_potential_type}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
               </div>
               <div>
                 <p>Elementos constructivos</p>
