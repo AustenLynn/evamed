@@ -6,6 +6,7 @@ import { EndLifeUpdateComponent } from './components/end-life-update/end-life-up
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from './../material/material.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { IntermedialComponent } from './components/intermedial/intermedial.component';
 import { PassStepComponent } from './components/pass-step/pass-step.component';
 
@@ -17,6 +18,7 @@ import { PassStepComponent } from './components/pass-step/pass-step.component';
         SharedModule,
         FormsModule,
         MaterialModule,
+        MatTooltipModule,
     ],
     exports: [EndLifeUpdateComponent, IntermedialComponent, PassStepComponent]
 })

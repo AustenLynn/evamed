@@ -28,6 +28,7 @@ export class EndLifeUpdateComponent implements OnInit {
   catalogoUnidadEnergia: any;
   ECDP: any;
   projectId: any;
+  procesoSeleccionado = '';
 
   constructor(
     private projectsService: ProjectsService,
@@ -53,13 +54,15 @@ export class EndLifeUpdateComponent implements OnInit {
         this.projectId = data.id;
       });
     this.catalogsService.getEnergyUnits().subscribe(data => {
-      const energia = [];
+      /*const energia = [];
       data.map(unidad => {
         if (unidad.name_energy_unit === 'Hrs') {
           energia.push(unidad);
         }
       });
-      this.catalogoUnidadEnergia = energia;
+      this.catalogoUnidadEnergia = energia;*/
+      this.catalogoUnidadEnergia = data;
+      // TODO: get proper units for sources and dbs
     });
     this.endLifeService.getECDP().subscribe(data => {
       const ECDP = [];
@@ -147,6 +150,7 @@ export class EndLifeUpdateComponent implements OnInit {
     }
 
     this.onSaveECNatural();
+    this.procesoSeleccionado = selectedSheet;
   }
 
   removeFormEC(i, id) {
@@ -318,5 +322,10 @@ export class EndLifeUpdateComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       // this.ngOnInit();
     });
+  }
+
+  getSelectedSourceName(value: any): string {
+    const selected = this.catalogoFuentes.find(option => option.id === value);
+    return selected ? selected.name_source_information : '';
   }
 }
