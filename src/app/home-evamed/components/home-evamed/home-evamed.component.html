@@ -75,9 +75,8 @@
                       <ul class="listItems">
                         <li *ngFor="let sc of serchSC(project.id, section.id)">{{sc}}</li>
                       </ul>
-                  </mat-card-content>
+                    </mat-card-content>
                   </mat-card>
-
                 </section>
               </mat-tab>
               <mat-tab label="Construcción" class="label-second-tab">
@@ -88,13 +87,16 @@
                     *ngFor="let section of serchConstructiveSection(project.id)"
                     (click)="updateConstruction(project.id, section)"
                   >
-                    <h2>{{section.name_section}}</h2>
-                    <ul class="listItems">
-                      <li *ngFor="let sc of serchDetailConstruction(project.id, section.id)">
-                        {{sc.source_information}} <br />
-                        {{sc.quantity | number: '1.2-2' }} hrs
-                      </li>
-                    </ul>
+                  <mat-card-header></mat-card-header>
+                    <mat-card-content>
+                      <h2>{{section.name_section}}</h2>
+                      <ul class="listItems">
+                        <li *ngFor="let sc of serchDetailConstruction(project.id, section.id)">
+                          {{sc.source_information}} <br />
+                          {{sc.quantity | number: '1.2-2' }} hrs <!-- TODO: check units-->
+                        </li>
+                      </ul>
+                    </mat-card-content>
                   </mat-card>
                 </section>
               </mat-tab>
@@ -139,15 +141,18 @@
                     appearance="outlined"
                     class="card-item-custom"
                     *ngFor="let section of serchEndLifeSection(project.id)"
-                    (click)="updateEndLife(project.id)"
+                    (click)="updateEndLife(project.id, section)"
                   >
-                    <h2>{{section.name_section}}</h2>
-                    <ul class="listItems">
-                      <li *ngFor="let sc of searchDataEndLife(project.id, section.id)">
-                        {{sc.source_information}} <br />
-                        {{sc.quantity | number: '1.2-2' }} hrs
-                      </li>
-                    </ul>
+                  <mat-card-header></mat-card-header>
+                    <mat-card-content>
+                      <h2>{{section.name_section}}</h2>
+                      <ul class="listItems">
+                        <li *ngFor="let sc of searchDataEndLife(project.id, section.id)">
+                          {{sc.source_information}} <br />
+                          {{sc.quantity | number: '1.2-2' }} hrs <!-- TODO: check units-->
+                        </li>
+                      </ul>
+                    </mat-card-content>
                   </mat-card>
                 </section>
               </mat-tab>

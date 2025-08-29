@@ -1383,8 +1383,9 @@ export class HomeEvamedComponent implements OnInit {
     this.router.navigateByUrl('construction-stage-update');
   }
 
-  updateEndLife(id) {
+  updateEndLife(id, section) {
     localStorage.setItem('idProyectoConstrucción', id);
+    this.selectionService.setSection(section);
     this.router.navigateByUrl('update-end-life');
   }
 

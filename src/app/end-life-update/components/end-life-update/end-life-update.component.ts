@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatListOption } from '@angular/material/list';
 import { Router } from '@angular/router';
@@ -6,6 +6,9 @@ import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service
 import { EndLifeService } from 'src/app/core/services/end-life/end-life.service';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 import { ProjectsService } from 'src/app/core/services/projects/projects.service';
+import { SelectionService } from '../../../core/services/selection/selection.service';
+import { MatSelectionList } from '@angular/material/list';
+import { take } from 'rxjs/operators';
 import { IntermedialComponent } from '../intermedial/intermedial.component';
 import { PassStepComponent } from '../pass-step/pass-step.component';
 
@@ -15,18 +18,23 @@ import { PassStepComponent } from '../pass-step/pass-step.component';
     styleUrls: ['./end-life-update.component.scss'],
     standalone: false
 })
-export class EndLifeUpdateComponent implements OnInit {
+export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('sheets') sheetsList!: MatSelectionList;
+
   nameProject: string;
   selectedSheet: any;
   sheetNames: any;
   indexSheet: any;
+  pendingSection: string | { name_section: string } | null = null;
+  listDataReady = false;
   dataArrayEC = [];
   dataArrayTD = [];
   EC: any;
   TD: any;
   catalogoFuentes: any;
   catalogoUnidadEnergia: any;
-  ECDP: any;
+  ECDP: any[] = [];
   projectId: any;
   procesoSeleccionado = '';
 
@@ -36,7 +44,8 @@ export class EndLifeUpdateComponent implements OnInit {
     private endLifeService: EndLifeService,
     private materialsService: MaterialsService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private selectionService: SelectionService,
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
       const fuentes = [];
@@ -64,19 +73,6 @@ export class EndLifeUpdateComponent implements OnInit {
       this.catalogoUnidadEnergia = data;
       // TODO: get proper units for sources and dbs
     });
-    this.endLifeService.getECDP().subscribe(data => {
-      const ECDP = [];
-      data.map(item => {
-        if (
-          item.project_id ===
-          parseInt(localStorage.getItem('idProyectoConstrucción'), 10)
-        ) {
-          ECDP.push(item);
-        }
-      });
-
-      this.ECDP = ECDP;
-    });
   }
 
   ngOnInit(): void {
@@ -96,10 +92,49 @@ export class EndLifeUpdateComponent implements OnInit {
 
     this.indexSheet = undefined;
     this.dataArrayTD.push([]);
+
+    this.endLifeService.getECDP().subscribe(data => {
+      const projectId = parseInt(localStorage.getItem('idProyectoConstrucción') ?? '', 10);
+      this.ECDP = data.filter(item => item.project_id === projectId);
+
+      // Now that data is ready, trigger initial section selection
+      this.selectionService.section$.pipe(take(1)).subscribe(section => {
+        if (section) {
+          this.pendingSection = section;
+          if (this.listDataReady) {
+            this.selectSheetInUI(this.pendingSection);
+          }
+        }
+      });
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.listDataReady = true;
+    if (this.pendingSection) {
+      this.selectSheetInUI(this.pendingSection);
+    }
+  }
+
+  selectSheetInUI(section: string | { name_section: string }): void {
+    const name = typeof section === 'string' ? section : section.name_section,
+          opt = this.sheetsList?.options?.toArray() ?? [],
+          matchingOption = opt.find(o => o.value === name);
+
+    if (matchingOption) {
+      // Prevent ExpressionChangedAfterItHasBeenCheckedError by delaying update
+      setTimeout(() => {
+        this.sheetsList.selectedOptions.clear();
+        this.sheetsList.selectedOptions.select(matchingOption);
+        this.onGroupsChange([matchingOption]); // simulate user click
+      });
+    } else {
+      console.warn('Sheet option not found:', name);
+    }
   }
 
   onGroupsChange(options: MatListOption[]) {
-    let selectedSheet;
+    /*let selectedSheet;
     // map these MatListOptions to their values
     options.map(option => {
       selectedSheet = option.value;
@@ -151,6 +186,41 @@ export class EndLifeUpdateComponent implements OnInit {
 
     this.onSaveECNatural();
     this.procesoSeleccionado = selectedSheet;
+    */
+   const selectedSheet = options[0]?.value;
+    this.procesoSeleccionado = selectedSheet;
+    if (!selectedSheet) {
+      console.warn('No hay grupo seleccionado');
+      return;
+    }
+
+    // Find the index of selected sheet
+    this.indexSheet = this.sheetNames.indexOf(selectedSheet);
+
+    // Defensive check
+    if (this.indexSheet < 0) {
+      console.warn('El grupo seleccionado no existe');
+      return;
+    }
+
+    const getDataECPD = this.ECDP
+      .filter(item => item.section_id === this.indexSheet + 1)
+      .map(item => ({
+        id: item.id,
+        cantidad: item.quantity,
+        fuente: item.source_information_id,
+        unidad: item.unit_id
+      }));
+   // Assign data arrays if available
+    if (this.indexSheet >= 0 && this.indexSheet < this.sheetNames.length) {
+      this.dataArrayEC = this.EC?.[this.indexSheet] ?? getDataECPD;
+    }
+    if (!this.dataArrayEC || this.dataArrayEC.length === 0) {
+      this.addFormEC();
+    }
+
+    //Load Save
+    this.onSaveECNatural();
   }
 
   removeFormEC(i, id) {
