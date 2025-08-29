@@ -1,10 +1,13 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatListOption } from '@angular/material/list';
 import { MatAccordion } from '@angular/material/expansion';
 import { CatalogsService } from './../../../core/services/catalogs/catalogs.service';
 import { ConstructionStageService } from 'src/app/core/services/construction-stage/construction-stage.service';
 import { ProjectsService } from 'src/app/core/services/projects/projects.service';
+import { SelectionService } from '../../../core/services/selection/selection.service';
+import { MatSelectionList } from '@angular/material/list';
+import { take } from 'rxjs/operators';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 import { IntermedialComponent } from '../intermedial/intermedial.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,13 +19,16 @@ import { PassStepComponent } from '../pass-step/pass-step.component';
     styleUrls: ['./construction-stage-update.component.scss'],
     standalone: false
 })
-export class ConstructionStageUpdateComponent implements OnInit {
+export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  @ViewChild('sheets') sheetsList!: MatSelectionList;
 
   sheetNames: any;
   contentData: any;
   listData: any;
   indexSheet: number;
+  pendingSection: string | { name_section: string } | null = null;
+  listDataReady = false;
   SistemasConstructivos: any;
   catalogoFuentes: any;
   catalogoUnidadEnergia: any;
@@ -36,7 +42,7 @@ export class ConstructionStageUpdateComponent implements OnInit {
   AC: any;
   DG: any;
   selectedSheet: any;
-  CSE: any;
+  CSE: any[] = [];
   IMGP = [];
   projectId: number;
   procesoSeleccionado = '';
@@ -47,7 +53,8 @@ export class ConstructionStageUpdateComponent implements OnInit {
     private projectsService: ProjectsService,
     private constructionStageService: ConstructionStageService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private selectionService: SelectionService,
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
       const fuentes = [];
@@ -75,20 +82,6 @@ export class ConstructionStageUpdateComponent implements OnInit {
     this.catalogsService.getBulkUnits().subscribe(data => {
       this.catalogoUnidadMasa = data;
     });
-    this.constructionStageService
-      .getConstructiveSystemElement()
-      .subscribe(data => {
-        const CSE = [];
-        data.map(item => {
-          if (
-            item.project_id ===
-            parseInt(localStorage.getItem('idProyectoConstrucción'), 10)
-          ) {
-            CSE.push(item);
-          }
-        });
-        this.CSE = CSE;
-      });
     this.projectsService
       .getProjectById(localStorage.getItem('idProyectoConstrucción'))
       .subscribe((data: any) => {
@@ -130,6 +123,46 @@ export class ConstructionStageUpdateComponent implements OnInit {
 
     const PDP = JSON.parse(sessionStorage.getItem('primaryDataProject'));
     this.projectId = PDP.id;
+
+    this.constructionStageService.getConstructiveSystemElement().subscribe(data => {
+      const projectId = parseInt(localStorage.getItem('idProyectoConstrucción') ?? '', 10);
+      this.CSE = data.filter(item => item.project_id === projectId);
+
+      // Now that data is ready, trigger initial section selection
+      this.selectionService.section$.pipe(take(1)).subscribe(section => {
+        if (section) {
+          this.pendingSection = section;
+          if (this.listDataReady) {
+            this.selectSheetInUI(this.pendingSection);
+          }
+        }
+      });
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.listDataReady = true;
+    if (this.pendingSection) {
+      this.selectSheetInUI(this.pendingSection);
+    }
+  }
+
+  selectSheetInUI(section: string | { name_section: string }): void {
+    const name = typeof section === 'string' ? section : section.name_section,
+          opt = this.sheetsList?.options?.toArray() ?? [],
+          matchingOption = opt.find(o => o.value === name);
+
+    if (matchingOption) {
+      // Prevent ExpressionChangedAfterItHasBeenCheckedError by delaying update
+      setTimeout(() => {
+        this.sheetsList.selectedOptions.clear();
+        this.sheetsList.selectedOptions.select(matchingOption);
+        this.onGroupsChange([matchingOption]); // simulate user click
+        //this.cdr.detectChanges(); // manually trigger change detection
+      });
+    } else {
+      console.warn('Sheet option not found:', name);
+    }
   }
 
   preload(array) {
@@ -216,6 +249,7 @@ export class ConstructionStageUpdateComponent implements OnInit {
       console.warn('El grupo seleccionado no existe');
       return;
     }
+
     const getDataEC = this.CSE
       .filter(item => item.section_id === this.indexSheet + 1 && item.constructive_process_id === 1)
       .map(item => ({

@@ -63,7 +63,6 @@
             <mat-tab-group class="container-second-tab">
               <mat-tab label="Producción" class="label-second-tab">
                 <section class="grid-container">
-
                   <mat-card
                     appearance="outlined"
                     class="card-item-custom"
@@ -87,7 +86,7 @@
                     appearance="outlined"
                     class="card-item-custom"
                     *ngFor="let section of serchConstructiveSection(project.id)"
-                    (click)="updateConstruction(project.id)"
+                    (click)="updateConstruction(project.id, section)"
                   >
                     <h2>{{section.name_section}}</h2>
                     <ul class="listItems">
