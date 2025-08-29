@@ -83,12 +83,10 @@ export class ProjectsService {
     return this.http
       .put(`${environment.api_scheme_project}${id}/`, changes)
       .pipe(
-        /*tap(data => {
-          return data;
-        })*/
-       tap(() => {
+       tap(data => {
         // Invalidate cached data after a successful update
         this.clearMaterialSchemeCache();
+        return data;
         })
       );
   }
