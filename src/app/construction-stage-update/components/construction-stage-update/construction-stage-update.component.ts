@@ -39,6 +39,7 @@ export class ConstructionStageUpdateComponent implements OnInit {
   CSE: any;
   IMGP = [];
   projectId: number;
+  procesoSeleccionado = '';
 
   constructor(
     private materialsService: MaterialsService,
@@ -58,13 +59,15 @@ export class ConstructionStageUpdateComponent implements OnInit {
       this.catalogoFuentes = fuentes;
     });
     this.catalogsService.getEnergyUnits().subscribe(data => {
-      const energia = [];
+      /*const energia = [];
       data.map(unidad => {
         if (unidad.name_energy_unit === 'Hrs') {
           energia.push(unidad);
         }
       });
-      this.catalogoUnidadEnergia = energia;
+      this.catalogoUnidadEnergia = energia;*/
+      this.catalogoUnidadEnergia = data;
+      // TODO: get proper units for sources and dbs
     });
     this.catalogsService.getVolumeUnits().subscribe(data => {
       this.catalogoUnidadVolumen = data;
@@ -145,7 +148,7 @@ export class ConstructionStageUpdateComponent implements OnInit {
   }
 
   onGroupsChange(options: MatListOption[]) {
-    let selectedSheet;
+    /*let selectedSheet;
     // map these MatListOptions to their values
     options.map(option => {
       selectedSheet = option.value;
@@ -195,6 +198,37 @@ export class ConstructionStageUpdateComponent implements OnInit {
         this.addFormEC();
       }
     } else {
+      this.addFormEC();
+    }*/
+
+    const selectedSheet = options[0]?.value;
+    this.procesoSeleccionado = selectedSheet;
+    if (!selectedSheet) {
+      console.warn('No hay grupo seleccionado');
+      return;
+    }
+
+    // Find the index of selected sheet
+    this.indexSheet = this.sheetNames.indexOf(selectedSheet);
+
+    // Defensive check
+    if (this.indexSheet < 0) {
+      console.warn('El grupo seleccionado no existe');
+      return;
+    }
+    const getDataEC = this.CSE
+      .filter(item => item.section_id === this.indexSheet + 1 && item.constructive_process_id === 1)
+      .map(item => ({
+        id: item.id,
+        cantidad: this.trunc(item.quantity),
+        fuente: item.source_information_id,
+        unidad: item.energy_unit_id
+      }));
+   // Assign data arrays if available
+    if (this.indexSheet >= 0 && this.indexSheet < this.sheetNames.length) {
+      this.dataArrayEC = this.EC?.[this.indexSheet] ?? getDataEC;
+    }
+    if (!this.dataArrayEC || this.dataArrayEC.length === 0) {
       this.addFormEC();
     }
 
@@ -427,5 +461,10 @@ export class ConstructionStageUpdateComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       // this.ngOnInit();
     });
+  }
+
+  getSelectedSourceName(value: any): string {
+    const selected = this.catalogoFuentes.find(option => option.id === value);
+    return selected ? selected.name_source_information : '';
   }
 }
