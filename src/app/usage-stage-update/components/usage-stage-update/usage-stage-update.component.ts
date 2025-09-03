@@ -79,6 +79,8 @@ export class UsageStageUpdateComponent implements OnInit {
         tipoEnergiaElectrica.push(tipo);
         }*/
 
+        // TODO: revisar tipos de energia a incluir
+
         if (
           tipo.name_type_energy ===
           'Calefacción doméstica con gas natural (GLO)'
@@ -541,5 +543,15 @@ export class UsageStageUpdateComponent implements OnInit {
         });
       }
     });
+  }
+
+  getEnergyType(value: any, type: any): string {
+    let selected;
+    if (type === 'electric') {
+      selected = this.catalogoTipoEnergiaElectrica.find(option => option.id === value);
+    } else if (type === 'fuel') {
+      selected = this.catalogoTipoEnergiaCombustible.find(option => option.id === value);
+    }
+    return selected ? selected.name_type_energy : '';
   }
 }
