@@ -234,15 +234,15 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
       this.addFormEC();
     }*/
 
-    const selectedSheet = options[0]?.value;
-    this.procesoSeleccionado = selectedSheet;
-    if (!selectedSheet) {
+    this.selectedSheet = options[0]?.value;
+    this.procesoSeleccionado = this.selectedSheet;
+    if (!this.selectedSheet) {
       console.warn('No hay grupo seleccionado');
       return;
     }
 
     // Find the index of selected sheet
-    this.indexSheet = this.sheetNames.indexOf(selectedSheet);
+    this.indexSheet = this.sheetNames.indexOf(this.selectedSheet);
 
     // Defensive check
     if (this.indexSheet < 0) {

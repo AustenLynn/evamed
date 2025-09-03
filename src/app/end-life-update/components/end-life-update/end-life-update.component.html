@@ -64,8 +64,7 @@
       Energía consumida durante el proceso deconstructivo de&nbsp;<strong>{{ procesoSeleccionado | lowercase }}</strong>
       <div class="container-ec">
         <div *ngFor="let data of dataArrayEC; let i=index;">
-          <div class="Row top-0">
-            <div class="Col col-small-space">
+          <div class="Col col-xs-12">
               <span class="label-small-input">
                 Fuente
               </span>
@@ -93,32 +92,33 @@
                   </mat-form-field>
                 </div>
             </div>
-            <div class="Col col-small-space">
-              <span class="label-small-input">
-                Cantidad
-              </span>
-              <mat-form-field appearance="fill">
-                <input class="input-general" [(ngModel)]="data.cantidad" name="cantidad_{{i}}" matInput type="number">
-              </mat-form-field>
-            </div>
-            <div class="Col col-small-space">
-              <span class="label-small-input">
-                Unidad funcional
-              </span>
-              <mat-form-field appearance="outline">
-                <mat-label>Seleccione una opción</mat-label>
-                <mat-select [(ngModel)]="data.unidad" name="unidad{{i}}" hideSingleSelectionIndicator>
-                  <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
-                    {{unidad.name_energy_unit}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="Col col-small-space">
-              <div *ngIf="i !== 0">
-                <button mat-button class="button-remove" (click)="removeFormEC(i, data.id)">
-                  <mat-icon>remove_circle</mat-icon>
-                </button>
+            <div class="Row top-0">
+              <div class="Col col-small-space">
+                <span class="label-small-input">
+                  Cantidad
+                </span>
+                <mat-form-field appearance="fill">
+                  <input class="input-general" [(ngModel)]="data.cantidad" name="cantidad_{{i}}" matInput type="number">
+                </mat-form-field>
+              </div>
+              <div class="Col col-small-space">
+                <span class="label-small-input">
+                  Unidad funcional
+                </span>
+                <mat-form-field appearance="outline">
+                  <mat-label>Seleccione una opción</mat-label>
+                  <mat-select [(ngModel)]="data.unidad" name="unidad{{i}}" hideSingleSelectionIndicator>
+                    <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
+                      {{unidad.name_energy_unit}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="Col col-small-space">
+                <div *ngIf="i !== 0">
+                  <button mat-button class="button-remove" (click)="removeFormEC(i, data.id)">
+                    <mat-icon>remove_circle</mat-icon>
+                  </button>
               </div>
             </div>
           </div>

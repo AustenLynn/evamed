@@ -62,18 +62,9 @@
       </div>
     </section>
 
-    <section class="container-systems">
-      <!--Accorion multiple-->
-      <mat-accordion class="example-headers-align" multi>
-        <!--Expansion panel 1. -->
-        <mat-expansion-panel *ngIf="indexSheet!==undefined" [expanded]="true">
-          <!--Expansion panel header-->
-          <mat-expansion-panel-header class="custom-expansion-panel-header">
-            <mat-panel-title class="custom-mat-panel-title">
-              Energía consumida durante el proceso de&nbsp;<strong>{{ procesoSeleccionado | lowercase }}</strong>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <!--Expansion panel form-field-->
+    <section class="container-systems" *ngIf="indexSheet!==undefined">
+      Energía consumida durante el proceso de&nbsp;<strong>{{ procesoSeleccionado | lowercase }}</strong>
+      <div class="container-ec">
           <div *ngFor="let data of dataArrayEC; let i=index;">
             <div class="Col col-xs-12">
                 <span class="label-small-input">
@@ -142,13 +133,7 @@
           <button mat-button (click)="onSaveEC()">
             <mat-icon>save</mat-icon>
           </button>
-        </mat-expansion-panel>
-      </mat-accordion>
-
-    </section>
-
-    <section class="container-details">
-
+      </div>
     </section>
   </section>
 </div>
