@@ -1,5 +1,5 @@
 // generar api
-const apiEvamed = 'http://10.2.102.118:8000/api-projects',
+const apiEvamed = 'http://localhost:8000/api-projects',
 // apis
  projects = '/projects/',
  transports = '/transports/',
