@@ -28,7 +28,12 @@ export class IntermedialComponent implements OnInit {
 
   continueStep(event: Event) {
     event.preventDefault();
-    //
+    if (this.data && (this.data as { mode?: string }).mode === 'update') {
+      this.router.navigateByUrl('/');
+      this.onNoClick();
+      return;
+    }
+
     this.onNoClick();
   }
 }

@@ -10,10 +10,12 @@ import { AddConstructiveSystemComponent } from './components/add-constructive-sy
 import { AddConstructiveMaterialComponent } from './components/add-constructive-material/add-constructive-material.component';
 import { IntermedialComponent } from './components/intermedial/intermedial.component';
 import { PassStepComponent } from './components/pass-step/pass-step.component';
+import { MaterialStageUpdateComponent } from './components/material-stage-update/material-stage-update.component';
 
 @NgModule({
     declarations: [
         MaterialsStageComponent,
+        MaterialStageUpdateComponent,
         AddConstructiveElementComponent,
         AddConstructiveSystemComponent,
         AddConstructiveMaterialComponent,

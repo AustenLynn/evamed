@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatListOption } from '@angular/material/list';
 import { MatSelectionListChange } from '@angular/material/list';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
@@ -13,7 +13,6 @@ import { AddConstructiveSystemComponent } from '../add-constructive-system/add-c
 import { AddConstructiveMaterialComponent } from '../add-constructive-material/add-constructive-material.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AnalisisService } from 'src/app/core/services/analisis/analisis.service';
-import { PassStepComponent } from '../pass-step/pass-step.component';
 
 export interface Material {
   id: number;
@@ -27,7 +26,7 @@ export interface Material {
     styleUrls: ['./materials-stage.component.scss'],
     standalone: false
 })
-export class MaterialsStageComponent implements OnInit {
+export class MaterialsStageComponent implements OnInit, OnDestroy {
   selectedSheet: any;
   sheetNames: any;
   contentData: any;
@@ -90,6 +89,8 @@ export class MaterialsStageComponent implements OnInit {
 
   displayedColumns: string[] = ['Standard', 'Potencial', 'Valor', 'Unidad'];
   endSave = false;
+  private autosaveIntervalId: ReturnType<typeof setInterval> | null = null;
+  private lastAutosaveSignature: string | null = null;
 
   constructor(
     private materialsService: MaterialsService,
@@ -200,6 +201,47 @@ export class MaterialsStageComponent implements OnInit {
     });
 
     this.contentData = data.data;
+
+    this.startAutosave();
+  }
+
+  ngOnDestroy(): void {
+    if (this.autosaveIntervalId) {
+      clearInterval(this.autosaveIntervalId);
+      this.autosaveIntervalId = null;
+    }
+  }
+
+  private startAutosave(): void {
+    if (this.autosaveIntervalId) {
+      return;
+    }
+
+    this.autosaveIntervalId = setInterval(() => {
+      if (!this.projectId) {
+        console.log('autosave: materials-stage skipped (missing projectId)');
+        return;
+      }
+      const signature = this.buildAutosaveSignature();
+      if (signature === this.lastAutosaveSignature) {
+        return;
+      }
+
+      this.lastAutosaveSignature = signature;
+      console.log('autosave: materials-stage');
+      this.saveStepOne();
+    }, 5000);
+  }
+
+  private buildAutosaveSignature(): string {
+    return JSON.stringify({
+      projectId: this.projectId,
+      indexSheet: this.indexSheet,
+      SOR: this.SOR,
+      SOD: this.SOD,
+      SOU: this.SOU,
+      contentData: this.contentData,
+    });
   }
 
   // Lógica para autocompletado
@@ -807,116 +849,71 @@ onSCSelected(event: MatSelectionListChange) {
   }
 
   goToMaterialStage() {
-    this.router.navigateByUrl('material-stage');
+    this.router.navigateByUrl('materials-stage');
   }
 
   goToConstructionStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
+    const projectId = this.projectId ?? parseInt(
+      localStorage.getItem('idProyectoConstrucción') ?? '',
+      10
+    );
+    if (!Number.isFinite(projectId)) {
+      this.router.navigateByUrl('construction-stage');
+      return;
+    }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        if(result.save) {
-          this.saveStepOne();
-        }
-        this.materialsService.getConstructionStage().subscribe(cse => {
-          const schemaFilter = cse.filter(
-            schema => schema.project_id === this.projectId
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('construction-stage');
-          } else {
-            localStorage.setItem(
-              'idProyectoConstrucción',
-              this.projectId.toString()
-            );
-            this.router.navigateByUrl('construction-stage-update');
-          }
-        });
-      }
-    });
-  }
-
-  goToUsageStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        if(result.save) {
-          this.saveStepOne();
-        }
-        this.materialsService.getACR().subscribe(acr => {
-          const schemaFilter = acr.filter(
-            schema => schema.project_id === this.projectId
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('usage-stage');
-          } else {
-            localStorage.setItem(
-              'idProyectoConstrucción',
-              this.projectId.toString()
-            );
-            this.router.navigateByUrl('usage-stage-update');
-          }
-        });
-      }
-    });
-  }
-
-  goToEndLife() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        if(result.save) {
-          this.saveStepOne();
-        }
-        this.materialsService.getEDCP().subscribe(edcp => {
-          const schemaFilter = edcp.filter(
-            schema => schema.project_id === this.projectId
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('end-life-stage');
-          } else {
-            localStorage.setItem(
-              'idProyectoConstrucción',
-              this.projectId.toString()
-            );
-            this.router.navigateByUrl('update-end-life');
-          }
-        });
-      }
-    });
-  }
-
-  continue() {
-    this.saveStepOne();
     this.materialsService.getConstructionStage().subscribe(cse => {
       const schemaFilter = cse.filter(
-        schema => schema.project_id === this.projectId
+        schema => Number(schema.project_id) === projectId
       );
 
       if (schemaFilter.length === 0) {
         this.router.navigateByUrl('construction-stage');
       } else {
+        localStorage.setItem('idProyectoConstrucción', projectId.toString());
+        this.router.navigateByUrl('construction-stage/update');
+      }
+    });
+  }
+
+  goToUsageStage() {
+    this.materialsService.getACR().subscribe(acr => {
+      const schemaFilter = acr.filter(
+        schema => schema.project_id === this.projectId
+      );
+
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('usage-stage');
+      } else {
         localStorage.setItem(
           'idProyectoConstrucción',
           this.projectId.toString()
         );
-        this.router.navigateByUrl('construction-stage-update');
+        this.router.navigateByUrl('usage-stage/update');
       }
     });
+  }
+
+  goToEndLife() {
+    this.materialsService.getEDCP().subscribe(edcp => {
+      const schemaFilter = edcp.filter(
+        schema => schema.project_id === this.projectId
+      );
+
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('end-life-stage');
+      } else {
+        localStorage.setItem(
+          'idProyectoConstrucción',
+          this.projectId.toString()
+        );
+        this.router.navigateByUrl('end-life-stage/update');
+      }
+    });
+  }
+
+  continue() {
+    this.goToConstructionStage();
   }
 
   goToSearchInfo() {

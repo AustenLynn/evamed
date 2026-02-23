@@ -8,9 +8,15 @@ import { MaterialModule } from './../material/material.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IntermedialComponent } from './components/intermedial/intermedial.component';
 import { PassStepComponent } from './components/pass-step/pass-step.component';
+import { ConstructionStageUpdateComponent } from './components/construction-stage-update/construction-stage-update.component';
 
 @NgModule({
-    declarations: [ConstructionStageComponent, IntermedialComponent, PassStepComponent],
+    declarations: [
+        ConstructionStageComponent,
+        ConstructionStageUpdateComponent,
+        IntermedialComponent,
+        PassStepComponent
+    ],
     imports: [
         CommonModule,
         ConstructionStageRoutingModule,

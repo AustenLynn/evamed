@@ -1,12 +1,10 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatListOption } from '@angular/material/list';
 import { MatAccordion } from '@angular/material/expansion';
 import { CatalogsService } from './../../../core/services/catalogs/catalogs.service';
 import { ConstructionStageService } from 'src/app/core/services/construction-stage/construction-stage.service';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
-import { MatDialog } from '@angular/material/dialog';
-import { PassStepComponent } from '../pass-step/pass-step.component';
 
 @Component({
     selector: 'app-construction-stage',
@@ -14,7 +12,7 @@ import { PassStepComponent } from '../pass-step/pass-step.component';
     styleUrls: ['./construction-stage.component.scss'],
     standalone: false
 })
-export class ConstructionStageComponent implements OnInit {
+export class ConstructionStageComponent implements OnInit, OnDestroy {
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   sheetNames: any;
@@ -37,13 +35,15 @@ export class ConstructionStageComponent implements OnInit {
   selectedSheet: any;
   endSave = false;
   procesoSeleccionado = '';
+  private autosaveIntervalId: ReturnType<typeof setInterval> | null = null;
+  private lastAutosaveSignature: string | null = null;
+  private isSwitchingSheet = false;
 
   constructor(
     private materialsService: MaterialsService,
     private catalogsService: CatalogsService,
     private constructionStageService: ConstructionStageService,
     private router: Router,
-    public dialog: MatDialog
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
       // this.catalogoFuentes = data;
@@ -96,9 +96,51 @@ export class ConstructionStageComponent implements OnInit {
     });
     this.contentData = data.data;
     this.indexSheet = undefined;
+
+    // Save on blur instead of polling.
+  }
+
+  ngOnDestroy(): void {
+    if (this.autosaveIntervalId) {
+      clearInterval(this.autosaveIntervalId);
+      this.autosaveIntervalId = null;
+    }
+  }
+
+  private startAutosave(): void {
+    if (this.autosaveIntervalId) {
+      return;
+    }
+
+    this.autosaveIntervalId = setInterval(() => {
+      if (!this.projectId || !this.EC) {
+        console.log('autosave: construction-stage skipped (missing projectId or EC)');
+        return;
+      }
+      const signature = this.buildAutosaveSignature();
+      if (signature === this.lastAutosaveSignature) {
+        return;
+      }
+
+      this.onSaveEC();
+      this.lastAutosaveSignature = signature;
+      console.log('autosave: construction-stage');
+      this.saveStepTwo();
+    }, 5000);
+  }
+
+  private buildAutosaveSignature(): string {
+    return JSON.stringify({
+      projectId: this.projectId,
+      indexSheet: this.indexSheet,
+      dataArrayEC: this.dataArrayEC,
+      dataArrayAC: this.dataArrayAC,
+      dataArrayDG: this.dataArrayDG,
+    });
   }
 
   onGroupsChange(options: MatListOption[]) {
+    this.isSwitchingSheet = true;
     /*let selectedSheet;
     // map these MatListOptions to their values
     options.map(option => {
@@ -152,6 +194,10 @@ export class ConstructionStageComponent implements OnInit {
     if (!this.dataArrayEC || this.dataArrayEC.length === 0) {
       this.addFormEC();
     }
+
+    setTimeout(() => {
+      this.isSwitchingSheet = false;
+    });
   }
 
   addFormEC() {
@@ -175,6 +221,26 @@ export class ConstructionStageComponent implements OnInit {
         this.EC[i] = this.dataArrayEC;
       }
     }
+  }
+
+  onFieldBlur(): void {
+    if (!this.projectId || this.indexSheet === undefined) {
+      return;
+    }
+    this.onSaveEC();
+    this.saveStepTwo();
+  }
+
+  private saveBeforeNavigate(): void {
+    if (!this.projectId || this.indexSheet === undefined) {
+      return;
+    }
+    this.onSaveEC();
+    this.saveStepTwo();
+  }
+
+  onSelectChange(event: { isUserInput?: boolean }): void {
+    this.onFieldBlur();
   }
 
   addFormAC() {
@@ -225,14 +291,27 @@ export class ConstructionStageComponent implements OnInit {
 
   onNgModelChange() {}
 
+  private parseQuantity(value: unknown): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+    const normalized = String(value).replace(',', '.');
+    const parsed = Number(normalized);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
   async saveStepTwo() {
     try {
       await Object.entries(this.EC).forEach(([key, ec]) => {
         const ecAny: any = ec;
         ecAny.map(data => {
+          const quantity = this.parseQuantity(data?.cantidad);
+          if (quantity === null || !data?.fuente || !data?.unidad) {
+            return;
+          }
           this.constructionStageService
             .addConstructiveSistemElement({
-              quantity: data.cantidad,
+              quantity,
               project_id: this.projectId,
               section_id: parseInt(key, 10) + 1,
               constructive_process_id: 1,
@@ -306,31 +385,20 @@ export class ConstructionStageComponent implements OnInit {
   }
 
   goToMaterialStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
+    this.saveBeforeNavigate();
+    this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
+      const schemaFilter = msp.filter(
+        schema => schema.project_id === this.projectId
+      );
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        if(result.save) {
-          this.saveStepTwo();
-        }
-        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
-          const schemaFilter = msp.filter(
-            schema => schema.project_id === this.projectId
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('materials-stage');
-          } else {
-            localStorage.setItem(
-              'idProyectoConstrucción',
-              this.projectId.toString()
-            );
-            this.router.navigateByUrl('material-stage-update');
-          }
-        });
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('materials-stage');
+      } else {
+        localStorage.setItem(
+          'idProyectoConstrucción',
+          this.projectId.toString()
+        );
+        this.router.navigateByUrl('materials-stage/update');
       }
     });
   }
@@ -341,67 +409,7 @@ export class ConstructionStageComponent implements OnInit {
 
 
   goToUsageStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        if(result.save) {
-          this.saveStepTwo();
-        }
-        this.materialsService.getACR().subscribe(acr => {
-          const schemaFilter = acr.filter(
-            schema => schema.project_id === this.projectId
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('usage-stage');
-          } else {
-            localStorage.setItem(
-              'idProyectoConstrucción',
-              this.projectId.toString()
-            );
-            this.router.navigateByUrl('usage-stage-update');
-          }
-        });
-      }
-    });
-  }
-
-  goToEndLife() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        if(result.save) {
-          this.saveStepTwo();
-        }
-        this.materialsService.getEDCP().subscribe(edcp => {
-          const schemaFilter = edcp.filter(
-            schema => schema.project_id === this.projectId
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('end-life-stage');
-          } else {
-            localStorage.setItem(
-              'idProyectoConstrucción',
-              this.projectId.toString()
-            );
-            this.router.navigateByUrl('update-end-life');
-          }
-        });
-      }
-    });
-  }
-
-  continue() {
-    this.saveStepTwo();
+    this.saveBeforeNavigate();
     this.materialsService.getACR().subscribe(acr => {
       const schemaFilter = acr.filter(
         schema => schema.project_id === this.projectId
@@ -414,9 +422,32 @@ export class ConstructionStageComponent implements OnInit {
           'idProyectoConstrucción',
           this.projectId.toString()
         );
-        this.router.navigateByUrl('usage-stage-update');
+        this.router.navigateByUrl('usage-stage/update');
       }
     });
+  }
+
+  goToEndLife() {
+    this.saveBeforeNavigate();
+    this.materialsService.getEDCP().subscribe(edcp => {
+      const schemaFilter = edcp.filter(
+        schema => schema.project_id === this.projectId
+      );
+
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('end-life-stage');
+      } else {
+        localStorage.setItem(
+          'idProyectoConstrucción',
+          this.projectId.toString()
+        );
+        this.router.navigateByUrl('end-life-stage/update');
+      }
+    });
+  }
+
+  continue() {
+    this.goToUsageStage();
   }
 
   getSelectedSourceName(value: any): string {

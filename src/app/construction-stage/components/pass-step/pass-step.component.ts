@@ -13,7 +13,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class PassStepComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<PassStepComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { continue: boolean, save: boolean }
+    @Inject(MAT_DIALOG_DATA) public data: { continue: boolean; save?: boolean; mode?: 'update' }
   ) {}
 
   ngOnInit(): void {}
@@ -36,5 +36,9 @@ export class PassStepComponent implements OnInit {
     this.data.continue = true;
     this.data.save = false;
     this.dialogRef.close(this.data);
+  }
+
+  get isUpdate(): boolean {
+    return this.data?.mode === 'update';
   }
 }

@@ -62,42 +62,10 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'update-end-life',
-        canActivate: [AdminGuard],
-        loadChildren: () =>
-          import('./end-life-update/end-life-update.module').then(
-            m => m.EndLifeUpdateModule
-          ),
-      },
-      {
         path: 'resultados',
         canActivate: [AdminGuard],
         loadChildren: () =>
           import('./comparar/comparar.module').then(m => m.CompararModule),
-      },
-      {
-        path: 'material-stage-update',
-        canActivate: [AdminGuard],
-        loadChildren: () =>
-          import('./material-stage-update/material-stage-update.module').then(
-            m => m.MaterialStageUpdateModule
-          ),
-      },
-      {
-        path: 'construction-stage-update',
-        canActivate: [AdminGuard],
-        loadChildren: () =>
-          import(
-            './construction-stage-update/construction-stage-update.module'
-          ).then(m => m.ConstructionStageUpdateModule),
-      },
-      {
-        path: 'usage-stage-update',
-        canActivate: [AdminGuard],
-        loadChildren: () =>
-          import('./usage-stage-update/usage-stage-update.module').then(
-            m => m.UsageStageUpdateModule
-          ),
       },
       {
         path: 'admin-materials',

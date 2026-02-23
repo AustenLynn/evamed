@@ -50,7 +50,7 @@
             Cantidad
           </span>
           <mat-form-field appearance="fill">
-            <input class="input-general" [(ngModel)]="cantidad" name="cantidad" matInput type="text">
+            <input class="input-general" [(ngModel)]="cantidad" name="cantidad" matInput type="text" (blur)="onFieldBlur()">
           </mat-form-field>
         </div>
         <div>
@@ -59,7 +59,7 @@
           </span>
           <mat-form-field appearance="outline">
             <mat-label>Seleccione una opción</mat-label>
-            <mat-select [(ngModel)]="unidad" name="fuente" hideSingleSelectionIndicator>
+            <mat-select [(ngModel)]="unidad" name="fuente" hideSingleSelectionIndicator (selectionChange)="onFieldBlur()">
               <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
                 {{unidad.name_energy_unit}}
               </mat-option>
@@ -98,6 +98,7 @@
                     <mat-form-field appearance="outline" class="custom-formField">
                       <mat-label>Seleccione una opción</mat-label>
                       <mat-select [(ngModel)]="tipoMixElectrico" name="fuente" hideSingleSelectionIndicator
+                        (selectionChange)="onFieldBlur()"
                         panelWidth="" placeholder="Fuente">
                         <mat-option *ngFor="let tipo of catalogoTipoEnergiaElectrica" [value]="tipo.id">
                           {{tipo.name_type_energy}}
@@ -110,6 +111,7 @@
                     <mat-form-field appearance="outline" class="custom-formField">
                       <mat-label>Seleccione una opción</mat-label>
                       <mat-select [(ngModel)]="tipoMixElectrico" name="fuente" hideSingleSelectionIndicator
+                        (selectionChange)="onFieldBlur()"
                         panelWidth="" placeholder="Fuente">
                         <mat-option *ngFor="let tipo of catalogoTipoEnergiaElectrica" [value]="tipo.id">
                           {{tipo.name_type_energy}}
@@ -126,7 +128,7 @@
                   </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="cantidadMixElectrico"
-                      (ngModelChange)="changeCantidadME(cantidadMixElectrico)" name="cantidad" matInput type="text">
+                      (ngModelChange)="changeCantidadME(cantidadMixElectrico)" name="cantidad" matInput type="text" (blur)="onFieldBlur()">
                   </mat-form-field>
                 </div>
 
@@ -136,7 +138,7 @@
                   </span>
                   <mat-form-field appearance="outline">
                     <mat-label>Seleccione una opción</mat-label>
-                    <mat-select [(ngModel)]="unidadMixElectrico" name="fuente" hideSingleSelectionIndicator>
+                    <mat-select [(ngModel)]="unidadMixElectrico" name="fuente" hideSingleSelectionIndicator (selectionChange)="onFieldBlur()">
                       <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
                         {{unidad.name_energy_unit}}
                       </mat-option>
@@ -150,7 +152,7 @@
                   </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="porcentajeMixElectrico"
-                      (ngModelChange)="changePorcentajeME(porcentajeMixElectrico)" name="cantidad" matInput type="text">
+                      (ngModelChange)="changePorcentajeME(porcentajeMixElectrico)" name="cantidad" matInput type="text" (blur)="onFieldBlur()">
                   </mat-form-field>
                 </div>
               </div>
@@ -178,7 +180,7 @@
                     matTooltipPosition="above" *ngIf="tipoCombustible">
                     <mat-form-field appearance="outline" class="custom-formField">
                       <mat-label>Seleccione una opción</mat-label>
-                      <mat-select [(ngModel)]="tipoCombustible" name="fuente" hideSingleSelectionIndicator panelWidth="">
+                      <mat-select [(ngModel)]="tipoCombustible" name="fuente" hideSingleSelectionIndicator panelWidth="" (selectionChange)="onFieldBlur()">
                         <mat-option *ngFor="let tipo of catalogoTipoEnergiaCombustible" [value]="tipo.id">
                           {{tipo.name_type_energy}}
                         </mat-option>
@@ -189,7 +191,7 @@
                   <div *ngIf="!tipoCombustible">
                     <mat-form-field appearance="outline" class="custom-formField">
                       <mat-label>Seleccione una opción</mat-label>
-                      <mat-select [(ngModel)]="tipoCombustible" name="fuente" hideSingleSelectionIndicator panelWidth="">
+                      <mat-select [(ngModel)]="tipoCombustible" name="fuente" hideSingleSelectionIndicator panelWidth="" (selectionChange)="onFieldBlur()">
                         <mat-option *ngFor="let tipo of catalogoTipoEnergiaCombustible" [value]="tipo.id">
                           {{tipo.name_type_energy}}
                         </mat-option>
@@ -206,7 +208,7 @@
                   </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="cantidadCombustible"
-                      (ngModelChange)="changeCantidadC(cantidadCombustible)" name="cantidad" matInput type="text">
+                      (ngModelChange)="changeCantidadC(cantidadCombustible)" name="cantidad" matInput type="text" (blur)="onFieldBlur()">
                   </mat-form-field>
                 </div>
 
@@ -216,7 +218,7 @@
                   </span>
                   <mat-form-field appearance="outline">
                     <mat-label>Seleccione una opción</mat-label>
-                    <mat-select [(ngModel)]="unidadCombustible" name="fuente" hideSingleSelectionIndicator>
+                    <mat-select [(ngModel)]="unidadCombustible" name="fuente" hideSingleSelectionIndicator (selectionChange)="onFieldBlur()">
                       <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
                         {{unidad.name_energy_unit}}
                       </mat-option>
@@ -230,7 +232,7 @@
                   </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="porcentajeCombustible"
-                      (ngModelChange)="changePorcentajeC(porcentajeCombustible)" name="cantidad" matInput type="text">
+                      (ngModelChange)="changePorcentajeC(porcentajeCombustible)" name="cantidad" matInput type="text" (blur)="onFieldBlur()">
                   </mat-form-field>
                 </div>
               </div>
@@ -254,7 +256,7 @@
                   </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="cantidadPanelesFotovoltaicos"
-                      (ngModelChange)="changeCantidadPF(cantidadPanelesFotovoltaicos)" name="cantidad" matInput type="text">
+                      (ngModelChange)="changeCantidadPF(cantidadPanelesFotovoltaicos)" name="cantidad" matInput type="text" (blur)="onFieldBlur()">
                   </mat-form-field>
                 </div>
 
@@ -264,7 +266,7 @@
                   </span>
                   <mat-form-field appearance="outline">
                     <mat-label>Seleccione una opción</mat-label>
-                    <mat-select [(ngModel)]="unidadPanelesFotovoltaicos" name="fuente" hideSingleSelectionIndicator>
+                    <mat-select [(ngModel)]="unidadPanelesFotovoltaicos" name="fuente" hideSingleSelectionIndicator (selectionChange)="onFieldBlur()">
                       <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
                         {{unidad.name_energy_unit}}
                       </mat-option>
@@ -278,7 +280,7 @@
                   </span>
                   <mat-form-field appearance="fill">
                     <input class="input-general" [(ngModel)]="porcentajePanelesFotovoltaicos"
-                      (ngModelChange)="changePorcentajePF(porcentajePanelesFotovoltaicos)" name="cantidad" matInput type="text">
+                      (ngModelChange)="changePorcentajePF(porcentajePanelesFotovoltaicos)" name="cantidad" matInput type="text" (blur)="onFieldBlur()">
                   </mat-form-field>
                 </div>
               </div>
@@ -293,6 +295,6 @@
 <!--Section continue-->
 <div class="section-continue">
   <button mat-button class="yellow-button" (click)="continue()" [disabled]="endSave">
-    Guardar y continuar
+    Continuar
   </button>
 </div>

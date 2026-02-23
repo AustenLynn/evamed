@@ -70,7 +70,7 @@ export class HomeEvamedComponent implements OnInit {
   email: string;
   nameProject: string;
   tagProject: string;
-  sections: any;
+  sections: any[] = [];
   dataMaterial: any;
   catologoImpactoAmbiental: any;
   catologoOpcionesCarbono = [
@@ -78,12 +78,12 @@ export class HomeEvamedComponent implements OnInit {
     'Vivienda sustentable',
   ];
   auxDataProjectList: any;
-  ConstructiveSystemElements: any;
-  ListDataEndLife: any;
-  sourceInformation: any;
-  ACR: any;
-  ECD: any;
-  ECDP: any;
+  ConstructiveSystemElements: any[] = [];
+  ListDataEndLife: any[] = [];
+  sourceInformation: any[] = [];
+  ACR: any[] = [];
+  ECD: any[] = [];
+  ECDP: any[] = [];
   //para calculos
   DatosCalculos: any;
   cargaDatosCalculo = false;
@@ -537,8 +537,10 @@ export class HomeEvamedComponent implements OnInit {
   serchConstructiveSection(projectId) {
     const sectionsExist = [];
     try {
-      this.sections.map(section => {
-        this.ConstructiveSystemElements.map(cs => {
+      const sections = this.sections ?? [];
+      const elements = this.ConstructiveSystemElements ?? [];
+      sections.map(section => {
+        elements.map(cs => {
           if (cs.project_id === projectId && cs.section_id === section.id) {
             sectionsExist.push(section);
           }
@@ -554,8 +556,10 @@ export class HomeEvamedComponent implements OnInit {
   serchEndLifeSection(projectId) {
     const sectionsExist = [];
     try {
-      this.sections.map(section => {
-        this.ECDP.map(ecpd => {
+      const sections = this.sections ?? [];
+      const ecdpList = this.ECDP ?? [];
+      sections.map(section => {
+        ecdpList.map(ecpd => {
           if (ecpd.project_id === projectId && ecpd.section_id === section.id) {
             sectionsExist.push(section);
           }
@@ -572,14 +576,17 @@ export class HomeEvamedComponent implements OnInit {
     const list = [];
 
     try {
-      this.sections.map(section => {
-        this.ConstructiveSystemElements.map(cs => {
+      const sections = this.sections ?? [];
+      const elements = this.ConstructiveSystemElements ?? [];
+      const sources = this.sourceInformation ?? [];
+      sections.map(section => {
+        elements.map(cs => {
           if (
             cs.project_id === projectId &&
             cs.section_id === section.id &&
             section.id === scId
           ) {
-            this.sourceInformation.map(si => {
+            sources.map(si => {
               if (si.id === cs.source_information_id) {
                 list.push({
                   quantity: cs.quantity,
@@ -600,14 +607,17 @@ export class HomeEvamedComponent implements OnInit {
   searchDataEndLife(projectId, scId) {
     const list = [];
     try {
-      this.sections.map(section => {
-        this.ListDataEndLife.map(cs => {
+      const sections = this.sections ?? [];
+      const dataEndLife = this.ListDataEndLife ?? [];
+      const sources = this.sourceInformation ?? [];
+      sections.map(section => {
+        dataEndLife.map(cs => {
           if (
             cs.project_id === projectId &&
             cs.section_id === section.id &&
             section.id === scId
           ) {
-            this.sourceInformation.map(si => {
+            sources.map(si => {
               if (si.id === cs.source_information_id) {
                 list.push({
                   quantity: cs.quantity,
@@ -780,10 +790,12 @@ export class HomeEvamedComponent implements OnInit {
             city_id_origin: projectData.city_id_origin,
             distance: null,
           })
-          .subscribe(async newProjectData => {
-            await localStorage.setItem('newProjectDataId', newProjectData.id);
+          .subscribe(newProjectData => {
+            localStorage.setItem('newProjectDataId', newProjectData.id);
+
             // Duplicar fin de vida
-            await this.ListDataEndLife.map(dataEL => {
+            const endLifeData = this.ListDataEndLife ?? [];
+            endLifeData.forEach(dataEL => {
               if (dataEL.project_id === projectId) {
                 this.endLifeService
                   .addECDP({
@@ -801,7 +813,8 @@ export class HomeEvamedComponent implements OnInit {
             });
 
             // Duplicar construcción
-            await this.ConstructiveSystemElements.map(cs => {
+            const constructionData = this.ConstructiveSystemElements ?? [];
+            constructionData.forEach(cs => {
               if (cs.project_id === projectId) {
                 this.constructionStageService
                   .addConstructiveSistemElement({
@@ -819,102 +832,98 @@ export class HomeEvamedComponent implements OnInit {
                     console.log(dataResultConstruction);
                   });
               }
-            }).then(
-              // Duplicar Producción
-              this.dataMaterial
-                .map(material => {
-                  if (material.project_id === projectId) {
-                    this.projectsService
-                      .addSchemeProject({
-                        construction_system: material.construction_system,
-                        comercial_name: material.comercial_name,
-                        quantity: material.quantity,
-                        provider_distance: material.provider_distance,
-                        material_id: material.material_id,
+            });
+
+            // Duplicar Producción
+            const materialsData = this.dataMaterial ?? [];
+            materialsData.forEach(material => {
+              if (material.project_id === projectId) {
+                this.projectsService
+                  .addSchemeProject({
+                    construction_system: material.construction_system,
+                    comercial_name: material.comercial_name,
+                    quantity: material.quantity,
+                    provider_distance: material.provider_distance,
+                    material_id: material.material_id,
+                    project_id: parseInt(
+                      localStorage.getItem('newProjectDataId') ?? '',
+                      10
+                    ),
+                    origin_id: material.origin_id,
+                    section_id: material.section_id,
+                    value: material.value,
+                    distance_init: material.distance_init,
+                    distance_end: material.distance_end,
+                    replaces: material.replaces,
+                    city_id_origin: material.city_id_origin,
+                    city_id_end: material.city_id_end,
+                    transport_id_origin: material.transport_id_origin,
+                    transport_id_end: material.transport_id_end,
+                    state_id_origin: material.state_id_origin,
+                    unit_text: material.unit_text,
+                    description_material: material.description_material,
+                  })
+                  .subscribe(dataResulMaterial => {
+                    console.log('resultado de materiales');
+                    console.log(dataResulMaterial);
+                  });
+              }
+            });
+
+            this.electricitConsumptionService
+              .getACR()
+              .subscribe(dataAllACR => {
+                dataAllACR.map(acr => {
+                  if (acr.project_id === projectId) {
+                    // Duplicar Uso
+                    this.electricitConsumptionService
+                      .addACR({
                         project_id: parseInt(
-                          localStorage.getItem('newProjectDataId')
+                          localStorage.getItem('newProjectDataId') ?? '',
+                          10
                         ),
-                        origin_id: material.origin_id,
-                        section_id: material.section_id,
-                        value: material.value,
-                        distance_init: material.distance_init,
-                        distance_end: material.distance_end,
-                        replaces: material.replaces,
-                        city_id_origin: material.city_id_origin,
-                        city_id_end: material.city_id_end,
-                        transport_id_origin: material.transport_id_origin,
-                        transport_id_end: material.transport_id_end,
-                        state_id_origin: material.state_id_origin,
-                        unit_text: material.unit_text,
-                        description_material: material.description_material,
+                        quantity: acr.quantity,
+                        unit_id: acr.unit_id,
                       })
-                      .subscribe(dataResulMaterial => {
-                        console.log('resultado de materiales');
-                        console.log(dataResulMaterial);
+                      .subscribe(dataNewACR => {
+                        console.log('Resultado de add NewACR');
+                        console.log(dataNewACR);
+                        this.electricitConsumptionService
+                          .getECD()
+                          .subscribe(dataAllECD => {
+                            dataAllECD.map(ecd => {
+                              if (
+                                ecd.annual_consumption_required_id === acr.id
+                              ) {
+                                this.electricitConsumptionService
+                                  .addECD({
+                                    quantity: ecd.quantity,
+                                    percentage: ecd.percentage,
+                                    source: ecd.source,
+                                    annual_consumption_required_id:
+                                      dataNewACR.id,
+                                    unit_id: ecd.unit_id,
+                                    type: ecd.type,
+                                  })
+                                  .subscribe(dataNewECD => {
+                                    console.log('Resultado de add New ECD');
+                                    console.log(dataNewECD);
+                                    this.users
+                                      .searchUser(
+                                        localStorage.getItem('email-login')
+                                      )
+                                      .subscribe(data => {
+                                        console.log(data);
+                                        location.reload();
+                                      });
+                                  });
+                              }
+                            });
+                          });
                       });
                   }
-                })
-                .then(
-                  this.electricitConsumptionService
-                    .getACR()
-                    .subscribe(dataAllACR => {
-                      dataAllACR.map(acr => {
-                        if (acr.project_id === projectId) {
-                          // Duplicar Uso
-                          this.electricitConsumptionService
-                            .addACR({
-                              project_id: parseInt(
-                                localStorage.getItem('newProjectDataId')
-                              ),
-                              quantity: acr.quantity,
-                              unit_id: acr.unit_id,
-                            })
-                            .subscribe(dataNewACR => {
-                              console.log('Resultado de add NewACR');
-                              console.log(dataNewACR);
-                              this.electricitConsumptionService
-                                .getECD()
-                                .subscribe(dataAllECD => {
-                                  dataAllECD.map(ecd => {
-                                    if (
-                                      ecd.annual_consumption_required_id ===
-                                      acr.id
-                                    ) {
-                                      this.electricitConsumptionService
-                                        .addECD({
-                                          quantity: ecd.quantity,
-                                          percentage: ecd.percentage,
-                                          source: ecd.source,
-                                          annual_consumption_required_id:
-                                            dataNewACR.id,
-                                          unit_id: ecd.unit_id,
-                                          type: ecd.type,
-                                        })
-                                        .subscribe(dataNewECD => {
-                                          console.log(
-                                            'Resultado de add New ECD'
-                                          );
-                                          console.log(dataNewECD);
-                                          this.users
-                                            .searchUser(
-                                              localStorage.getItem(
-                                                'email-login'
-                                              )
-                                            )
-                                            .subscribe(data => {
-                                              console.log(data);
-                                              location.reload();
-                                            });
-                                        });
-                                    }
-                                  });
-                                });
-                            });
-                        }
-                      });
-                    })
-                )
-            );
+                });
+              });
           });
       });
   }
@@ -1374,24 +1383,24 @@ export class HomeEvamedComponent implements OnInit {
   updateMaterial(id, section) {
     localStorage.setItem('idProyectoConstrucción', id);
     this.selectionService.setSection(section);
-    this.router.navigateByUrl('material-stage-update');
+    this.router.navigateByUrl('materials-stage/update');
   }
 
   updateConstruction(id, section) {
     localStorage.setItem('idProyectoConstrucción', id);
     this.selectionService.setSection(section);
-    this.router.navigateByUrl('construction-stage-update');
+    this.router.navigateByUrl('construction-stage/update');
   }
 
   updateEndLife(id, section) {
     localStorage.setItem('idProyectoConstrucción', id);
     this.selectionService.setSection(section);
-    this.router.navigateByUrl('update-end-life');
+    this.router.navigateByUrl('end-life-stage/update');
   }
 
   updateUso(id) {
     localStorage.setItem('idProyectoConstrucción', id);
-    this.router.navigateByUrl('usage-stage-update');
+    this.router.navigateByUrl('usage-stage/update');
   }
 
   getSelectedImpactName(value: any): string {

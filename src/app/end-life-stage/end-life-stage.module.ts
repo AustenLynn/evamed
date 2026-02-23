@@ -8,9 +8,15 @@ import { MaterialModule } from './../material/material.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IntermedialComponent } from './components/intermedial/intermedial.component';
 import { PassStepComponent } from './components/pass-step/pass-step.component';
+import { EndLifeUpdateComponent } from './components/end-life-update/end-life-update.component';
 
 @NgModule({
-    declarations: [EndLifeStageComponent, IntermedialComponent, PassStepComponent],
+    declarations: [
+        EndLifeStageComponent,
+        EndLifeUpdateComponent,
+        IntermedialComponent,
+        PassStepComponent
+    ],
     imports: [
         CommonModule,
         EndLifeStageRoutingModule,

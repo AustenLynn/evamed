@@ -1,9 +1,11 @@
 <nav class="nav-redirect">
   <h2 class="proyecto-title">{{nameProject}}</h2>
-  <a href="/" class="a-redirect"> < Regresar a proyectos </a>
+  <a href="/" class="a-redirect">
+    < Regresar a proyectos </a>
 </nav>
 <!--Principal container-->
 <div class="principal-container container-total">
+  <!--Navigation steps-->
   <nav class="nav-steps">
     <div class="mdl-stepper-horizontal-alternative">
       <div class="mdl-stepper-step step-one-selected">
@@ -13,26 +15,26 @@
         <div class="mdl-stepper-bar-right"></div>
       </div>
       <div class="mdl-stepper-step step-two">
-        <div class="mdl-stepper-circle" (click)="goToConstructionStage()" (keypress)="goToConstructionStage()" tabindex="2"></div>
-        <div class="mdl-stepper-tag"> Construcción </div>
+        <div class="mdl-stepper-circle"></div>
+        <div class="mdl-stepper-tag" aux-yellow> Construcción </div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
       </div>
       <div class="mdl-stepper-step step-three">
-        <div class="mdl-stepper-circle" (click)="goToUsageStage()" (keypress)="goToUsageStage()" tabindex="3"></div>
+        <div class="mdl-stepper-circle" (click)="goToUsageStage()" (keypress)="goToUsageStage()" tabindex="2"></div>
         <div class="mdl-stepper-tag"> Uso </div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
       </div>
       <div class="mdl-stepper-step step-four">
-        <div class="mdl-stepper-circle"></div>
-        <div class="mdl-stepper-tag aux-yellow"> Fin de vida </div>
+        <div class="mdl-stepper-circle"  (click)="goToEndLife()" (keypress)="goToEndLife()" tabindex="3"></div>
+        <div class="mdl-stepper-tag "> Fin de vida </div>
         <div class="mdl-stepper-bar-left"></div>
         <div class="mdl-stepper-bar-right"></div>
       </div>
     </div>
   </nav>
-  <!--Container actions of step 4-->
+  <!--Container actions of step 1-->
   <section class="container-actions">
     <!--Section sheets-->
     <section class="container-sheets">
@@ -59,31 +61,32 @@
         </mat-selection-list>
       </div>
     </section>
-    <!--Formulario de energía consumida-->
+
     <section class="container-systems" *ngIf="indexSheet!==undefined">
-      Energía consumida durante el proceso deconstructivo de&nbsp;<strong>{{ procesoSeleccionado | lowercase }}</strong>
+      Energía consumida durante el proceso de&nbsp;<strong>{{ procesoSeleccionado | lowercase }}</strong>
       <div class="container-ec">
-        <div *ngFor="let data of dataArrayEC; let i=index;">
-          <div class="Col col-xs-12">
-              <span class="label-small-input">
-                Fuente
-              </span>
-              <div [matTooltip]="getSelectedSourceName(data.fuente)"
+          <div *ngFor="let data of dataArrayEC; let i=index;">
+            <div class="Col col-xs-12">
+                <span class="label-small-input">
+                  Fuente
+                </span>
+                <div [matTooltip]="getSelectedSourceName(data.fuente)"
                   matTooltipPosition="above" *ngIf="data.fuente">
-                <mat-form-field appearance="outline">
-                  <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator panelWidth="">
-                    <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
-                      {{fuente.name_source_information}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <!-- When there's no selection, omit the tooltip -->
-                <div *ngIf="!data.fuente">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Seleccione una opción</mat-label>
+                    <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator panelWidth="" (selectionChange)="onSelectChange($event)">
+                      <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
+                        {{fuente.name_source_information}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <!-- When there's no selection, omit the tooltip -->
+                 <div *ngIf="!data.fuente">
                   <mat-form-field appearance="outline" class="custom-input">
                     <mat-label>Seleccione una opción</mat-label>
                     <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator
+                    (selectionChange)="onSelectChange($event)"
                     panelWidth="" placeholder="Fuente">
                       <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
                         {{fuente.name_source_information}}
@@ -91,23 +94,23 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-            </div>
+              </div>
             <div class="Row top-0">
               <div class="Col col-small-space">
                 <span class="label-small-input">
                   Cantidad
                 </span>
                 <mat-form-field appearance="fill">
-                  <input class="input-general" [(ngModel)]="data.cantidad" name="cantidad_{{i}}" matInput type="number">
+                  <input class="input-general" [(ngModel)]="data.cantidad" name="cantidad_{{i}}" matInput type="number" (blur)="onFieldBlur()">
                 </mat-form-field>
               </div>
               <div class="Col col-small-space">
                 <span class="label-small-input">
-                  Unidad funcional
+                  Unidad
                 </span>
                 <mat-form-field appearance="outline">
                   <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.unidad" name="unidad{{i}}" hideSingleSelectionIndicator>
+                  <mat-select [(ngModel)]="data.unidad" name="unidad{{i}}" hideSingleSelectionIndicator (selectionChange)="onSelectChange($event)">
                     <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
                       {{unidad.name_energy_unit}}
                     </mat-option>
@@ -119,17 +122,18 @@
                   <button mat-button class="button-remove" (click)="removeFormEC(i, data.id)">
                     <mat-icon>remove_circle</mat-icon>
                   </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <!--Actions-->
-        <button mat-button (click)="addFormEC()">
-          <mat-icon>add_circle</mat-icon>
-        </button>
-        <button mat-button (click)="onSaveEC()">
-          <mat-icon>save</mat-icon>
-        </button>
+          <!--Actions-->
+          <button mat-button (click)="addFormEC()">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+
+          <button mat-button (click)="onSaveEC()">
+            <mat-icon>save</mat-icon>
+          </button>
       </div>
     </section>
   </section>

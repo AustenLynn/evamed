@@ -28,7 +28,23 @@ export class IntermedialComponent implements OnInit {
 
   continueStep(event: Event) {
     event.preventDefault();
-    //
+    if (this.data && (this.data as { mode?: string }).mode === 'update') {
+      this.materialsService.getEDCP().subscribe(edcp => {
+        const schemaFilter = edcp.filter(
+          schema =>
+            schema.project_id == localStorage.getItem('idProyectoConstrucción')
+        );
+
+        if (schemaFilter.length === 0) {
+          this.router.navigateByUrl('end-life-stage');
+        } else {
+          this.router.navigateByUrl('end-life-stage/update');
+        }
+      });
+      this.onNoClick();
+      return;
+    }
+
     this.onNoClick();
   }
 }

@@ -76,6 +76,7 @@
                   <mat-form-field appearance="outline" class="custom-input">
                     <mat-label>Seleccione una opción</mat-label>
                     <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator
+                    (selectionChange)="onSelectChange($event)"
                     panelWidth="" placeholder="Fuente">
                       <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
                         {{fuente.name_source_information}}
@@ -88,6 +89,7 @@
                   <mat-form-field appearance="outline" class="custom-input">
                     <mat-label>Seleccione una opción</mat-label>
                     <mat-select [(ngModel)]="data.fuente" name="fuente{{i}}" hideSingleSelectionIndicator
+                    (selectionChange)="onSelectChange($event)"
                     panelWidth="" placeholder="Fuente">
                       <mat-option *ngFor="let fuente of catalogoFuentes" [value]="fuente.id">
                         {{fuente.name_source_information}}
@@ -101,7 +103,7 @@
                   Cantidad
                 </span>
                 <mat-form-field>
-                  <input class="input-general" [(ngModel)]="data.cantidad" name="cantidad_{{i}}" matInput type="number">
+                  <input class="input-general" [(ngModel)]="data.cantidad" name="cantidad_{{i}}" matInput type="number" (blur)="onFieldBlur()">
                 </mat-form-field>
               </div>
               <div class="Col col-small-space">
@@ -110,7 +112,7 @@
                 </span>
                 <mat-form-field appearance="outline" >
                   <mat-label>Seleccione una opción</mat-label>
-                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}" hideSingleSelectionIndicator>
+                  <mat-select [(ngModel)]="data.unidad" name="fuente{{i}}" hideSingleSelectionIndicator (selectionChange)="onSelectChange($event)">
                     <mat-option *ngFor="let unidad of catalogoUnidadEnergia" [value]="unidad.id">
                       {{unidad.name_energy_unit}}
                     </mat-option>
@@ -142,6 +144,6 @@
 <!--Section continue-->
 <div class="section-continue">
   <button mat-button class="yellow-button" (click)="continue()" [disabled]="endSave">
-    Guardar y continuar
+    Continuar
   </button>
 </div>

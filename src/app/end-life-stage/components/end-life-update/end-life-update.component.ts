@@ -1,5 +1,4 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatListOption } from '@angular/material/list';
 import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
@@ -8,9 +7,7 @@ import { MaterialsService } from 'src/app/core/services/materials/materials.serv
 import { ProjectsService } from 'src/app/core/services/projects/projects.service';
 import { SelectionService } from '../../../core/services/selection/selection.service';
 import { MatSelectionList } from '@angular/material/list';
-import { take } from 'rxjs/operators';
-import { IntermedialComponent } from '../intermedial/intermedial.component';
-import { PassStepComponent } from '../pass-step/pass-step.component';
+import { finalize, take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-end-life-update',
@@ -18,7 +15,7 @@ import { PassStepComponent } from '../pass-step/pass-step.component';
     styleUrls: ['./end-life-update.component.scss'],
     standalone: false
 })
-export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
+export class EndLifeUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('sheets') sheetsList!: MatSelectionList;
 
@@ -37,6 +34,8 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
   ECDP: any[] = [];
   projectId: any;
   procesoSeleccionado = '';
+  private autosaveIntervalId: ReturnType<typeof setInterval> | null = null;
+  private lastAutosaveSignature: string | null = null;
 
   constructor(
     private projectsService: ProjectsService,
@@ -44,7 +43,6 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
     private endLifeService: EndLifeService,
     private materialsService: MaterialsService,
     private router: Router,
-    public dialog: MatDialog,
     private selectionService: SelectionService,
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
@@ -107,6 +105,49 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
         }
       });
     });
+
+    // Save on blur instead of polling.
+  }
+
+  ngOnDestroy(): void {
+    if (this.autosaveIntervalId) {
+      clearInterval(this.autosaveIntervalId);
+      this.autosaveIntervalId = null;
+    }
+  }
+
+  private startAutosave(): void {
+    if (this.autosaveIntervalId) {
+      return;
+    }
+
+    this.autosaveIntervalId = setInterval(() => {
+      const signature = this.buildAutosaveSignature();
+      if (signature === this.lastAutosaveSignature) {
+        return;
+      }
+
+      console.log('autosave: end-life-update');
+      this.onSaveEC();
+      this.lastAutosaveSignature = signature;
+      this.saveStepFour();
+    }, 5000);
+  }
+
+  private buildAutosaveSignature(): string {
+    return JSON.stringify({
+      projectId: this.projectId,
+      indexSheet: this.indexSheet,
+      dataArrayEC: this.dataArrayEC,
+    });
+  }
+
+  onFieldBlur(): void {
+    if (!this.projectId || this.indexSheet === undefined) {
+      return;
+    }
+    this.onSaveEC();
+    this.saveStepFour();
   }
 
   ngAfterViewInit(): void {
@@ -205,12 +246,23 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
 
     const getDataECPD = this.ECDP
       .filter(item => item.section_id === this.indexSheet + 1)
-      .map(item => ({
-        id: item.id,
-        cantidad: item.quantity,
-        fuente: item.source_information_id,
-        unidad: item.unit_id
-      }));
+      .map(item => {
+        const quantity = this.parseQuantity(item.quantity);
+        return {
+          id: item.id,
+          cantidad: item.quantity,
+          fuente: item.source_information_id,
+          unidad: item.unit_id,
+          _signature: quantity === null
+            ? null
+            : JSON.stringify({
+              quantity,
+              fuente: item.source_information_id,
+              unidad: item.unit_id,
+              section: item.section_id
+            })
+        };
+      });
    // Assign data arrays if available
     if (this.indexSheet >= 0 && this.indexSheet < this.sheetNames.length) {
       this.dataArrayEC = this.EC?.[this.indexSheet] ?? getDataECPD;
@@ -227,7 +279,7 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
     this.endLifeService.deleteECDP(id).subscribe(() => {
       console.log(`Se eliminó ${id}`);
     });
-    this.dataArrayEC.splice(i, i);
+    this.dataArrayEC.splice(i, 1);
   }
 
   addFormEC() {
@@ -253,6 +305,15 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
     }
   }
 
+  private parseQuantity(value: unknown): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+    const normalized = String(value).replace(',', '.');
+    const parsed = Number(normalized);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
   onSaveEC() {
     let i;
     if (this.EC === undefined) {
@@ -272,28 +333,58 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
       const ecAny: any = ec;
       if (this.indexSheet === parseInt(key)) {
         ecAny.map(data => {
+          const quantity = this.parseQuantity(data?.cantidad);
+          if (quantity === null || !data?.fuente || !data?.unidad) {
+            return;
+          }
+          const signature = JSON.stringify({
+            quantity,
+            fuente: data.fuente,
+            unidad: data.unidad,
+            section: parseInt(key, 10) + 1
+          });
+          if (data._signature === signature || data._pendingSave) {
+            return;
+          }
+
+          data._pendingSave = true;
+          data._signature = signature;
+
           if (data.id !== undefined) {
-            this.endLifeService.deleteECDP(data.id).subscribe(() => {
-              console.log(`Se eliminó ${data.id}`);
+            this.endLifeService.deleteECDP(data.id).subscribe({
+              next: () => {
+                console.log(`Se eliminó ${data.id}`);
+              },
+              error: () => {
+                // Ignore missing rows; we'll re-create below.
+              }
             });
           }
           try {
             this.endLifeService
               .addECDP({
-                quantity: data.cantidad,
-                unit_id: 2,
+                quantity,
+                unit_id: data.unidad,
                 source_information_id: data.fuente,
                 section_id: parseInt(key, 10) + 1,
                 project_id: parseInt(
-                  localStorage.getItem('idProyectoConstrucción'),
+                  localStorage.getItem('idProyectoConstrucción') ?? '',
                   10
                 ),
               })
-              .subscribe(data => {
-                console.log(data);
+              .pipe(finalize(() => {
+                data._pendingSave = false;
+              }))
+              .subscribe(result => {
+                data.id = result?.id ?? data.id;
+                data._signature = signature;
+                console.log(result);
+              }, () => {
+                data._pendingSave = false;
               });
           } catch (e) {
             console.log('No hay que eliminar***', e);
+            data._pendingSave = false;
           }
         });
       }
@@ -303,76 +394,57 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
   saveStepFour() {}
 
   goToMaterialStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
-          const schemaFilter = msp.filter(
-            schema =>
-              schema.project_id ==
-              localStorage.getItem('idProyectoConstrucción')
-          );
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('materials-stage');
-          } else {
-            this.router.navigateByUrl('material-stage-update');
-          }
-        });
+    this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
+      const schemaFilter = msp.filter(
+        schema =>
+          schema.project_id ==
+          localStorage.getItem('idProyectoConstrucción')
+      );
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('materials-stage');
+      } else {
+        this.router.navigateByUrl('materials-stage/update');
       }
     });
   }
 
   goToConstructionStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
+    const projectId = parseInt(
+      localStorage.getItem('idProyectoConstrucción') ?? '',
+      10
+    );
+    if (!Number.isFinite(projectId)) {
+      this.router.navigateByUrl('construction-stage');
+      return;
+    }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        this.materialsService.getConstructionStage().subscribe(cse => {
-          const schemaFilter = cse.filter(
-            schema =>
-              schema.project_id ==
-              localStorage.getItem('idProyectoConstrucción')
-          );
-          console.log(schemaFilter);
+    this.materialsService.getConstructionStage().subscribe(cse => {
+      const schemaFilter = cse.filter(
+        schema => Number(schema.project_id) === projectId
+      );
+      console.log(schemaFilter);
 
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('construction-stage');
-          } else {
-            this.router.navigateByUrl('construction-stage-update');
-          }
-        });
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('construction-stage');
+      } else {
+        localStorage.setItem('idProyectoConstrucción', projectId.toString());
+        this.router.navigateByUrl('construction-stage/update');
       }
     });
   }
 
   goToUsageStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
+    this.materialsService.getACR().subscribe(acr => {
+      const schemaFilter = acr.filter(
+        schema =>
+          schema.project_id ==
+          localStorage.getItem('idProyectoConstrucción')
+      );
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        this.materialsService.getACR().subscribe(acr => {
-          const schemaFilter = acr.filter(
-            schema =>
-              schema.project_id ==
-              localStorage.getItem('idProyectoConstrucción')
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('usage-stage');
-          } else {
-            this.router.navigateByUrl('usage-stage-update');
-          }
-        });
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('usage-stage');
+      } else {
+        this.router.navigateByUrl('usage-stage/update');
       }
     });
   }
@@ -384,14 +456,7 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit {
   continueStep(event: Event) {
     console.log('continuar!!!!');
     event.preventDefault();
-    const dialogRef = this.dialog.open(IntermedialComponent, {
-      width: '680px',
-      data: {},
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      // this.ngOnInit();
-    });
+    this.router.navigateByUrl('/');
   }
 
   getSelectedSourceName(value: any): string {

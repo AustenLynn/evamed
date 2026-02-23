@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatListOption } from '@angular/material/list';
 import { MatAccordion } from '@angular/material/expansion';
@@ -7,11 +7,8 @@ import { ConstructionStageService } from 'src/app/core/services/construction-sta
 import { ProjectsService } from 'src/app/core/services/projects/projects.service';
 import { SelectionService } from '../../../core/services/selection/selection.service';
 import { MatSelectionList } from '@angular/material/list';
-import { take } from 'rxjs/operators';
+import { finalize, take } from 'rxjs/operators';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
-import { IntermedialComponent } from '../intermedial/intermedial.component';
-import { MatDialog } from '@angular/material/dialog';
-import { PassStepComponent } from '../pass-step/pass-step.component';
 
 @Component({
     selector: 'app-construction-stage-update',
@@ -19,7 +16,7 @@ import { PassStepComponent } from '../pass-step/pass-step.component';
     styleUrls: ['./construction-stage-update.component.scss'],
     standalone: false
 })
-export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
+export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @ViewChild('sheets') sheetsList!: MatSelectionList;
 
@@ -46,6 +43,10 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
   IMGP = [];
   projectId: number;
   procesoSeleccionado = '';
+  private autosaveIntervalId: ReturnType<typeof setInterval> | null = null;
+  private lastAutosaveSignature: string | null = null;
+  private autosaveInFlight = false;
+  private isSwitchingSheet = false;
 
   constructor(
     private materialsService: MaterialsService,
@@ -53,7 +54,6 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
     private projectsService: ProjectsService,
     private constructionStageService: ConstructionStageService,
     private router: Router,
-    public dialog: MatDialog,
     private selectionService: SelectionService,
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
@@ -121,8 +121,18 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
       'Otros',
     ];
 
-    const PDP = JSON.parse(sessionStorage.getItem('primaryDataProject'));
-    this.projectId = PDP.id;
+    const storedProject = sessionStorage.getItem('primaryDataProject');
+    const PDP = storedProject ? JSON.parse(storedProject) : null;
+    this.projectId = PDP?.id ?? null;
+    if (!this.projectId) {
+      const fallbackId = parseInt(
+        localStorage.getItem('idProyectoConstrucción') ?? '',
+        10
+      );
+      if (Number.isFinite(fallbackId)) {
+        this.projectId = fallbackId;
+      }
+    }
 
     this.constructionStageService.getConstructiveSystemElement().subscribe(data => {
       const projectId = parseInt(localStorage.getItem('idProyectoConstrucción') ?? '', 10);
@@ -137,6 +147,49 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
           }
         }
       });
+    });
+
+    // Save on blur instead of polling.
+  }
+
+  ngOnDestroy(): void {
+    if (this.autosaveIntervalId) {
+      clearInterval(this.autosaveIntervalId);
+      this.autosaveIntervalId = null;
+    }
+  }
+
+  private startAutosave(): void {
+    if (this.autosaveIntervalId) {
+      return;
+    }
+
+    this.autosaveIntervalId = setInterval(() => {
+      if (this.autosaveInFlight) {
+        return;
+      }
+      const signature = this.buildAutosaveSignature();
+      if (signature === this.lastAutosaveSignature) {
+        return;
+      }
+
+      console.log('autosave: construction-stage-update');
+      this.onSaveEC();
+      this.lastAutosaveSignature = signature;
+      this.saveStepTwo();
+    }, 5000);
+  }
+
+  private buildAutosaveSignature(): string {
+    const normalizedEC = (this.dataArrayEC ?? []).map((data: any) => ({
+      cantidad: data?.cantidad ?? null,
+      fuente: data?.fuente ?? null,
+      unidad: data?.unidad ?? null
+    }));
+    return JSON.stringify({
+      projectId: this.projectId,
+      indexSheet: this.indexSheet,
+      dataArrayEC: normalizedEC,
     });
   }
 
@@ -173,11 +226,29 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
   }
 
   trunc(x, posiciones = 0) {
-    const s = x.toString(),
-    //let l = s.length;
-      decimalLength = s.indexOf('.') + 1,
-      numStr = s.substr(0, decimalLength + posiciones);
+    if (x === null || x === undefined || x === '') {
+      return 0;
+    }
+    const normalized = String(x).replace(',', '.');
+    const parsed = Number(normalized);
+    if (!Number.isFinite(parsed)) {
+      return 0;
+    }
+    const decimalIndex = normalized.indexOf('.');
+    if (decimalIndex === -1) {
+      return parsed;
+    }
+    const numStr = normalized.substr(0, decimalIndex + 1 + posiciones);
     return Number(numStr);
+  }
+
+  private parseQuantity(value: unknown): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+    const normalized = String(value).replace(',', '.');
+    const parsed = Number(normalized);
+    return Number.isFinite(parsed) ? parsed : null;
   }
 
   onGroupsChange(options: MatListOption[]) {
@@ -234,6 +305,7 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
       this.addFormEC();
     }*/
 
+    this.isSwitchingSheet = true;
     this.selectedSheet = options[0]?.value;
     this.procesoSeleccionado = this.selectedSheet;
     if (!this.selectedSheet) {
@@ -252,12 +324,21 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
 
     const getDataEC = this.CSE
       .filter(item => item.section_id === this.indexSheet + 1 && item.constructive_process_id === 1)
-      .map(item => ({
-        id: item.id,
-        cantidad: this.trunc(item.quantity),
-        fuente: item.source_information_id,
-        unidad: item.energy_unit_id
-      }));
+      .map(item => {
+        const cantidad = this.trunc(item.quantity);
+        const fuente = item.source_information_id;
+        const unidad = item.energy_unit_id;
+        const quantity = this.parseQuantity(cantidad);
+        return {
+          id: item.id,
+          cantidad,
+          fuente,
+          unidad,
+          _signature: quantity === null
+            ? null
+            : JSON.stringify({ quantity, fuente, unidad })
+        };
+      });
    // Assign data arrays if available
     if (this.indexSheet >= 0 && this.indexSheet < this.sheetNames.length) {
       this.dataArrayEC = this.EC?.[this.indexSheet] ?? getDataEC;
@@ -265,6 +346,10 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
     if (!this.dataArrayEC || this.dataArrayEC.length === 0) {
       this.addFormEC();
     }
+
+    setTimeout(() => {
+      this.isSwitchingSheet = false;
+    });
 
     //Load Save
     this.onSaveECNatural();
@@ -300,6 +385,9 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
   }
 
   onSaveEC() {
+    if (this.autosaveInFlight) {
+      return;
+    }
     let i;
     if (this.EC === undefined) {
       this.EC = [];
@@ -312,22 +400,48 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
 
     console.log('entra al proceso de OnSaveEC!!!!!!!!!!!!!!!!!!!!!!');
 
+    this.autosaveInFlight = true;
+    let pendingRequests = 0;
+    const markDone = () => {
+      pendingRequests -= 1;
+      if (pendingRequests <= 0) {
+        this.autosaveInFlight = false;
+      }
+    };
+
     Object.entries(this.EC).forEach(([key, ec]) => {
       const ecAny: any = ec;
       if (this.indexSheet === parseInt(key)) {
         ecAny.map(data => {
+          const quantity = this.parseQuantity(data?.cantidad);
+          if (quantity === null || !data?.fuente || !data?.unidad) {
+            return;
+          }
+
+          const signature = JSON.stringify({
+            quantity,
+            fuente: data?.fuente,
+            unidad: data?.unidad
+          });
+          if (data?._signature === signature) {
+            return;
+          }
+
           console.log(data);
           if (data.id !== undefined) {
+            pendingRequests += 1;
             this.constructionStageService
               .deleteConstructiveSystemElement(data.id)
+              .pipe(finalize(markDone))
               .subscribe(() => {
                 console.log(`Se eliminó ${data.id}`);
               });
           }
           try {
+            pendingRequests += 1;
             this.constructionStageService
               .addConstructiveSistemElement({
-                quantity: data.cantidad,
+                quantity,
                 project_id: parseInt(
                   localStorage.getItem('idProyectoConstrucción'),
                   10
@@ -335,12 +449,15 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
                 section_id: parseInt(key, 10) + 1,
                 constructive_process_id: 1,
                 volume_unit_id: null,
-                energy_unit_id: 2, // value hours
+                energy_unit_id: data.unidad,
                 bulk_unit_id: null,
                 source_information_id: data.fuente,
               })
-              .subscribe(data => {
-                console.log(`Se agregó ${data.id}`);
+              .pipe(finalize(markDone))
+              .subscribe(result => {
+                data.id = result?.id ?? data.id;
+                data._signature = signature;
+                console.log(`Se agregó ${result?.id ?? data.id}`);
               });
           } catch (e) {
             console.log('No hay que eliminar', e);
@@ -348,6 +465,30 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
         });
       }
     });
+
+    if (pendingRequests === 0) {
+      this.autosaveInFlight = false;
+    }
+  }
+
+  onFieldBlur(): void {
+    if (this.autosaveInFlight || this.indexSheet === undefined) {
+      return;
+    }
+    this.onSaveEC();
+    this.saveStepTwo();
+  }
+
+  private saveBeforeNavigate(): void {
+    if (this.autosaveInFlight || this.indexSheet === undefined) {
+      return;
+    }
+    this.onSaveEC();
+    this.saveStepTwo();
+  }
+
+  onSelectChange(event: { isUserInput?: boolean }): void {
+    this.onFieldBlur();
   }
 
   addFormAC() {
@@ -408,92 +549,93 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit {
   }
 
   goToMaterialStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
-          const schemaFilter = msp.filter(
-            schema =>
-              schema.project_id ==
-              localStorage.getItem('idProyectoConstrucción')
-          );
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('materials-stage');
-          } else {
-            this.router.navigateByUrl('material-stage-update');
-          }
-        });
+    this.saveBeforeNavigate();
+    this.materialsService.getMaterialSchemeProyects().subscribe(msp => {
+      const schemaFilter = msp.filter(
+        schema =>
+          schema.project_id ==
+          localStorage.getItem('idProyectoConstrucción')
+      );
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('materials-stage');
+      } else {
+        this.router.navigateByUrl('materials-stage/update');
       }
     });
   }
 
   goToConstructionStage() {
-    this.router.navigateByUrl('construction-stage');
+    const projectId = parseInt(
+      localStorage.getItem('idProyectoConstrucción') ?? '',
+      10
+    );
+    if (!Number.isFinite(projectId)) {
+      this.router.navigateByUrl('construction-stage');
+      return;
+    }
+
+    this.materialsService.getConstructionStage().subscribe(cse => {
+      const schemaFilter = cse.filter(
+        schema => Number(schema.project_id) === projectId
+      );
+
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('construction-stage');
+      } else {
+        localStorage.setItem('idProyectoConstrucción', projectId.toString());
+        this.router.navigateByUrl('construction-stage/update');
+      }
+    });
   }
 
   goToUsageStage() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
+    this.saveBeforeNavigate();
+    this.materialsService.getACR().subscribe(acr => {
+      const schemaFilter = acr.filter(
+        schema =>
+          schema.project_id ==
+          localStorage.getItem('idProyectoConstrucción')
+      );
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        this.materialsService.getACR().subscribe(acr => {
-          const schemaFilter = acr.filter(
-            schema =>
-              schema.project_id ==
-              localStorage.getItem('idProyectoConstrucción')
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('usage-stage');
-          } else {
-            this.router.navigateByUrl('usage-stage-update');
-          }
-        });
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('usage-stage');
+      } else {
+        this.router.navigateByUrl('usage-stage/update');
       }
     });
   }
 
   goToEndLife() {
-    const dialogRef = this.dialog.open(PassStepComponent, {
-      width: '680px',
-      data: {},
-    });
+    this.saveBeforeNavigate();
+    this.materialsService.getEDCP().subscribe(edcp => {
+      const schemaFilter = edcp.filter(
+        schema =>
+          schema.project_id ==
+          localStorage.getItem('idProyectoConstrucción')
+      );
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.continue) {
-        this.materialsService.getEDCP().subscribe(edcp => {
-          const schemaFilter = edcp.filter(
-            schema =>
-              schema.project_id ==
-              localStorage.getItem('idProyectoConstrucción')
-          );
-
-          if (schemaFilter.length === 0) {
-            this.router.navigateByUrl('end-life-stage');
-          } else {
-            this.router.navigateByUrl('update-end-life');
-          }
-        });
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('end-life-stage');
+      } else {
+        this.router.navigateByUrl('end-life-stage/update');
       }
     });
   }
 
   continueStep(event: Event) {
     event.preventDefault();
-    const dialogRef = this.dialog.open(IntermedialComponent, {
-      width: '680px',
-      data: {},
-    });
+    this.materialsService.getACR().subscribe(acr => {
+      const schemaFilter = acr.filter(
+        schema =>
+          schema.project_id ==
+          localStorage.getItem('idProyectoConstrucción')
+      );
 
-    dialogRef.afterClosed().subscribe(() => {
-      // this.ngOnInit();
+      if (schemaFilter.length === 0) {
+        this.router.navigateByUrl('usage-stage');
+      } else {
+        this.router.navigateByUrl('usage-stage/update');
+      }
     });
   }
 
