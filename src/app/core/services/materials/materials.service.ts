@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { environment } from './../../../../environments/environment';
 
@@ -23,6 +23,41 @@ export class MaterialsService {
         return data;
       })
     );
+  }
+
+  getMaterialsStageSelections(projectId: number, sectionId?: number) {
+    let params = new HttpParams().set('project_id', String(projectId));
+    if (sectionId !== undefined && sectionId !== null) {
+      params = params.set('section_id', String(sectionId));
+    }
+
+    return this.http
+      .get<any>(environment.api_materials_stage, { params })
+      .pipe(
+        tap(data => {
+          return data;
+        })
+      );
+  }
+
+  upsertMaterialsStageSelections(payload: object) {
+    return this.http
+      .post<any>(environment.api_materials_stage, payload)
+      .pipe(
+        tap(data => {
+          return data;
+        })
+      );
+  }
+
+  updateMaterialsStageSelections(payload: object) {
+    return this.http
+      .patch<any>(environment.api_materials_stage_update, payload)
+      .pipe(
+        tap(data => {
+          return data;
+        })
+      );
   }
 
   getACR() {

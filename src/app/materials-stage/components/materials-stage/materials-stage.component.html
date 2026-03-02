@@ -85,7 +85,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsRevit"
-            (ngModelChange)="onNgModelChangeRevit()" (selectionChange)="onSCSelected($event)">
+            (ngModelChange)="onNgModelChangeRevit()" (selectionChange)="onSCSelected($event, 1, 'revit-user')">
             <mat-list-option *ngFor="let sc of ListSCRevit" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option" [selected]="sc.checked">
               <div style="
@@ -125,7 +125,7 @@
           </mat-expansion-panel-header>
 
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsDynamo"
-            (ngModelChange)="onNgModelChangeDynamo()">
+            (ngModelChange)="onNgModelChangeDynamo()" (selectionChange)="onSCSelected($event, 2, 'dynamo')">
             <mat-list-option *ngFor="let sc of ListSCDynamo" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option">
               <div style="
@@ -162,7 +162,7 @@
             <mat-panel-title> Creados por el usuario </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsUsuario"
-            (ngModelChange)="onNgModelChangeUser()">
+            (ngModelChange)="onNgModelChangeUser()" (selectionChange)="onSCSelected($event, 3, 'user')">
             <mat-list-option *ngFor="let sc of ListSCUsuario" [value]="sc" [disableRipple]="true"
               checkboxPosition="before">
               <div style="

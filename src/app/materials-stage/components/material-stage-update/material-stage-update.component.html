@@ -85,7 +85,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsRevit"
-            (ngModelChange)="onNgModelChangeRevit()">
+            (ngModelChange)="onNgModelChangeRevit()" (selectionChange)="onSCSelected($event, 1)">
             <mat-list-option *ngFor="let sc of ListSCRevit" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option" [selected]="true">
               <div style="
@@ -126,7 +126,7 @@
           </mat-expansion-panel-header>
 
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsDynamo"
-            (ngModelChange)="onNgModelChangeDynamo()">
+            (ngModelChange)="onNgModelChangeDynamo()" (selectionChange)="onSCSelected($event, 2)">
             <mat-list-option *ngFor="let sc of ListSCDynamo" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option" [selected]="true">
               <div style="

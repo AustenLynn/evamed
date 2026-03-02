@@ -91,6 +91,7 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
   endSave = false;
   private autosaveIntervalId: ReturnType<typeof setInterval> | null = null;
   private lastAutosaveSignature: string | null = null;
+  private selectionIdByKey: { [key: string]: number } = {};
 
   constructor(
     private materialsService: MaterialsService,
@@ -343,6 +344,77 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
         this.selectedOptionsUsuario = this.SOU[i];
       }
     }
+
+    this.syncSelectionsForCurrentSheet();
+  }
+
+  private buildSelectionKey(sectionId: number, originId: number, label: string): string {
+    return `${sectionId}|${originId}|${label}`;
+  }
+
+  private syncSelectionsForCurrentSheet() {
+    if (!this.projectId || this.indexSheet === undefined) {
+      return;
+    }
+
+    const sectionId = this.indexSheet + 1;
+    const toItems = (values: string[], originId: number) =>
+      values.map(label => ({
+        section_id: sectionId,
+        origin_id: originId,
+        label,
+      }));
+
+    const options = [
+      ...toItems(this.ListSCRevit || [], 1),
+      ...toItems(this.ListSCDynamo || [], 2),
+      ...toItems(this.ListSCUsuario || [], 3),
+    ];
+
+    if (options.length === 0) {
+      return;
+    }
+
+    this.materialsService
+      .upsertMaterialsStageSelections({
+        project_id: this.projectId,
+        items: options,
+      })
+      .subscribe({
+        next: () => {
+        this.materialsService
+          .getMaterialsStageSelections(this.projectId, sectionId)
+          .subscribe({
+            next: response => {
+            const items = response?.items || [];
+            this.selectionIdByKey = {
+              ...this.selectionIdByKey,
+              ...items.reduce((acc, item) => {
+                const originId = item.origin_id ?? 0;
+                acc[this.buildSelectionKey(sectionId, originId, item.label)] = item.id;
+                return acc;
+              }, {}),
+            };
+
+            this.selectedOptionsRevit = items
+              .filter(item => item.origin_id === 1 && item.is_selected)
+              .map(item => item.label);
+            this.selectedOptionsDynamo = items
+              .filter(item => item.origin_id === 2 && item.is_selected)
+              .map(item => item.label);
+            this.selectedOptionsUsuario = items
+              .filter(item => item.origin_id === 3 && item.is_selected)
+              .map(item => item.label);
+
+            this.SOR[this.indexSheet] = this.selectedOptionsRevit;
+            this.SOD[this.indexSheet] = this.selectedOptionsDynamo;
+            this.SOU[this.indexSheet] = this.selectedOptionsUsuario;
+            },
+            error: () => {},
+          });
+        },
+        error: () => {},
+      });
   }
 
   onSelectedMaterial(value) {
@@ -504,10 +576,12 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
   }
 
   onNgModelChangeUser() {
-    //  let i;
-    //  for ( i = 0; i <= this.sheetNames.length; i++ ) {
-    //    this.indexSheet === i ? this.SOU[i] = this.selectedOptionsUsuario : this.SOU[i];
-    //  }
+    let i;
+    for (i = 0; i <= this.sheetNames.length; i++) {
+      if (this.indexSheet === i) {
+        this.SOU[i] = this.selectedOptionsUsuario;
+      }
+    }
   }
 
   onNgModelChangeMaterial() {
@@ -669,13 +743,67 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
     });
   }
 
-onSCSelected(event: MatSelectionListChange) {
+onSCSelected(event: MatSelectionListChange, originId: number, originName: string) {
   const selectedItem = event.options[0]?.value,
         isSelected = event.options[0]?.selected;
 
-  if (isSelected) {
+  if (!selectedItem || this.indexSheet === undefined || !this.projectId) {
+    return;
+  }
+
+  if (isSelected && originName === 'revit-user') {
     this.showMaterials(selectedItem, 'revit-user');
   }
+
+  const sectionId = this.indexSheet + 1;
+  const key = this.buildSelectionKey(sectionId, originId, selectedItem);
+  const selectionId = this.selectionIdByKey[key];
+
+  const rollback = () => {
+    event.options[0].selected = !isSelected;
+    this.onNgModelChangeRevit();
+    this.onNgModelChangeDynamo();
+    this.onNgModelChangeUser();
+  };
+
+  if (selectionId) {
+    this.materialsService
+      .updateMaterialsStageSelections({
+        project_id: this.projectId,
+        items: [
+          {
+            sistemaConstructivoId: selectionId,
+            is_selected: isSelected,
+          },
+        ],
+      })
+      .subscribe({
+        error: () => rollback(),
+      });
+    return;
+  }
+
+  this.materialsService
+    .upsertMaterialsStageSelections({
+      project_id: this.projectId,
+      items: [
+        {
+          section_id: sectionId,
+          origin_id: originId,
+          label: selectedItem,
+          is_selected: isSelected,
+        },
+      ],
+    })
+      .subscribe({
+        next: response => {
+          const created = response?.items?.[0];
+          if (created?.id) {
+            this.selectionIdByKey[key] = created.id;
+          }
+      },
+      error: () => rollback(),
+    });
 }
 
   showMaterials(sc, origin) {

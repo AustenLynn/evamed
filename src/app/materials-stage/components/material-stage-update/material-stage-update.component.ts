@@ -78,6 +78,7 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
   filteredOptions: Observable<Material[]>;
 
   displayedColumns: string[] = ['Standard', 'Potencial', 'Valor', 'Unidad'];
+  private selectionIdByKey: { [key: string]: number } = {};
 
   constructor(
     private materialsService: MaterialsService,
@@ -300,8 +301,75 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
       this.selectedOptionsDynamo = this.SOD?.[this.indexSheet] ?? [];
       //this.selectedOptionsUsuario = this.SOU?.[this.indexSheet] ?? [];
 
+      this.syncSelectionsForCurrentSheet();
+
       this.cdr.detectChanges();
     });
+  }
+
+  private buildSelectionKey(sectionId: number, originId: number, label: string): string {
+    return `${sectionId}|${originId}|${label}`;
+  }
+
+  private syncSelectionsForCurrentSheet() {
+    const projectId = parseInt(localStorage.getItem('idProyectoConstrucción') ?? '', 10);
+    if (!Number.isFinite(projectId) || this.indexSheet === undefined) {
+      return;
+    }
+
+    const sectionId = this.indexSheet + 1;
+    const toItems = (values: string[], originId: number) =>
+      values.map(label => ({
+        section_id: sectionId,
+        origin_id: originId,
+        label,
+      }));
+
+    const options = [
+      ...toItems(this.ListSCRevit || [], 1),
+      ...toItems(this.ListSCDynamo || [], 2),
+    ];
+
+    if (options.length === 0) {
+      return;
+    }
+
+    this.materialsService
+      .upsertMaterialsStageSelections({
+        project_id: projectId,
+        items: options,
+      })
+      .subscribe({
+        next: () => {
+        this.materialsService
+          .getMaterialsStageSelections(projectId, sectionId)
+          .subscribe({
+            next: response => {
+            const items = response?.items || [];
+            this.selectionIdByKey = {
+              ...this.selectionIdByKey,
+              ...items.reduce((acc, item) => {
+                const originId = item.origin_id ?? 0;
+                acc[this.buildSelectionKey(sectionId, originId, item.label)] = item.id;
+                return acc;
+              }, {}),
+            };
+
+            this.selectedOptionsRevit = items
+              .filter(item => item.origin_id === 1 && item.is_selected)
+              .map(item => item.label);
+            this.selectedOptionsDynamo = items
+              .filter(item => item.origin_id === 2 && item.is_selected)
+              .map(item => item.label);
+
+            this.SOR[this.indexSheet] = this.selectedOptionsRevit;
+            this.SOD[this.indexSheet] = this.selectedOptionsDynamo;
+            },
+            error: () => {},
+          });
+        },
+        error: () => {},
+      });
   }
 
   onNgModelChangeRevit() {
@@ -331,6 +399,65 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
 
   onNgModelChangeMaterial() {
     // console.log(this.selectedMaterial);
+  }
+
+  onSCSelected(event, originId: number) {
+    const selectedItem = event.options[0]?.value,
+          isSelected = event.options[0]?.selected,
+          projectId = parseInt(localStorage.getItem('idProyectoConstrucción') ?? '', 10);
+
+    if (!selectedItem || this.indexSheet === undefined || !Number.isFinite(projectId)) {
+      return;
+    }
+
+    const sectionId = this.indexSheet + 1;
+    const key = this.buildSelectionKey(sectionId, originId, selectedItem);
+    const selectionId = this.selectionIdByKey[key];
+
+    const rollback = () => {
+      event.options[0].selected = !isSelected;
+      this.onNgModelChangeRevit();
+      this.onNgModelChangeDynamo();
+    };
+
+    if (selectionId) {
+      this.materialsService
+        .updateMaterialsStageSelections({
+          project_id: projectId,
+          items: [
+            {
+              sistemaConstructivoId: selectionId,
+              is_selected: isSelected,
+            },
+          ],
+        })
+        .subscribe({
+          error: () => rollback(),
+        });
+      return;
+    }
+
+    this.materialsService
+      .upsertMaterialsStageSelections({
+        project_id: projectId,
+        items: [
+          {
+            section_id: sectionId,
+            origin_id: originId,
+            label: selectedItem,
+            is_selected: isSelected,
+          },
+        ],
+      })
+      .subscribe({
+        next: response => {
+          const created = response?.items?.[0];
+          if (created?.id) {
+            this.selectionIdByKey[key] = created.id;
+          }
+        },
+        error: () => rollback(),
+      });
   }
 
   updateStepOne() {
