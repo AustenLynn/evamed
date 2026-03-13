@@ -85,7 +85,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsRevit"
-            (ngModelChange)="onNgModelChangeRevit()" (selectionChange)="onSCSelected($event, 1, 'revit-user')">
+            (ngModelChange)="onNgModelChangeRevit()" (selectionChange)="onSCSelected($event, 1)">
             <mat-list-option *ngFor="let sc of ListSCRevit" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option" [selected]="sc.checked">
               <div style="
@@ -94,7 +94,9 @@
                   align-items: center;
                 ">
                 <div style="display: flex; align-items: center; width: 65.8%"
-                  class="item-by-list" tabindex="4">
+                  class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"
+                  (click)="onSystemLabelClick($event, sc, 'revit-user')"
+                  (keydown.enter)="onSystemLabelClick($event, sc, 'revit-user')" tabindex="4">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
@@ -112,7 +114,7 @@
           </mat-expansion-panel-header>
 
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsDynamo"
-            (ngModelChange)="onNgModelChangeDynamo()" (selectionChange)="onSCSelected($event, 2, 'dynamo')">
+            (ngModelChange)="onNgModelChangeDynamo()" (selectionChange)="onSCSelected($event, 2)">
             <mat-list-option *ngFor="let sc of ListSCDynamo" [value]="sc" [disableRipple]="true"
               checkboxPosition="before" class="item-list-option">
               <div style="
@@ -120,8 +122,10 @@
                   justify-content: space-between;
                   align-items: center;
                 ">
-                <div style="display: flex; align-items: center; width: 65.8%" (click)="showMaterials(sc, 'dynamo')"
-                  class="item-by-list" (keypress)="showMaterials(sc, 'dynamo')" tabindex="5">
+                <div style="display: flex; align-items: center; width: 65.8%"
+                  (click)="onSystemLabelClick($event, sc, 'dynamo')"
+                  class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"
+                  (keydown.enter)="onSystemLabelClick($event, sc, 'dynamo')" tabindex="5">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
@@ -138,7 +142,7 @@
             <mat-panel-title> Creados por el usuario </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsUsuario"
-            (ngModelChange)="onNgModelChangeUser()" (selectionChange)="onSCSelected($event, 3, 'user')">
+            (ngModelChange)="onNgModelChangeUser()" (selectionChange)="onSCSelected($event, 3)">
             <mat-list-option *ngFor="let sc of ListSCUsuario" [value]="sc" [disableRipple]="true"
               checkboxPosition="before">
               <div style="
@@ -146,8 +150,10 @@
                   justify-content: space-between;
                   align-items: center;
                 ">
-                <div style="display: flex; align-items: center; width: 65.8%" (click)="showMaterials(sc, 'user')"
-                  (keypress)="showMaterials(sc, 'user')" tabindex="6">
+                <div style="display: flex; align-items: center; width: 65.8%"
+                  (click)="onSystemLabelClick($event, sc, 'user')"
+                  class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"
+                  (keydown.enter)="onSystemLabelClick($event, sc, 'user')" tabindex="6">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>

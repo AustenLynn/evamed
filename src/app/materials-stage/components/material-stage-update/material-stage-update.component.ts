@@ -71,7 +71,9 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
   showListEPIC: boolean;
   EPiC: any;
   mexicaniuh: any;
-  description_material_selected: any
+  description_material_selected: any;
+  SCseleccionado = '';
+  currentPanelItem = '';
 
   myControl = new UntypedFormControl();
   options: Material[];
@@ -268,9 +270,7 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
     }
 
     // Reset UI panels
-    this.selectedMaterial = false;
-    this.showSearch = false;
-    this.listMateriales = {};
+    this.clearMaterialsPanel();
     this.shouldShowMaterials = false;
 
     // Delay updates to avoid ExpressionChangedAfterItHasBeenCheckedError
@@ -414,6 +414,10 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
     const key = this.buildSelectionKey(sectionId, originId, selectedItem);
     const selectionId = this.selectionIdByKey[key];
 
+    if (!isSelected && selectedItem === this.currentPanelItem) {
+      this.clearMaterialsPanel();
+    }
+
     const rollback = () => {
       event.options[0].selected = !isSelected;
       this.onNgModelChangeRevit();
@@ -460,6 +464,24 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
       });
   }
 
+  private clearMaterialsPanel(): void {
+    this.currentPanelItem = '';
+    this.SCseleccionado = '';
+    this.selectedMaterial = false;
+    this.showSearch = false;
+    this.showMaterial = false;
+    this.listMateriales = {};
+  }
+
+  onSystemLabelClick(event: Event, sc: string, origin: string): void {
+    event.stopPropagation();
+    this.showMaterials(null, sc, origin);
+  }
+
+  isActiveSystemLabel(sc: string): boolean {
+    return this.currentPanelItem === sc;
+  }
+
   updateStepOne() {
     //Lógica de editar
     console.log('editar------------------');
@@ -476,7 +498,9 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
   }
 
   showMaterials(event, sc, origin) {
-    event.stopPropagation();
+    event?.stopPropagation();
+    this.currentPanelItem = sc;
+    this.SCseleccionado = '/ ' + sc;
     this.selectedMaterial = false;
     this.showSearch = false;
     this.showMaterial = false;

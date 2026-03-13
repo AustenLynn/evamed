@@ -743,7 +743,7 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
     });
   }
 
-onSCSelected(event: MatSelectionListChange, originId: number, originName: string) {
+onSCSelected(event: MatSelectionListChange, originId: number) {
   const selectedItem = event.options[0]?.value,
         isSelected = event.options[0]?.selected;
 
@@ -751,8 +751,8 @@ onSCSelected(event: MatSelectionListChange, originId: number, originName: string
     return;
   }
 
-  if (isSelected && originName === 'revit-user') {
-    this.showMaterials(selectedItem, 'revit-user');
+  if (!isSelected && selectedItem === this.currentPanelItem) {
+    this.clearMaterialsPanel();
   }
 
   const sectionId = this.indexSheet + 1;
@@ -805,6 +805,15 @@ onSCSelected(event: MatSelectionListChange, originId: number, originName: string
       error: () => rollback(),
     });
 }
+
+  onSystemLabelClick(event: Event, sc: string, origin: string) {
+    event.stopPropagation();
+    this.showMaterials(sc, origin);
+  }
+
+  isActiveSystemLabel(sc: string): boolean {
+    return this.currentPanelItem === sc;
+  }
 
   showMaterials(sc, origin) {
     this.currentPanelItem = sc; // track currently shown item

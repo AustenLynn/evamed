@@ -275,9 +275,17 @@ div.step-four div.mdl-stepper-circle {
 }
 
 .item-by-list {
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
   &:hover+.container-options {
     display: block;
   }
+}
+
+.item-by-list-active {
+  background-color: #edc903;
 }
 
 .header-form {

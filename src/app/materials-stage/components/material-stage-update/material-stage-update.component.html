@@ -94,8 +94,9 @@
                   align-items: center;
                 ">
                 <div style="display: flex; align-items: center; width: 65.8%"
-                  (click)="showMaterials($event, sc, 'revit-user')" class="item-by-list"
-                  (keypress)="showMaterials($event, sc, 'revit-user')" tabindex="4">
+                  (click)="onSystemLabelClick($event, sc, 'revit-user')" class="item-by-list"
+                  [class.item-by-list-active]="isActiveSystemLabel(sc)"
+                  (keydown.enter)="onSystemLabelClick($event, sc, 'revit-user')" tabindex="4">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
@@ -122,8 +123,9 @@
                   align-items: center;
                 ">
                 <div style="display: flex; align-items: center; width: 65.8%"
-                  (click)="showMaterials($event, sc, 'dynamo')" class="item-by-list"
-                  (keypress)="showMaterials($event, sc, 'dynamo')" tabindex="5">
+                  (click)="onSystemLabelClick($event, sc, 'dynamo')" class="item-by-list"
+                  [class.item-by-list-active]="isActiveSystemLabel(sc)"
+                  (keydown.enter)="onSystemLabelClick($event, sc, 'dynamo')" tabindex="5">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
@@ -149,8 +151,9 @@
                   align-items: center;
                 ">
                 <div style="display: flex; align-items: center; width: 65.8%"
-                  (click)="showMaterials($event, sc, 'user')"
-                  (keypress)="showMaterials($event, sc, 'user')" tabindex="6">
+                  (click)="onSystemLabelClick($event, sc, 'user')" class="item-by-list"
+                  [class.item-by-list-active]="isActiveSystemLabel(sc)"
+                  (keydown.enter)="onSystemLabelClick($event, sc, 'user')" tabindex="6">
                   <div style="display: flex; flex-direction: column">
                     {{ sc }}
                   </div>
