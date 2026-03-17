@@ -84,26 +84,25 @@
               Registrados en REVIT y/o Template EVAMED
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsRevit"
-            (ngModelChange)="onNgModelChangeRevit()" (selectionChange)="onSCSelected($event, 1)">
-            <mat-list-option *ngFor="let sc of ListSCRevit" [value]="sc" [disableRipple]="true"
-              checkboxPosition="before" class="item-list-option" [selected]="sc.checked">
-              <div style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                ">
-                <div style="display: flex; align-items: center; width: 65.8%"
+          <div class="custom-selection-list">
+            <div *ngFor="let sc of ListSCRevit" class="system-item">
+              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center; width: 70%;"
                   class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"
                   (click)="onSystemLabelClick($event, sc, 'revit-user')"
                   (keydown.enter)="onSystemLabelClick($event, sc, 'revit-user')" tabindex="4">
-                  <div style="display: flex; flex-direction: column">
+                  <div style="display: flex; flex-direction: column;">
                     {{ sc }}
                   </div>
                 </div>
+                <mat-slide-toggle
+                  [checked]="isSystemSelected(sc, 1)"
+                  (change)="onToggleSystemSelection($event, sc, 1)"
+                  color="accent"
+                  class="toggle-switch"></mat-slide-toggle>
               </div>
-            </mat-list-option>
-          </mat-selection-list>
+            </div>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
 
@@ -113,26 +112,25 @@
             <mat-panel-title> Opciones EVAMED </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsDynamo"
-            (ngModelChange)="onNgModelChangeDynamo()" (selectionChange)="onSCSelected($event, 2)">
-            <mat-list-option *ngFor="let sc of ListSCDynamo" [value]="sc" [disableRipple]="true"
-              checkboxPosition="before" class="item-list-option">
-              <div style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                ">
-                <div style="display: flex; align-items: center; width: 65.8%"
+          <div class="custom-selection-list">
+            <div *ngFor="let sc of ListSCDynamo" class="system-item">
+              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center; width: 70%;"
                   (click)="onSystemLabelClick($event, sc, 'dynamo')"
                   class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"
                   (keydown.enter)="onSystemLabelClick($event, sc, 'dynamo')" tabindex="5">
-                  <div style="display: flex; flex-direction: column">
+                  <div style="display: flex; flex-direction: column;">
                     {{ sc }}
                   </div>
                 </div>
+                <mat-slide-toggle
+                  [checked]="isSystemSelected(sc, 2)"
+                  (change)="onToggleSystemSelection($event, sc, 2)"
+                  color="accent"
+                  class="toggle-switch"></mat-slide-toggle>
               </div>
-            </mat-list-option>
-          </mat-selection-list>
+            </div>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
 
@@ -141,26 +139,25 @@
           <mat-expansion-panel-header>
             <mat-panel-title> Creados por el usuario </mat-panel-title>
           </mat-expansion-panel-header>
-          <mat-selection-list #sistemas_constructivos [(ngModel)]="selectedOptionsUsuario"
-            (ngModelChange)="onNgModelChangeUser()" (selectionChange)="onSCSelected($event, 3)">
-            <mat-list-option *ngFor="let sc of ListSCUsuario" [value]="sc" [disableRipple]="true"
-              checkboxPosition="before">
-              <div style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                ">
-                <div style="display: flex; align-items: center; width: 65.8%"
+          <div class="custom-selection-list">
+            <div *ngFor="let sc of ListSCUsuario" class="system-item">
+              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center; width: 70%;"
                   (click)="onSystemLabelClick($event, sc, 'user')"
                   class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"
                   (keydown.enter)="onSystemLabelClick($event, sc, 'user')" tabindex="6">
-                  <div style="display: flex; flex-direction: column">
+                  <div style="display: flex; flex-direction: column;">
                     {{ sc }}
                   </div>
                 </div>
+                <mat-slide-toggle
+                  [checked]="isSystemSelected(sc, 3)"
+                  (change)="onToggleSystemSelection($event, sc, 3)"
+                  color="accent"
+                  class="toggle-switch"></mat-slide-toggle>
               </div>
-            </mat-list-option>
-          </mat-selection-list>
+            </div>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
     </section>

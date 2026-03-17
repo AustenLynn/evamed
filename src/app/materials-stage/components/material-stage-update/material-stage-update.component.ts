@@ -38,6 +38,7 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
   selectedOptionsRevit: string[] = [];
   selectedOptionsDynamo: string[] = [];
   selectedOptionsUsuario: string[] = [];
+  selectedSystems: { [key: string]: boolean } = {}; // Track selected systems: "originId:systemName" -> true/false
   panelOpenFirst = false;
   panelOpenSecond = false;
   panelOpenThird = false;
@@ -414,14 +415,10 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
     const key = this.buildSelectionKey(sectionId, originId, selectedItem);
     const selectionId = this.selectionIdByKey[key];
 
-    if (!isSelected && selectedItem === this.currentPanelItem) {
-      this.clearMaterialsPanel();
-    }
-
     const rollback = () => {
-      event.options[0].selected = !isSelected;
-      this.onNgModelChangeRevit();
-      this.onNgModelChangeDynamo();
+      // Update local tracking state
+      const systemKey = `${originId}:${selectedItem}`;
+      this.selectedSystems[systemKey] = !isSelected;
     };
 
     if (selectionId) {
@@ -480,6 +477,31 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
 
   isActiveSystemLabel(sc: string): boolean {
     return this.currentPanelItem === sc;
+  }
+
+  isSystemSelected(sc: string, originId: number): boolean {
+    const key = `${originId}:${sc}`;
+    return this.selectedSystems[key] || false;
+  }
+
+  onToggleSystemSelection(event: any, sc: string, originId: number): void {
+    event.stopPropagation();
+    const key = `${originId}:${sc}`;
+    // Get the new state from the mat-slide-toggle change event
+    const newSelectedState = event.checked || false;
+    
+    // Update local state
+    this.selectedSystems[key] = newSelectedState;
+    
+    // Call the original onSCSelected logic with synthetic event
+    const syntheticEvent = {
+      options: [{
+        value: sc,
+        selected: newSelectedState
+      }]
+    } as any;
+    
+    this.onSCSelected(syntheticEvent, originId);
   }
 
   updateStepOne() {

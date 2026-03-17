@@ -40,6 +40,7 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
   previousSelectedOptionsRevit: any[] = [];
   selectedOptionsDynamo: string[] = [];
   selectedOptionsUsuario: string[] = [];
+  selectedSystems: { [key: string]: boolean } = {}; // Track selected systems: "originId:systemName" -> true/false
   panelOpenFirst = true;
   panelOpenSecond = true;
   panelOpenThird = true;
@@ -743,7 +744,7 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
     });
   }
 
-onSCSelected(event: MatSelectionListChange, originId: number) {
+onSCSelected(event: MatSelectionListChange | any, originId: number) {
   const selectedItem = event.options[0]?.value,
         isSelected = event.options[0]?.selected;
 
@@ -751,19 +752,14 @@ onSCSelected(event: MatSelectionListChange, originId: number) {
     return;
   }
 
-  if (!isSelected && selectedItem === this.currentPanelItem) {
-    this.clearMaterialsPanel();
-  }
-
   const sectionId = this.indexSheet + 1;
   const key = this.buildSelectionKey(sectionId, originId, selectedItem);
   const selectionId = this.selectionIdByKey[key];
 
   const rollback = () => {
-    event.options[0].selected = !isSelected;
-    this.onNgModelChangeRevit();
-    this.onNgModelChangeDynamo();
-    this.onNgModelChangeUser();
+    // Update local tracking state
+    const systemKey = `${originId}:${selectedItem}`;
+    this.selectedSystems[systemKey] = !isSelected;
   };
 
   if (selectionId) {
@@ -813,6 +809,31 @@ onSCSelected(event: MatSelectionListChange, originId: number) {
 
   isActiveSystemLabel(sc: string): boolean {
     return this.currentPanelItem === sc;
+  }
+
+  isSystemSelected(sc: string, originId: number): boolean {
+    const key = `${originId}:${sc}`;
+    return this.selectedSystems[key] || false;
+  }
+
+  onToggleSystemSelection(event: any, sc: string, originId: number): void {
+    event.stopPropagation();
+    const key = `${originId}:${sc}`;
+    // Get the new state from the mat-slide-toggle change event
+    const newSelectedState = event.checked || false;
+    
+    // Update local state
+    this.selectedSystems[key] = newSelectedState;
+    
+    // Call the original onSCSelected logic with synthetic event
+    const syntheticEvent = {
+      options: [{
+        value: sc,
+        selected: newSelectedState
+      }]
+    } as any;
+    
+    this.onSCSelected(syntheticEvent, originId);
   }
 
   showMaterials(sc, origin) {
