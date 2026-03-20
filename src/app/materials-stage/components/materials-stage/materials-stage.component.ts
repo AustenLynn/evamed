@@ -407,6 +407,17 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
               .filter(item => item.origin_id === 3 && item.is_selected)
               .map(item => item.label);
 
+            // Populate selectedSystems object for toggle switch display binding
+            items.forEach(item => {
+              if (item.is_selected) {
+                const key = `${item.origin_id}:${item.label}`;
+                this.selectedSystems[key] = true;
+              } else {
+                const key = `${item.origin_id}:${item.label}`;
+                this.selectedSystems[key] = false;
+              }
+            });
+
             this.SOR[this.indexSheet] = this.selectedOptionsRevit;
             this.SOD[this.indexSheet] = this.selectedOptionsDynamo;
             this.SOU[this.indexSheet] = this.selectedOptionsUsuario;
@@ -817,7 +828,6 @@ onSCSelected(event: MatSelectionListChange | any, originId: number) {
   }
 
   onToggleSystemSelection(event: any, sc: string, originId: number): void {
-    event.stopPropagation();
     const key = `${originId}:${sc}`;
     // Get the new state from the mat-slide-toggle change event
     const newSelectedState = event.checked || false;

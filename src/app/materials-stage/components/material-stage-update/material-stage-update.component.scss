@@ -424,21 +424,34 @@ td.mat-mdc-footer-cell:first-of-type {
 }
 
 ::ng-deep .toggle-switch.mat-mdc-slide-toggle--checked .mdc-switch__track {
-  background-color: #92be00 !important;
+  background-color: #a8d024 !important;
 }
 
 ::ng-deep .toggle-switch.mat-mdc-slide-toggle--checked .mdc-switch__handle {
-  background-color: #92be00 !important;
+  background-color: #a8d024 !important;
 }
 
 ::ng-deep .toggle-switch.mat-mdc-slide-toggle--checked .mdc-evolution-switch__handle::after {
-  background-color: #92be00 !important;
+  background-color: #a8d024 !important;
 }
 
 ::ng-deep .toggle-switch.mat-accent .mdc-switch--checked .mdc-switch__track {
-  background-color: #92be00 !important;
+  background-color: #a8d024 !important;
 }
 
 ::ng-deep .toggle-switch.mat-accent .mdc-switch--checked .mdc-switch__handle::after {
-  background-color: #92be00 !important;
+  background-color: #a8d024 !important;
+}
+
+/* Hover state for toggle switch */
+::ng-deep .toggle-switch:hover .mdc-switch__track {
+  background-color: rgba(168, 208, 36, 0.8) !important;
+}
+
+::ng-deep .toggle-switch:hover .mdc-switch__handle {
+  background-color: rgba(168, 208, 36, 0.8) !important;
+}
+
+::ng-deep .toggle-switch .mdc-switch__ripple {
+  color: #a8d024 !important;
 }

@@ -363,6 +363,17 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
               .filter(item => item.origin_id === 2 && item.is_selected)
               .map(item => item.label);
 
+            // Populate selectedSystems object for toggle switch display binding
+            items.forEach(item => {
+              if (item.is_selected) {
+                const key = `${item.origin_id}:${item.label}`;
+                this.selectedSystems[key] = true;
+              } else {
+                const key = `${item.origin_id}:${item.label}`;
+                this.selectedSystems[key] = false;
+              }
+            });
+
             this.SOR[this.indexSheet] = this.selectedOptionsRevit;
             this.SOD[this.indexSheet] = this.selectedOptionsDynamo;
             },
@@ -485,7 +496,6 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
   }
 
   onToggleSystemSelection(event: any, sc: string, originId: number): void {
-    event.stopPropagation();
     const key = `${originId}:${sc}`;
     // Get the new state from the mat-slide-toggle change event
     const newSelectedState = event.checked || false;
