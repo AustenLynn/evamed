@@ -457,3 +457,26 @@ td.mat-mdc-footer-cell:first-of-type {
 ::ng-deep .toggle-switch .mdc-switch__ripple {
   color: #a8d024 !important;
 }
+
+.section-continue {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  margin-top: 16px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+
+.section-continue .yellow-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px !important;
+  min-height: 36px;
+  margin: 0;
+}
+
+.section-continue .custom-continue {
+  margin-top: 0 !important;
+}
