@@ -91,6 +91,17 @@ export class ProjectsService {
       );
   }
 
+  deleteSchemeProject(id: number): Observable<any> {
+    return this.http
+      .delete(`${environment.api_scheme_project}${id}/`)
+      .pipe(
+        tap(data => {
+          this.clearMaterialSchemeCache();
+          return data;
+        })
+      );
+  }
+
   getMaterialSchemeProyectOrigin() {
     return this.http.get<any>(environment.api_scheme_project_original).pipe(
       tap(data => {

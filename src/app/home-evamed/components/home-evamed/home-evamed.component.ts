@@ -654,6 +654,18 @@ export class HomeEvamedComponent implements OnInit {
     return dataList.filter(this.onlyUnique);
   }
 
+  hasProductionData(projectId: number): boolean {
+    return this.serchSections(projectId).length > 0;
+  }
+
+  hasConstructionData(projectId: number): boolean {
+    return this.serchConstructiveSection(projectId).length > 0;
+  }
+
+  hasEndLifeData(projectId: number): boolean {
+    return this.serchEndLifeSection(projectId).length > 0;
+  }
+
   DataPieUso(data) {
     const aux = [];
     let auxdata = [];
@@ -1386,15 +1398,33 @@ export class HomeEvamedComponent implements OnInit {
     this.router.navigateByUrl('materials-stage/update');
   }
 
+  addProduction(id) {
+    localStorage.setItem('idProyectoConstrucción', id);
+    this.selectionService.clearSection();
+    this.router.navigateByUrl('materials-stage/update');
+  }
+
   updateConstruction(id, section) {
     localStorage.setItem('idProyectoConstrucción', id);
     this.selectionService.setSection(section);
     this.router.navigateByUrl('construction-stage/update');
   }
 
+  addConstruction(id) {
+    localStorage.setItem('idProyectoConstrucción', id);
+    this.selectionService.clearSection();
+    this.router.navigateByUrl('construction-stage/update');
+  }
+
   updateEndLife(id, section) {
     localStorage.setItem('idProyectoConstrucción', id);
     this.selectionService.setSection(section);
+    this.router.navigateByUrl('end-life-stage/update');
+  }
+
+  addEndLife(id) {
+    localStorage.setItem('idProyectoConstrucción', id);
+    this.selectionService.clearSection();
     this.router.navigateByUrl('end-life-stage/update');
   }
 

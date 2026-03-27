@@ -71,9 +71,15 @@
     <!--Section construction systems-->
     <section class="container-systems">
       <div class="tab-title-sections">
-        <p>Seleccione el sistema constructivo base a aplicar</p>
-        <button mat-icon-button>
-          <mat-icon>add_circle</mat-icon>
+        <p>Sistema constructivo</p>
+        <button
+          mat-icon-button
+          class="system-action-button"
+          [class.delete-mode]="deleteMode"
+          [attr.aria-label]="deleteMode ? 'Eliminar sistemas seleccionados' : 'Seleccionar sistemas para eliminar'"
+          (click)="handleSystemAction()"
+        >
+          <mat-icon>{{ deleteMode ? 'delete' : 'edit' }}</mat-icon>
         </button>
       </div>
       <mat-accordion *ngIf="indexSheet !== undefined">
@@ -86,7 +92,14 @@
           </mat-expansion-panel-header>
           <div class="custom-selection-list">
             <div *ngFor="let sc of ListSCRevit" class="system-item">
-              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div class="system-row">
+                <mat-checkbox
+                  *ngIf="deleteMode"
+                  class="selection-checkbox"
+                  [checked]="isRowMarkedForDelete(sc, 1)"
+                  (click)="$event.stopPropagation()"
+                  (change)="onDeleteSelectionChange($event.checked, sc, 1)"
+                ></mat-checkbox>
                 <div style="display: flex; align-items: center; width: 70%;"
                   (click)="onSystemLabelClick($event, sc, 'revit-user')" class="item-by-list"
                   [class.item-by-list-active]="isActiveSystemLabel(sc)"
@@ -96,6 +109,7 @@
                   </div>
                 </div>
                 <mat-slide-toggle
+                  *ngIf="!deleteMode"
                   [checked]="isSystemSelected(sc, 1)"
                   (change)="onToggleSystemSelection($event, sc, 1)"
                   color="accent"
@@ -114,7 +128,14 @@
 
           <div class="custom-selection-list">
             <div *ngFor="let sc of ListSCDynamo" class="system-item">
-              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div class="system-row">
+                <mat-checkbox
+                  *ngIf="deleteMode"
+                  class="selection-checkbox"
+                  [checked]="isRowMarkedForDelete(sc, 2)"
+                  (click)="$event.stopPropagation()"
+                  (change)="onDeleteSelectionChange($event.checked, sc, 2)"
+                ></mat-checkbox>
                 <div style="display: flex; align-items: center; width: 70%;"
                   (click)="onSystemLabelClick($event, sc, 'dynamo')" class="item-by-list"
                   [class.item-by-list-active]="isActiveSystemLabel(sc)"
@@ -124,6 +145,7 @@
                   </div>
                 </div>
                 <mat-slide-toggle
+                  *ngIf="!deleteMode"
                   [checked]="isSystemSelected(sc, 2)"
                   (change)="onToggleSystemSelection($event, sc, 2)"
                   color="accent"
@@ -141,7 +163,14 @@
           </mat-expansion-panel-header>
           <div class="custom-selection-list">
             <div *ngFor="let sc of ListSCUsuario" class="system-item">
-              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div class="system-row">
+                <mat-checkbox
+                  *ngIf="deleteMode"
+                  class="selection-checkbox"
+                  [checked]="isRowMarkedForDelete(sc, 3)"
+                  (click)="$event.stopPropagation()"
+                  (change)="onDeleteSelectionChange($event.checked, sc, 3)"
+                ></mat-checkbox>
                 <div style="display: flex; align-items: center; width: 70%;"
                   (click)="onSystemLabelClick($event, sc, 'user')" class="item-by-list"
                   [class.item-by-list-active]="isActiveSystemLabel(sc)"
@@ -151,6 +180,7 @@
                   </div>
                 </div>
                 <mat-slide-toggle
+                  *ngIf="!deleteMode"
                   [checked]="isSystemSelected(sc, 3)"
                   (change)="onToggleSystemSelection($event, sc, 3)"
                   color="accent"

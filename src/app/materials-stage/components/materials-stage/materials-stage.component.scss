@@ -390,6 +390,23 @@ td.mat-mdc-footer-cell:first-of-type {
   }
 }
 
+.system-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.selection-checkbox {
+  margin-left: 8px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.system-action-button.delete-mode {
+  color: #c62828;
+}
+
 .toggle-button {
   background: none;
   border: none;

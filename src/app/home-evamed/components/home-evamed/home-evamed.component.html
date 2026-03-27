@@ -63,6 +63,15 @@
             <mat-tab-group class="container-second-tab">
               <mat-tab label="Producción" class="label-second-tab">
                 <section class="grid-container">
+                  <div class="empty-tab-state" *ngIf="!hasProductionData(project.id)">
+                    <button
+                      mat-flat-button
+                      class="empty-tab-add-button"
+                      (click)="addProduction(project.id)"
+                    >
+                      Agregar
+                    </button>
+                  </div>
                   <mat-card
                     appearance="outlined"
                     class="card-item-custom"
@@ -81,6 +90,15 @@
               </mat-tab>
               <mat-tab label="Construcción" class="label-second-tab">
                 <section class="grid-container">
+                  <div class="empty-tab-state" *ngIf="!hasConstructionData(project.id)">
+                    <button
+                      mat-flat-button
+                      class="empty-tab-add-button"
+                      (click)="addConstruction(project.id)"
+                    >
+                      Agregar
+                    </button>
+                  </div>
                   <mat-card
                     appearance="outlined"
                     class="card-item-custom"
@@ -137,6 +155,15 @@
               </mat-tab>
               <mat-tab label="Fin de vida" class="label-second-tab">
                 <section class="grid-container">
+                  <div class="empty-tab-state" *ngIf="!hasEndLifeData(project.id)">
+                    <button
+                      mat-flat-button
+                      class="empty-tab-add-button"
+                      (click)="addEndLife(project.id)"
+                    >
+                      Agregar
+                    </button>
+                  </div>
                   <mat-card
                     appearance="outlined"
                     class="card-item-custom"

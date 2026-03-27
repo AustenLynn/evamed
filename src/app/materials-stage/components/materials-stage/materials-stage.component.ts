@@ -6,7 +6,7 @@ import { ProjectsService } from './../../../core/services/projects/projects.serv
 import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
 import { UntypedFormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AddConstructiveElementComponent } from '../add-constructive-element/add-constructive-element.component';
 import { AddConstructiveSystemComponent } from '../add-constructive-system/add-constructive-system.component';
@@ -41,6 +41,8 @@ export class MaterialsStageComponent implements OnInit, OnDestroy {
   selectedOptionsDynamo: string[] = [];
   selectedOptionsUsuario: string[] = [];
   selectedSystems: { [key: string]: boolean } = {}; // Track selected systems: "originId:systemName" -> true/false
+  deleteMode = false;
+  rowsMarkedForDelete: { [key: string]: boolean } = {};
   panelOpenFirst = true;
   panelOpenSecond = true;
   panelOpenThird = true;
@@ -825,6 +827,151 @@ onSCSelected(event: MatSelectionListChange | any, originId: number) {
   isSystemSelected(sc: string, originId: number): boolean {
     const key = `${originId}:${sc}`;
     return this.selectedSystems[key] || false;
+  }
+
+  isRowMarkedForDelete(sc: string, originId: number): boolean {
+    const key = `${originId}:${sc}`;
+    return this.rowsMarkedForDelete[key] || false;
+  }
+
+  toggleDeleteMode(): void {
+    this.deleteMode = !this.deleteMode;
+    if (!this.deleteMode) {
+      this.rowsMarkedForDelete = {};
+    }
+  }
+
+  onDeleteSelectionChange(checked: boolean, sc: string, originId: number): void {
+    const key = `${originId}:${sc}`;
+    this.rowsMarkedForDelete[key] = checked;
+  }
+
+  handleSystemAction(): void {
+    if (!this.deleteMode) {
+      this.toggleDeleteMode();
+      return;
+    }
+
+    const systemsToDelete = this.getMarkedSystemsForDelete();
+    if (systemsToDelete.length === 0) {
+      this.toggleDeleteMode();
+      return;
+    }
+
+    this.deleteSelectedSystems(systemsToDelete);
+  }
+
+  private getMarkedSystemsForDelete(): Array<{ label: string; originId: number }> {
+    return Object.entries(this.rowsMarkedForDelete)
+      .filter(([, checked]) => checked)
+      .map(([key]) => {
+        const separatorIndex = key.indexOf(':');
+        return {
+          originId: parseInt(key.slice(0, separatorIndex), 10),
+          label: key.slice(separatorIndex + 1),
+        };
+      });
+  }
+
+  private deleteSelectedSystems(
+    systemsToDelete: Array<{ label: string; originId: number }>
+  ): void {
+    if (this.indexSheet === undefined) {
+      return;
+    }
+
+    const sectionId = this.indexSheet + 1;
+    const selectionRequests = [];
+
+    systemsToDelete.forEach(({ label, originId }) => {
+      const selectionId = this.selectionIdByKey[
+        this.buildSelectionKey(sectionId, originId, label)
+      ];
+
+      if (selectionId) {
+        selectionRequests.push(
+          this.materialsService.updateMaterialsStageSelections({
+            project_id: this.projectId,
+            items: [
+              {
+                sistemaConstructivoId: selectionId,
+                is_selected: false,
+              },
+            ],
+          })
+        );
+      }
+    });
+
+    const runLocalDelete = () => {
+      this.listData = (this.listData ?? []).filter(item => {
+        return !systemsToDelete.some(system => {
+          const sameLabel = item.Sistema_constructivo === system.label;
+          const sameOrigin =
+            (system.originId === 1 &&
+              (item.Origen === 'Modelo de Revit' || item.Origen === 'Template EVAMED')) ||
+            (system.originId === 2 && item.Origen === 'Opciones EVAMED') ||
+            (system.originId === 3 && item.Origen === 'Usuario_Plataforma');
+
+          return sameLabel && sameOrigin;
+        });
+      });
+
+      this.contentData[this.indexSheet + 1] = this.listData;
+      const storedDataProject = sessionStorage.getItem('dataProject');
+      if (storedDataProject) {
+        const parsedDataProject = JSON.parse(storedDataProject);
+        parsedDataProject.data = this.contentData;
+        sessionStorage.setItem('dataProject', JSON.stringify(parsedDataProject));
+      }
+
+      this.finalizeDeletedSystems(systemsToDelete, sectionId);
+    };
+
+    if (selectionRequests.length === 0) {
+      runLocalDelete();
+      return;
+    }
+
+    forkJoin(selectionRequests).subscribe({
+      next: () => runLocalDelete(),
+      error: error => {
+        console.error('No se pudieron actualizar las selecciones eliminadas', error);
+      },
+    });
+  }
+
+  private finalizeDeletedSystems(
+    systemsToDelete: Array<{ label: string; originId: number }>,
+    sectionId: number
+  ): void {
+    systemsToDelete.forEach(({ label, originId }) => {
+      delete this.rowsMarkedForDelete[`${originId}:${label}`];
+      delete this.selectedSystems[`${originId}:${label}`];
+      delete this.selectionIdByKey[this.buildSelectionKey(sectionId, originId, label)];
+
+      if (originId === 1) {
+        this.selectedOptionsRevit = this.selectedOptionsRevit.filter(item => item !== label);
+      }
+      if (originId === 2) {
+        this.selectedOptionsDynamo = this.selectedOptionsDynamo.filter(item => item !== label);
+      }
+      if (originId === 3) {
+        this.selectedOptionsUsuario = this.selectedOptionsUsuario.filter(item => item !== label);
+      }
+
+      if (this.currentPanelItem === label) {
+        this.clearMaterialsPanel();
+      }
+    });
+
+    this.SOR[this.indexSheet] = this.selectedOptionsRevit;
+    this.SOD[this.indexSheet] = this.selectedOptionsDynamo;
+    this.SOU[this.indexSheet] = this.selectedOptionsUsuario;
+    this.deleteMode = false;
+    this.rowsMarkedForDelete = {};
+
+    this.onGroupsChange([{ value: this.selectedSheet } as MatListOption]);
   }
 
   onToggleSystemSelection(event: any, sc: string, originId: number): void {
