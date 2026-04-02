@@ -440,37 +440,48 @@ td.mat-mdc-footer-cell:first-of-type {
   margin-left: auto;
 }
 
+.toggle-switch {
+  --mdc-switch-selected-track-color: #c8e36b;
+  --mdc-switch-selected-handle-color: #b8d84f;
+  --mdc-switch-selected-hover-track-color: #d4ea8a;
+  --mdc-switch-selected-hover-handle-color: #c8e36b;
+  --mdc-switch-selected-focus-track-color: #d4ea8a;
+  --mdc-switch-selected-focus-handle-color: #c8e36b;
+  --mdc-switch-selected-pressed-track-color: #bddb5a;
+  --mdc-switch-selected-pressed-handle-color: #aecd45;
+}
+
 ::ng-deep .toggle-switch.mat-mdc-slide-toggle--checked .mdc-switch__track {
-  background-color: #a8d024 !important;
+  background-color: #c8e36b !important;
 }
 
 ::ng-deep .toggle-switch.mat-mdc-slide-toggle--checked .mdc-switch__handle {
-  background-color: #a8d024 !important;
+  background-color: #b8d84f !important;
 }
 
 ::ng-deep .toggle-switch.mat-mdc-slide-toggle--checked .mdc-evolution-switch__handle::after {
-  background-color: #a8d024 !important;
+  background-color: #b8d84f !important;
 }
 
 ::ng-deep .toggle-switch.mat-accent .mdc-switch--checked .mdc-switch__track {
-  background-color: #a8d024 !important;
+  background-color: #c8e36b !important;
 }
 
 ::ng-deep .toggle-switch.mat-accent .mdc-switch--checked .mdc-switch__handle::after {
-  background-color: #a8d024 !important;
+  background-color: #b8d84f !important;
 }
 
 /* Hover state for toggle switch */
 ::ng-deep .toggle-switch:hover .mdc-switch__track {
-  background-color: rgba(168, 208, 36, 0.8) !important;
+  background-color: rgba(200, 227, 107, 0.9) !important;
 }
 
 ::ng-deep .toggle-switch:hover .mdc-switch__handle {
-  background-color: rgba(168, 208, 36, 0.8) !important;
+  background-color: rgba(184, 216, 79, 0.95) !important;
 }
 
 ::ng-deep .toggle-switch .mdc-switch__ripple {
-  color: #a8d024 !important;
+  color: #c8e36b !important;
 }
 
 .section-continue {
