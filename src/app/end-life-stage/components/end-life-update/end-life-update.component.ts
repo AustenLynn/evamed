@@ -93,9 +93,12 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit, OnDestroy 
     this.indexSheet = undefined;
     this.dataArrayTD.push([]);
 
+    this.energyTotalService.loadAll();
+
     this.endLifeService.getECDP().subscribe(data => {
       const projectId = parseInt(localStorage.getItem('idProyectoConstrucción') ?? '', 10);
       this.ECDP = data.filter(item => item.project_id === projectId);
+      this.computeAndPushTotal();
 
       // Now that data is ready, trigger initial section selection
       this.selectionService.section$.pipe(take(1)).subscribe(section => {
@@ -154,8 +157,10 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private computeAndPushTotal(): void {
-    const sum = (this.dataArrayEC || [])
-      .reduce((acc, d) => acc + (parseFloat(d.cantidad) || 0), 0);
+    // Sum across ALL sections from this.ECDP (the full project dataset),
+    // not just dataArrayEC (which is the current section only).
+    const sum = (this.ECDP || [])
+      .reduce((acc, item) => acc + (parseFloat(item.quantity) || 0), 0);
     this.energyTotalService.setEndLifeTotal(sum);
   }
 

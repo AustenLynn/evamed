@@ -136,9 +136,12 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit, 
       }
     }
 
+    this.energyTotalService.loadAll();
+
     this.constructionStageService.getConstructiveSystemElement().subscribe(data => {
       const projectId = parseInt(localStorage.getItem('idProyectoConstrucción') ?? '', 10);
       this.CSE = data.filter(item => item.project_id === projectId);
+      this.computeAndPushTotal();
 
       // Now that data is ready, trigger initial section selection
       this.selectionService.section$.pipe(take(1)).subscribe(section => {
@@ -483,8 +486,10 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit, 
   }
 
   private computeAndPushTotal(): void {
-    const sum = [...(this.dataArrayEC || []), ...(this.dataArrayAC || []), ...(this.dataArrayDG || [])]
-      .reduce((acc, d) => acc + (parseFloat(d.cantidad) || 0), 0);
+    // Sum across ALL sections from this.CSE (the full project dataset),
+    // not just the currently visible dataArrayEC (which is one section only).
+    const sum = (this.CSE || [])
+      .reduce((acc, item) => acc + (parseFloat(item.quantity) || 0), 0);
     this.energyTotalService.setConstructionTotal(sum);
   }
 

@@ -111,6 +111,7 @@ export class UsageStageUpdateComponent implements OnInit, OnDestroy {
       this.cantidad = globalData[0].quantity;
       this.unidad = globalData[0].unit_id;
       this.CAID = globalData[0].id;
+      this.computeAndPushTotal();
     });
 
     this.electricitConsumptionService.getECD().subscribe(data => {
@@ -141,6 +142,7 @@ export class UsageStageUpdateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.energyTotalService.loadAll();
     // Save on blur instead of polling.
   }
 
