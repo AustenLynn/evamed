@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
 import { EndLifeService } from 'src/app/core/services/end-life/end-life.service';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
+import { EnergyTotalService } from 'src/app/core/services/energy-total/energy-total.service';
 import { ProjectsService } from 'src/app/core/services/projects/projects.service';
 import { SelectionService } from '../../../core/services/selection/selection.service';
 import { MatSelectionList } from '@angular/material/list';
@@ -44,6 +45,7 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit, OnDestroy 
     private materialsService: MaterialsService,
     private router: Router,
     private selectionService: SelectionService,
+    private energyTotalService: EnergyTotalService,
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
       const fuentes = [];
@@ -148,6 +150,13 @@ export class EndLifeUpdateComponent implements OnInit, AfterViewInit, OnDestroy 
     }
     this.onSaveEC();
     this.saveStepFour();
+    this.computeAndPushTotal();
+  }
+
+  private computeAndPushTotal(): void {
+    const sum = (this.dataArrayEC || [])
+      .reduce((acc, d) => acc + (parseFloat(d.cantidad) || 0), 0);
+    this.energyTotalService.setEndLifeTotal(sum);
   }
 
   ngAfterViewInit(): void {

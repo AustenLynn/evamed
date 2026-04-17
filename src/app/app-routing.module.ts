@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { Routes, RouterModule, NoPreloading } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { AdminGuard } from './admin.guard';
 
@@ -171,8 +171,8 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-    preloadingStrategy: PreloadAllModules
-}),
+      preloadingStrategy: NoPreloading,
+    }),
   ],
   exports: [RouterModule],
 })

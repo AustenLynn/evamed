@@ -5,6 +5,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { CatalogsService } from './../../../core/services/catalogs/catalogs.service';
 import { ConstructionStageService } from 'src/app/core/services/construction-stage/construction-stage.service';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
+import { EnergyTotalService } from 'src/app/core/services/energy-total/energy-total.service';
 
 @Component({
     selector: 'app-construction-stage',
@@ -44,6 +45,7 @@ export class ConstructionStageComponent implements OnInit, OnDestroy {
     private catalogsService: CatalogsService,
     private constructionStageService: ConstructionStageService,
     private router: Router,
+    private energyTotalService: EnergyTotalService,
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
       // this.catalogoFuentes = data;
@@ -229,6 +231,13 @@ export class ConstructionStageComponent implements OnInit, OnDestroy {
     }
     this.onSaveEC();
     this.saveStepTwo();
+    this.computeAndPushTotal();
+  }
+
+  private computeAndPushTotal(): void {
+    const sum = [...(this.dataArrayEC || []), ...(this.dataArrayAC || []), ...(this.dataArrayDG || [])]
+      .reduce((acc, d) => acc + (parseFloat(d.cantidad) || 0), 0);
+    this.energyTotalService.setConstructionTotal(sum);
   }
 
   private saveBeforeNavigate(): void {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CatalogsService } from 'src/app/core/services/catalogs/catalogs.service';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
 import { ElectricitConsumptionService } from './../../../core/services/electricity-consumption/electricit-consumption.service';
+import { EnergyTotalService } from 'src/app/core/services/energy-total/energy-total.service';
 
 @Component({
     selector: 'app-usage-stage',
@@ -48,6 +49,7 @@ export class UsageStageComponent implements OnInit, OnDestroy {
     private catalogsService: CatalogsService,
     private router: Router,
     private electricitConsumptionService: ElectricitConsumptionService,
+    private energyTotalService: EnergyTotalService,
   ) {
     this.catalogsService.getEnergyUnits().subscribe(data => {
       const catalogoUnidades = [];
@@ -267,6 +269,11 @@ export class UsageStageComponent implements OnInit, OnDestroy {
       return;
     }
     this.saveStepThree();
+    this.computeAndPushTotal();
+  }
+
+  private computeAndPushTotal(): void {
+    this.energyTotalService.setUsageTotal(parseFloat(String(this.cantidad)) || 0);
   }
 
   goToMaterialStage() {

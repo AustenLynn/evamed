@@ -9,6 +9,7 @@ import { SelectionService } from '../../../core/services/selection/selection.ser
 import { MatSelectionList } from '@angular/material/list';
 import { finalize, take } from 'rxjs/operators';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
+import { EnergyTotalService } from 'src/app/core/services/energy-total/energy-total.service';
 
 @Component({
     selector: 'app-construction-stage-update',
@@ -55,6 +56,7 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit, 
     private constructionStageService: ConstructionStageService,
     private router: Router,
     private selectionService: SelectionService,
+    private energyTotalService: EnergyTotalService,
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
       const fuentes = [];
@@ -477,6 +479,13 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit, 
     }
     this.onSaveEC();
     this.saveStepTwo();
+    this.computeAndPushTotal();
+  }
+
+  private computeAndPushTotal(): void {
+    const sum = [...(this.dataArrayEC || []), ...(this.dataArrayAC || []), ...(this.dataArrayDG || [])]
+      .reduce((acc, d) => acc + (parseFloat(d.cantidad) || 0), 0);
+    this.energyTotalService.setConstructionTotal(sum);
   }
 
   private saveBeforeNavigate(): void {

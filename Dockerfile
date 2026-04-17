@@ -6,7 +6,7 @@ COPY package.json package-lock.json /app/
 RUN npm ci
 
 COPY . /app/
-RUN npm run build
+RUN npm run build -- --configuration production
 
 EXPOSE 8080
 

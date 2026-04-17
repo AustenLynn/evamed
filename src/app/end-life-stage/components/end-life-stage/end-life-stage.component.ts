@@ -5,6 +5,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatListOption } from '@angular/material/list';
 import { MaterialsService } from 'src/app/core/services/materials/materials.service';
+import { EnergyTotalService } from 'src/app/core/services/energy-total/energy-total.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { IntermedialComponent } from '../intermedial/intermedial.component';
@@ -45,7 +46,8 @@ export class EndLifeStageComponent implements OnInit, OnDestroy {
     private endLifeService: EndLifeService,
     private catalogsService: CatalogsService,
     private materialsService: MaterialsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private energyTotalService: EnergyTotalService,
   ) {
     this.catalogsService.getSourceInformation().subscribe(data => {
       const fuentes = [];
@@ -227,6 +229,13 @@ export class EndLifeStageComponent implements OnInit, OnDestroy {
     }
     this.onSaveEC();
     this.saveStepFour();
+    this.computeAndPushTotal();
+  }
+
+  private computeAndPushTotal(): void {
+    const sum = (this.dataArrayEC || [])
+      .reduce((acc, d) => acc + (parseFloat(d.cantidad) || 0), 0);
+    this.energyTotalService.setEndLifeTotal(sum);
   }
 
   private parseQuantity(value: unknown): number | null {
