@@ -619,6 +619,11 @@ export class ConstructionStageUpdateComponent implements OnInit, AfterViewInit, 
     });
   }
 
+  goToResultados() {
+    sessionStorage.setItem('projectID', localStorage.getItem('idProyectoConstrucción'));
+    this.router.navigateByUrl('resultados');
+  }
+
   goToEndLife() {
     this.saveBeforeNavigate();
     this.materialsService.getEDCP().subscribe(edcp => {

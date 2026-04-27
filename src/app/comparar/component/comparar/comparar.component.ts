@@ -324,6 +324,11 @@ export class CompararComponent implements OnInit {
     this.router.navigateByUrl('home-evamed');
   }
 
+  goToMaterialStage() {
+    localStorage.setItem('idProyectoConstrucción', this.idProyectoActivo.toString());
+    this.router.navigateByUrl('materials-stage/update');
+  }
+
   //ids Necesarios para modificar en html
   llenarIdsBotonesImpactos(catalogo) {
     this.idsImpactosAmbientales = { idsCiclo: [], idsElementos: [] };

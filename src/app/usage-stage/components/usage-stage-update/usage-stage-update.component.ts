@@ -598,6 +598,11 @@ export class UsageStageUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
+  goToResultados() {
+    sessionStorage.setItem('projectID', localStorage.getItem('idProyectoConstrucción'));
+    this.router.navigateByUrl('resultados');
+  }
+
   getEnergyType(value: any, type: any): string {
     let selected;
     if (type === 'electric') {

@@ -1138,4 +1138,13 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  goToHome() {
+    this.router.navigateByUrl('home-evamed');
+  }
+
+  goToResultados() {
+    sessionStorage.setItem('projectID', localStorage.getItem('idProyectoConstrucción'));
+    this.router.navigateByUrl('resultados');
+  }
 }

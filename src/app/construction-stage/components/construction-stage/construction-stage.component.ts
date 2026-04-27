@@ -459,6 +459,11 @@ export class ConstructionStageComponent implements OnInit, OnDestroy {
     this.goToUsageStage();
   }
 
+  goToResultados() {
+    sessionStorage.setItem('projectID', localStorage.getItem('idProyectoConstrucción'));
+    this.router.navigateByUrl('resultados');
+  }
+
   getSelectedSourceName(value: any): string {
     const selected = this.catalogoFuentes.find(option => option.id === value);
     return selected ? selected.name_source_information : '';
