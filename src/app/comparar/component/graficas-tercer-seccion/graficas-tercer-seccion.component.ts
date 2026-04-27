@@ -277,7 +277,7 @@ export class GraficasTercerSeccionComponent implements OnInit, AfterViewInit {
       let auxBotones = ['A1', 'A2', 'A3', 'A4', 'B4'],
        auxBotonesEtapa = {},
        auxA1A3 = false;
-      Object.keys(data.Producción).forEach(subE => {
+      Object.keys(data['Producción'] || {}).forEach(subE => {
         if(subE === 'A1-A3') {
           auxA1A3 = true;
         }
@@ -554,7 +554,7 @@ export class GraficasTercerSeccionComponent implements OnInit, AfterViewInit {
         hoverBackgroundColor: '#FF829DCC'
       },
     ];
-    const labels = this.graficaCicloVidaBar(aux['DatosMateriales'], aux['flagAgruparProduccion']);
+    const labels = this.graficaCicloVidaBar(dataProyecto, flagAgrupar);
     return { datasets: aux, labels: labels};
 }
 
@@ -564,7 +564,7 @@ export class GraficasTercerSeccionComponent implements OnInit, AfterViewInit {
       let auxBotones = ['A1', 'A2', 'A3', 'A4', 'B4'],
        auxBotonesEtapa = {},
        auxA1A3 = false;
-      Object.keys(data.Producción).forEach(subE => {
+      Object.keys(data['Producción'] || {}).forEach(subE => {
         if(subE === 'A1-A3') {
           auxA1A3 = true;
         }

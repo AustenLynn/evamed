@@ -842,9 +842,40 @@ export class MaterialStageUpdateComponent implements OnInit, AfterViewInit {
     console.log('entra a restore material');
   }
 
-  duplicateMaterial(event) {
+  duplicateMaterial(event, sc: string, origin: string) {
     event.stopPropagation();
-    console.log('entra a restore material');
+    const originIdMap = { 'revit-user': [1, 3], 'dynamo': [2], 'user': [3] };
+    const allowedOrigins = originIdMap[origin] ?? [];
+    const toDuplicate = this.listData2.filter(
+      item => item.construction_system === sc &&
+              item.section_id === this.indexSheet + 1 &&
+              allowedOrigins.includes(item.origin_id)
+    );
+    toDuplicate.forEach(item => {
+      this.projectsService.addSchemeProject({
+        comercial_name: item.comercial_name,
+        construction_system: item.construction_system,
+        provider_distance: 0,
+        quantity: item.quantity,
+        value: null,
+        distance_init: item.distance_init || 0,
+        distance_end: item.distance_end || 0,
+        replaces: item.replaces,
+        unit_text: item.unit_text,
+        description_material: item.description_material,
+        material_id: item.material_id,
+        project_id: item.project_id,
+        origin_id: item.origin_id,
+        section_id: item.section_id,
+        state_id_origin: item.state_id_origin,
+        city_id_origin: item.city_id_origin || 2,
+        city_id_end: item.city_id_end || 1,
+        transport_id_origin: item.transport_id_origin || null,
+        transport_id_end: item.transport_id_end || null,
+      }).subscribe(() => {
+        this.ngOnInit();
+      });
+    });
   }
 
   onSelectedMaterial(event, value) {

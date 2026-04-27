@@ -1153,8 +1153,20 @@ onSCSelected(event: MatSelectionListChange | any, originId: number) {
     console.log('entra a restore material');
   }
 
-  duplicateMaterial(event) {
+  duplicateMaterial(event, sc: string, origin: string) {
     event.stopPropagation();
+    const origenLabel = origin === 'dynamo' ? 'Opciones EVAMED' : 'Modelo de Revit';
+    const toDuplicate = this.listData.filter(
+      item => item.Sistema_constructivo === sc &&
+              (origin === 'user'
+                ? item.Origen === 'Creado por el usuario'
+                : item.Origen === origenLabel || item.Origen === 'Template EVAMED')
+    );
+    toDuplicate.forEach(item => {
+      this.listData.push({ ...item });
+    });
+    this.contentData[this.indexSheet + 1] = this.listData;
+    this.showMaterials(sc, origin === 'user' ? 'revit-user' : origin);
   }
 
   onReturnListMaterials() {

@@ -100,6 +100,9 @@
                   (click)="$event.stopPropagation()"
                   (change)="onDeleteSelectionChange($event.checked, sc, 1)"
                 ></mat-checkbox>
+                <button mat-icon-button *ngIf="deleteMode" aria-label="Duplicar" (click)="duplicateMaterial($event, sc, 'revit-user')">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
                 <div style="display: flex; align-items: center; width: 70%;"
                   class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"
                   (click)="onSystemLabelClick($event, sc, 'revit-user')"
@@ -136,6 +139,9 @@
                   (click)="$event.stopPropagation()"
                   (change)="onDeleteSelectionChange($event.checked, sc, 2)"
                 ></mat-checkbox>
+                <button mat-icon-button *ngIf="deleteMode" aria-label="Duplicar" (click)="duplicateMaterial($event, sc, 'dynamo')">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
                 <div style="display: flex; align-items: center; width: 70%;"
                   (click)="onSystemLabelClick($event, sc, 'dynamo')"
                   class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"
@@ -171,6 +177,9 @@
                   (click)="$event.stopPropagation()"
                   (change)="onDeleteSelectionChange($event.checked, sc, 3)"
                 ></mat-checkbox>
+                <button mat-icon-button *ngIf="deleteMode" aria-label="Duplicar" (click)="duplicateMaterial($event, sc, 'user')">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
                 <div style="display: flex; align-items: center; width: 70%;"
                   (click)="onSystemLabelClick($event, sc, 'user')"
                   class="item-by-list" [class.item-by-list-active]="isActiveSystemLabel(sc)"

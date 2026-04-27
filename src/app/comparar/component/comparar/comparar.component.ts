@@ -344,7 +344,7 @@ export class CompararComponent implements OnInit {
     this.basesDatos = {};
     listaBD.forEach(element => {
       this.DBList.push(element['name']);
-      this.basesDatos[element['name']] = false;
+      this.basesDatos[element['name']] = true;
     });
   }
 
