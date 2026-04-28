@@ -4,11 +4,20 @@
       <mat-icon class="excepction">keyboard_arrow_left</mat-icon>
     </button>
     <a class="return-proyecto">regresar a proyectos</a>
-    <br><a class="tittle-proyect">{{proyecto.nombre}}</a>
+    <br>
     <button mat-icon-button (click)="goToMaterialStage()">
       <mat-icon class="excepction">edit</mat-icon>
     </button>
-    <a class="return-proyecto">ir a etapa de materiales</a>
+    <a class="tittle-proyect">{{proyecto.nombre}}</a>
+    <br>
+    <button mat-button class="menu-proyectos" [matMenuTriggerFor]="menuEditProject">
+      Editar proyecto <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+    <mat-menu #menuEditProject="matMenu">
+      <button mat-menu-item *ngFor="let item of projectsList" (click)="editProject(item.id)">
+        <span>{{item.name_project}}</span>
+      </button>
+    </mat-menu>
   </div>
   <div class="bases-datos">
     <p class="text-duplicados">Duplicados</p>
