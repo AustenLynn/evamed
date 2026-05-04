@@ -10,14 +10,6 @@
     </button>
     <a class="tittle-proyect">{{proyecto.nombre}}</a>
     <br>
-    <button mat-button class="menu-proyectos" [matMenuTriggerFor]="menuEditProject">
-      Editar proyecto <mat-icon>keyboard_arrow_down</mat-icon>
-    </button>
-    <mat-menu #menuEditProject="matMenu">
-      <button mat-menu-item *ngFor="let item of projectsList" (click)="editProject(item.id)">
-        <span>{{item.name_project}}</span>
-      </button>
-    </mat-menu>
   </div>
   <div class="bases-datos">
     <p class="text-duplicados">Duplicados</p>
@@ -45,9 +37,14 @@
     <div>
       <div *ngFor="let item of proyectosMostrados;let i = index" class="button-graph">
         <mat-card appearance="outlined" class="card">
-          <div class="proyectoBoton"><span>{{item.num}}</span>
-          <button mat-icon-button (click)="quitarProyecto(item.id)"><mat-icon>highlight_off</mat-icon></button>
-          <span>{{item.Nombre}}</span></div>
+          <div class="proyectoBoton">
+            <span>{{item.num}}</span>
+            <span class="chip-name">{{item.Nombre}}</span>
+            <div class="chip-actions">
+              <button mat-icon-button (click)="editProject(item.id)"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="quitarProyecto(item.id)"><mat-icon>highlight_off</mat-icon></button>
+            </div>
+          </div>
         </mat-card>
       </div>
     </div>

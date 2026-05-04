@@ -17,7 +17,8 @@ import { GraficasTercerSeccionComponent } from '../../component/graficas-tercer-
 import { ProjectsService } from './../../../core/services/projects/projects.service';
 import { MaterialsService } from './../../../core/services/materials/materials.service';
 import { AnalisisService } from './../../../core/services/analisis/analisis.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {
   animate,
@@ -193,6 +194,7 @@ export class CompararComponent implements OnInit {
   idsImpactosAmbientales = {};
   //basesDatos={'EDPs':true,'EPic':false,'MEX':false}
   basesDatos = {};
+  selectionsByProject: { [projectId: number]: any[] } = {};
   toppingList: string[] = [
     'Extra cheese',
     'Mushroom',
@@ -397,8 +399,50 @@ export class CompararComponent implements OnInit {
 
   //agregar proyecto a graficas
 
+  private refreshProjectSelections(id: number): void {
+    this.materials.getMaterialsStageSelections(id).pipe(
+      catchError(() => of({ items: [] }))
+    ).subscribe(response => {
+      this.selectionsByProject[id] = response?.items || [];
+
+      const data = this.llamarCalculos(id),
+        analisis = this.getAnalisisBarras(id, data),
+        analisisRad = this.getAnalisisRadial(id, data),
+        analisisPie = this.getAnalisisPie(id, data),
+        analisisBarDos = this.getAnalisisBarrasElementosConstructivos(id),
+        analisisPieBarDos = this.getAnalisisPieBarSegunaSeccion(id),
+        analisisPieTres = this.getAnalisisElementos(id);
+
+      const barIdx = this.outproyect_bar.findIndex((e: any) => e.id == id);
+      if (barIdx >= 0) this.outproyect_bar[barIdx] = analisis;
+      const radIdx = this.outproyect_radar.findIndex((e: any) => e.id == id);
+      if (radIdx >= 0) this.outproyect_radar[radIdx] = analisisRad;
+      const pieIdx = this.outproyect_pie.findIndex((e: any) => e.id == id);
+      if (pieIdx >= 0) this.outproyect_pie[pieIdx] = analisisPie;
+      const barDosIdx = this.outproyect_bar_elementos.findIndex((e: any) => e.id == id);
+      if (barDosIdx >= 0) this.outproyect_bar_elementos[barDosIdx] = analisisBarDos;
+      const pieBarDosIdx = this.outproyect_pie_bar_elementos.findIndex((e: any) => e.id == id);
+      if (pieBarDosIdx >= 0) this.outproyect_pie_bar_elementos[pieBarDosIdx] = analisisPieBarDos;
+      const elemIdx = this.proyectosMostrados_elementos.findIndex((e: any) => e.idproyecto == id);
+      if (elemIdx >= 0) this.proyectosMostrados_elementos[elemIdx].data = analisisPieTres;
+
+      if (this.resultdosTabla) {
+        this.TablaResultados();
+      } else {
+        this.iniciaBarras();
+      }
+      if (this.Impactos_Elementos) {
+        this.iniciaBarrasSeccionDos();
+      }
+      if (this.Elementos_constructivos) {
+        this.iniciarSeccionTres();
+      }
+    });
+  }
+
   iniciar_graficas(id: number) {
     if (this.proyect_active.some(item => item == id)) {
+      this.refreshProjectSelections(id);
       return;
     }
     this.proyect_active.push(id);
@@ -408,95 +452,115 @@ export class CompararComponent implements OnInit {
       this.banderaAjusteElememtos = true;
     }
 
-    const data = this.llamarCalculos(id),
+    this.materials.getMaterialsStageSelections(id).pipe(
+      catchError(() => of({ items: [] }))
+    ).subscribe(response => {
+      this.selectionsByProject[id] = response?.items || [];
 
-    analisis = this.getAnalisisBarras(id, data),
-    analisisRad = this.getAnalisisRadial(id, data),
-    analisisPie = this.getAnalisisPie(id, data),
-    analisisBarDos = this.getAnalisisBarrasElementosConstructivos(id),
-    analisisPieBarDos = this.getAnalisisPieBarSegunaSeccion(id),
-    analisisPieTres = this.getAnalisisElementos(id);
+      const data = this.llamarCalculos(id),
 
-    this.proyect.forEach((proyecto, index) => {
-      if (proyecto.id == id && proyecto.id != this.idProyectoActivo) {
-        this.proyect[index].num_epic = this.calculos.materiales_EPIC;
-        this.proyect[index].num_epd = this.calculos.materiales_EPD;
-        this.proyect[index].card = true;
-        this.proyectosMostrados = [
-          ...this.proyectosMostrados,
-          {
-            num: this.proyect_active.length,
-            Nombre: this.proyect[index].Nombre,
-            id: this.proyect[index].id,
-          },
-        ];
-      }
-    });
+      analisis = this.getAnalisisBarras(id, data),
+      analisisRad = this.getAnalisisRadial(id, data),
+      analisisPie = this.getAnalisisPie(id, data),
+      analisisBarDos = this.getAnalisisBarrasElementosConstructivos(id),
+      analisisPieBarDos = this.getAnalisisPieBarSegunaSeccion(id),
+      analisisPieTres = this.getAnalisisElementos(id);
 
-    this.banderaAjusteElememtos = false;
-    this.outproyect_bar.push(analisis);
-    this.outproyect_radar.push(analisisRad);
-    this.outproyect_pie.push(analisisPie);
-    this.outproyect_bar_elementos.push(analisisBarDos);
-    this.outproyect_pie_bar_elementos.push(analisisPieBarDos);
-
-    if(this.Impactos_ambientales) {
-      //elementos de la dección 1
-      if (this.ID != ' ') {
-        document.getElementById(this.ID).className = 'boton-principal';
-      }
-    }
-    if (this.resultdosTabla) {
-      this.TablaResultados();
-    } else {
-      this.iniciaBarras();
-    }
-    if (this.Impactos_Elementos) {
-      //elementos de la sección 2
-      this.iniciaBarrasSeccionDos();
-      if(this.imgSeleccionadaElemento != ' ') {
-        this.DispercionAP(this.imgSeleccionadaElemento, ' ');
-      }
-      Object.keys(this.iconosElementosConstrucivos).forEach(element => {
-        if(this.iconosElementosConstrucivos[element]['habilitado'] === false) {
-          document.getElementById(this.idsIconosElementos[element]['idTEXTO']).className = 'espacio-sin-selecciomar';
-        }
-      })
-      this.catologoImpactoAmbiental.forEach(impacto => {
-        const auxID = impacto['id'].toString().concat('LineaImpactoElememtos'),
-          elementosflag = document.getElementById(auxID);
-        if (elementosflag != null) {
-          elementosflag.className = 'dot';
+      this.proyect.forEach((proyecto, index) => {
+        if (proyecto.id == id && proyecto.id != this.idProyectoActivo) {
+          this.proyect[index].num_epic = this.calculos.materiales_EPIC;
+          this.proyect[index].num_epd = this.calculos.materiales_EPD;
+          this.proyect[index].card = true;
+          this.proyectosMostrados = [
+            ...this.proyectosMostrados,
+            {
+              num: this.proyect_active.length,
+              Nombre: this.proyect[index].Nombre,
+              id: this.proyect[index].id,
+            },
+          ];
         }
       });
-      this.graficabar(null);
-    }
-    this.containerGraficas.clear();
-    this.receiveSelector(null);
-    this.banderaGrapg = 0;
 
-    this.proyectosMostrados_elementos = [
-      ...this.proyectosMostrados_elementos,
-      {
-        idproyecto: id,
-        nombre: analisis.Nombre,
-        data: analisisPieTres,
-      },
-    ];
-    this.estadoTercerSeccion[id] = {
-      agruparProduccion: false,
-      cicloSeleccionado: ' ',
-      flagPie: true,
-      fragBar: false,
-    };
+      this.banderaAjusteElememtos = false;
+      this.outproyect_bar.push(analisis);
+      this.outproyect_radar.push(analisisRad);
+      this.outproyect_pie.push(analisisPie);
+      this.outproyect_bar_elementos.push(analisisBarDos);
+      this.outproyect_pie_bar_elementos.push(analisisPieBarDos);
 
-    if (this.Elementos_constructivos) {
-      this.iniciarSeccionTres();
-    }
-    this.showVar = false;
-    this.showVar_1 = false;
-    this.banderaGrapg = 0;
-    return;
+      if(this.Impactos_ambientales) {
+        //elementos de la dección 1
+        if (this.ID != ' ') {
+          document.getElementById(this.ID).className = 'boton-principal';
+        }
+      }
+      if (this.resultdosTabla) {
+        this.TablaResultados();
+      } else {
+        this.iniciaBarras();
+      }
+      if (this.Impactos_Elementos) {
+        //elementos de la sección 2
+        this.iniciaBarrasSeccionDos();
+        if(this.imgSeleccionadaElemento != ' ') {
+          this.DispercionAP(this.imgSeleccionadaElemento, ' ');
+        }
+        Object.keys(this.iconosElementosConstrucivos).forEach(element => {
+          if(this.iconosElementosConstrucivos[element]['habilitado'] === false) {
+            document.getElementById(this.idsIconosElementos[element]['idTEXTO']).className = 'espacio-sin-selecciomar';
+          }
+        })
+        this.catologoImpactoAmbiental.forEach(impacto => {
+          const auxID = impacto['id'].toString().concat('LineaImpactoElememtos'),
+            elementosflag = document.getElementById(auxID);
+          if (elementosflag != null) {
+            elementosflag.className = 'dot';
+          }
+        });
+        this.graficabar(null);
+      }
+      this.containerGraficas.clear();
+      this.receiveSelector(null);
+      this.banderaGrapg = 0;
+
+      this.proyectosMostrados_elementos = [
+        ...this.proyectosMostrados_elementos,
+        {
+          idproyecto: id,
+          nombre: analisis.Nombre,
+          data: analisisPieTres,
+        },
+      ];
+      this.estadoTercerSeccion[id] = {
+        agruparProduccion: false,
+        cicloSeleccionado: ' ',
+        flagPie: true,
+        fragBar: false,
+      };
+
+      if (this.Elementos_constructivos) {
+        this.iniciarSeccionTres();
+      }
+      this.showVar = false;
+      this.showVar_1 = false;
+      this.banderaGrapg = 0;
+    });
+  }
+
+  private getFilteredScheme(idProyecto: number): any[] {
+    const selections: any[] = this.selectionsByProject[idProyecto] ?? [];
+    const deselectedKeys = new Set(
+      selections
+        .filter(s => s.is_selected === false)
+        .map(s => `${s.label}:${s.origin_id ?? 'null'}`)
+    );
+    if (deselectedKeys.size === 0) return this.materialSchemeProyectList;
+    return (this.materialSchemeProyectList as any[]).filter(item => {
+      if (item.project_id != idProyecto) return true;
+      const key = `${item.construction_system}:${item.origin_id ?? 'null'}`;
+      return !deselectedKeys.has(key);
+    });
   }
 
   iniciaBarras() {
@@ -606,7 +670,7 @@ export class CompararComponent implements OnInit {
       projectsList: this.projectsList,
       materialList: this.materialList,
       materialSchemeDataList: this.materialSchemeDataList,
-      materialSchemeProyectList: this.materialSchemeProyectList,
+      materialSchemeProyectList: this.getFilteredScheme(idProyecto),
       potentialTypesList: this.potentialTypesList,
       standarsList: this.standarsList,
       CSEList: this.CSEList,
@@ -641,7 +705,7 @@ export class CompararComponent implements OnInit {
       projectsList: this.projectsList,
       materialList: this.materialList,
       materialSchemeDataList: this.materialSchemeDataList,
-      materialSchemeProyectList: this.materialSchemeProyectList,
+      materialSchemeProyectList: this.getFilteredScheme(idProyecto),
       potentialTypesList: this.potentialTypesList,
       standarsList: this.standarsList,
       CSEList: this.CSEList,
@@ -1170,7 +1234,7 @@ export class CompararComponent implements OnInit {
       projectsList: this.projectsList,
       materialList: this.materialList,
       materialSchemeDataList: this.materialSchemeDataList,
-      materialSchemeProyectList: this.materialSchemeProyectList,
+      materialSchemeProyectList: this.getFilteredScheme(idProyecto),
       potentialTypesList: this.potentialTypesList,
       standarsList: this.standarsList,
       CSEList: this.CSEList,
@@ -1218,7 +1282,7 @@ export class CompararComponent implements OnInit {
         const auxidelemento: string = element['id'];
         Object.keys(auxDatos).forEach(impacto => {
           Object.keys(auxDatos[impacto]).forEach(idelemento => {
-            if (idelemento == auxidelemento.toString()) {
+            if (idelemento == auxidelemento.toString() && auxDatos[impacto][idelemento] !== 0) {
               flag = true;
             }
           });
@@ -1249,7 +1313,7 @@ export class CompararComponent implements OnInit {
           this.potentialTypesList[0]['name_complete_potential_type']
         );
         Object.keys(auxDatos[auximpacto]).forEach(idelemento => {
-          if (idelemento == auxidelemento.toString()) {
+          if (idelemento == auxidelemento.toString() && auxDatos[auximpacto][idelemento] !== 0) {
             flag = true;
           }
         });
@@ -1277,7 +1341,7 @@ export class CompararComponent implements OnInit {
             this.potentialTypesList[0]['name_complete_potential_type']
           );
         Object.keys(auxDatos[auximpacto]).forEach(idelemento => {
-          if (idelemento == auxidelemento.toString()) {
+          if (idelemento == auxidelemento.toString() && auxDatos[auximpacto][idelemento] !== 0) {
             flag = true;
           }
         });
@@ -1318,7 +1382,7 @@ export class CompararComponent implements OnInit {
             this.potentialTypesList[0]['name_complete_potential_type']
           );
         Object.keys(auxDatos[auximpacto]).forEach(idelemento => {
-          if (idelemento == auxidelemento.toString()) {
+          if (idelemento == auxidelemento.toString() && auxDatos[auximpacto][idelemento] !== 0) {
             flag = true;
           }
         });
@@ -1390,6 +1454,7 @@ export class CompararComponent implements OnInit {
       }
     });
     this.proyect_active = this.proyect_active.filter(item => item != ID);
+    delete this.selectionsByProject[ID];
 
     this.proyectosMostrados = this.proyectosMostrados.filter(
       ({ id }) => id != ID

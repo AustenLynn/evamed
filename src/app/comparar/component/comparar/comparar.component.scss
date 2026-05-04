@@ -58,6 +58,11 @@
 .button-graph {
   display: inline-block;
   margin-right: 10px;
+
+  &:hover .chip-actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
   .card.datos {
     height: auto;
   }
@@ -87,6 +92,20 @@
   transform: translateY(-8px);
   display: flex;
   align-items: center;
+  width: 100%;
+}
+
+.chip-name {
+  margin-left: 4px;
+}
+
+.chip-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
 }
 
 ng-template {

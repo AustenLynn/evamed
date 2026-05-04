@@ -204,15 +204,18 @@ export class CalculosTercerSeccion {
               peso = conversion_val[0]['value'];
             }
             if(BD[baseDatosMaterial[0]['database_from']]) {
+              // Always initialize sumaParaReempazos for this section so B4 never crashes
+              if(!sumaParaReempazos[ps['section_id']]) {
+                sumaParaReempazos[ps['section_id']] = {};
+                auxMaterialesYaSumados[ps['section_id']] = [];
+                auxMaterialesTransporte[ps['section_id']] = [];
+              }
               const auxres = peso * ps['quantity'] * (nacional + internacional)
               if(auxres != 0) {
                 if(!elementoscreados.includes(ps['section_id'])) {
                   elementoscreados.push(ps['section_id']);
                   Datos[nameImpacto]['Construccion']['A4'][ps['section_id']] = 0;
                   DatosMateriales[nameImpacto]['Construccion']['A4'][ps['section_id']] = {};
-                  sumaParaReempazos[ps['section_id']] = {};
-                  auxMaterialesYaSumados[ps['section_id']] = [];
-                  auxMaterialesTransporte[ps['section_id']] = [];
                 }
                 if(!auxMaterialesTransporte[ps['section_id']].includes(ps['material_id'])) {
                   sumaParaReempazos[ps['section_id']][ps['material_id']] = 0;
