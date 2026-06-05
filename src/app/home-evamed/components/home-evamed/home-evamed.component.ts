@@ -30,6 +30,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 //import { formatNumber } from '@angular/common';
 
 @Component({
@@ -38,7 +39,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     styleUrls: ['./home-evamed.component.scss'],
     imports: [BaseChartDirective, MatCardModule, MatSelectModule, FormsModule, MatFormFieldModule,
         MatIconModule, MatButtonModule, MatButtonToggleModule, MatTabsModule, MatMenuModule,
-        CommonModule, MatTooltipModule]
+        CommonModule, MatTooltipModule, MatProgressSpinnerModule]
 })
 export class HomeEvamedComponent implements OnInit {
   nombre: string;
@@ -262,33 +263,7 @@ export class HomeEvamedComponent implements OnInit {
         this.dataMaterial = dataMaterial;
       });
 
-    this.users
-      .searchUser(localStorage.getItem('email-login'))
-      .subscribe(data => {
-        this.user = data[0].name;
-        this.sector = data[0].institution;
-        this.email = data[0].email;
-        localStorage.setItem('email-id', data[0].id);
-        this.projectsList = [];
-        this.cargaDatosCalculo = false;
-        this.projects.getProjects().subscribe(data => {
-          data.map(item => {
-            if (
-              item.user_platform_id ===
-              parseInt(localStorage.getItem('email-id'), 10)
-            ) {
-              this.auxDatosGraficaUso.push(
-                this.DataPieUso(this.serchUseData(item.id))
-              );
-              this.projectsList.push(item);
-            }
-            this.countProjectList = this.projectsList.length;
-          });
-          this.projectsList.reverse();
-          this.auxDatosGraficaUso.reverse();
-          this.tempProjectsList = this.projectsList;
-        });
-      });
+    // user + projects are loaded in ngOnInit to ensure ordering before result fetches
 
     this.catalogsService.getStates().subscribe(data => {
       this.catalogoEstados = data;
@@ -305,13 +280,8 @@ export class HomeEvamedComponent implements OnInit {
       });
 
     this.endLifeService.getECDP().subscribe(data => {
-      const ELSR = [];
-      data.map(item => {
-        ELSR.push(item);
-      });
-      console.log('obteniendo datos de fin de vida');
-      console.log(ELSR);
-      this.ListDataEndLife = ELSR;
+      this.ListDataEndLife = data;
+      this.ECDP = data;
     });
 
     this.catalogsService
@@ -335,146 +305,153 @@ export class HomeEvamedComponent implements OnInit {
       });
       this.ECD = ECD;
     });
-
-    this.endLifeService.getECDP().subscribe(data => {
-      this.ECDP = data;
-    });
   }
 
   async ngOnInit() {
-    this.DatosCalculos = {
-      TEList: await lastValueFrom(this.analisis.getTypeEnergy()),
-      projectsList: await lastValueFrom(this.projectsService.getProjects()),
-      materialList: await lastValueFrom(this.materials.getMaterials()),
-      materialSchemeDataList: await lastValueFrom(this.analisis
-        .getMaterialSchemeData()),
-      materialSchemeProyectList: await lastValueFrom(this.analisis
-        .getMaterialSchemeProyect()),
-      potentialTypesList: await lastValueFrom(this.analisis.getPotentialTypes()),
-      standarsList: await lastValueFrom(this.analisis.getStandars()),
-      CSEList: await lastValueFrom(this.analisis.getConstructiveSystemElement()),
-      SIDList: await lastValueFrom(this.analisis.getSourceInformationData()),
-      SIList: await lastValueFrom(this.analisis.getSourceInformation()),
-      ACRList: await lastValueFrom(this.analisis.getAnnualConsumptionRequired()),
-      ECDList: await lastValueFrom(this.analisis.getElectricityConsumptionData()),
-      TEDList: await lastValueFrom(this.analisis.getTypeEnergyData()),
-      ULList: await lastValueFrom(this.analisis.getUsefulLife()),
-      ECDPList: await lastValueFrom(this.analisis.getECDP()),
-      sectionList: await lastValueFrom(this.analisis.getSectionsList()),
-      PTList: await lastValueFrom(this.analisis.getPotentialTransport()),
-      conversionList: await lastValueFrom(this.analisis.getConversion()),
-    };
-    const listaBD = await lastValueFrom(this.analisis.getDB()),
-      auxBD = [],
-      auxbases = {};
-    listaBD.forEach(element => {
-      auxBD.push(element['name']);
-      auxbases[element['name']] = false;
-    });
-    this.auxDataProjectList = [];
-    this.projectsList.forEach(element => {
-      let calculosOperacionesDeFase = null;
-      const auxCalculos = this.calculos.OperacionesDeFase(
-        element.id,
-        this.DatosCalculos,
-        auxbases
-      );
-      calculosOperacionesDeFase = auxCalculos[0];
+    // Load user, then catalogs + projects in parallel
+    const userData = await lastValueFrom(
+      this.users.searchUser(localStorage.getItem('email-login'))
+    );
+    this.user = userData[0].name;
+    this.sector = userData[0].institution;
+    this.email = userData[0].email;
+    localStorage.setItem('email-id', userData[0].id);
 
-      const auxDatos: Record<string, any> = {
-        id: element.id,
-        datos: calculosOperacionesDeFase,
-        etapasIgnoradas: [],
-        porcentaje: this.calculos.ValoresProcentaje(
+    const [allProjects, potentialTypesList, ULList, listaBD] = await Promise.all([
+      lastValueFrom(this.projectsService.getProjects()),
+      lastValueFrom(this.analisis.getPotentialTypes()),
+      lastValueFrom(this.analisis.getUsefulLife()),
+      lastValueFrom(this.analisis.getDB()),
+    ]);
+
+    const userId = parseInt(localStorage.getItem('email-id'), 10);
+    this.projectsList = allProjects
+      .filter((item: any) => item.user_platform_id === userId)
+      .reverse();
+    this.tempProjectsList = this.projectsList;
+    this.countProjectList = this.projectsList.length;
+
+    // Build usage pie chart data (depends on constructor-loaded ACR/ECD)
+    this.auxDatosGraficaUso = this.projectsList.map(
+      (item: any) => this.DataPieUso(this.serchUseData(item.id))
+    );
+
+    this.catologoImpactoAmbiental = this.calculos.FiltradoDeImpactos(potentialTypesList);
+    this.DatosCalculos = { projectsList: allProjects, potentialTypesList, ULList };
+
+    const auxBD: string[] = listaBD.map((el: any) => el['name']);
+    const auxbases: Record<string, boolean> = auxBD.reduce((acc: Record<string, boolean>, n: string) => { acc[n] = true; return acc; }, {});
+
+    // Build skeleton entries — results are fetched lazily when the user opens the Results tab
+    this.auxDataProjectList = this.projectsList.map((element: any) => ({
+      id: element.id,
+      resultsLoaded: false,
+      resultsLoading: false,
+      datos: null,
+      etapasIgnoradas: [],
+      porcentaje: null,
+      porcentajeSubepata: null,
+      banderaEtapa: false,
+      etapaSeleccionada: 'Ninguna',
+      subetasMostrada: [{ abreviacion: 'nada', color: '#FFFFFF' }],
+      impactoCompleteSelect: null,
+      impactoSelect: null,
+      unit_impacto: null,
+      TipoGraficaActiva: { Pie: true, Bar: false },
+      idsTextBotones: {
+        Producción: 'ProducciónTInfo'.concat(String(element.id)),
+        Construccion: 'ConstruccionTInfo'.concat(String(element.id)),
+        Uso: 'UsoTInfo'.concat(String(element.id)),
+        FinDeVida: 'FinDeVidaTInfo'.concat(String(element.id)),
+      },
+      idsBotones: {
+        Producción: 'ProducciónTextInfo'.concat(String(element.id)),
+        Construccion: 'ConstruccionTextInfo'.concat(String(element.id)),
+        Uso: 'UsoTextInfo'.concat(String(element.id)),
+        FinDeVida: 'FinDeVidaTextInfo'.concat(String(element.id)),
+      },
+      iconosCambio: {
+        Producción: 'visibility',
+        Construccion: 'visibility',
+        Uso: 'visibility',
+        FinDeVida: 'visibility',
+      },
+      dataGraficaBar: null,
+      dataGraficaPie: null,
+      mostrarOpcionCarbono: false,
+      iconoCarbono: 'switch_left',
+      graficasCarbonoOResultados: { resultados: true, carbono: false },
+      opcionCarbonoSeleccionada: this.catologoOpcionesCarbono[0],
+      dataGraficaCarbono: this.calculos.llenarGraficaCarbono(this.catologoOpcionesCarbono[0]),
+      valorCarbono: null,
+      flagsCarbono: null,
+      descripcionCarbono: this.calculos.determinarDescripcionCarbono(this.catologoOpcionesCarbono[0]),
+      errorCalculos: false,
+      DBList: auxBD,
+      basesDatos: { ...auxbases },
+    }));
+    this.cargaDatosCalculo = true;
+  }
+
+  onTabChange(event: any, i: number) {
+    if (event.index === 1) {
+      this.loadProjectResults(i);
+    }
+  }
+
+  async loadProjectResults(i: number) {
+    if (this.auxDataProjectList[i].resultsLoaded || this.auxDataProjectList[i].resultsLoading) return;
+    this.auxDataProjectList[i].resultsLoading = true;
+
+    const element = this.projectsList[i];
+    const result = await lastValueFrom(this.analisis.getProjectResults(element.id));
+
+    const rawDatos = result.datos;
+    const calculosOperacionesDeFase: Record<string, any> = {};
+    Object.keys(rawDatos).forEach(key => {
+      calculosOperacionesDeFase[this.calculos.ajustarNombre(key)] = rawDatos[key];
+    });
+
+    const firstImpacto = this.catologoImpactoAmbiental[0];
+    const firstImpactoKey = this.calculos.ajustarNombre(firstImpacto['name_complete_potential_type']);
+    const porcentajeSubepata = this.calculos.ValoresProcentajeSubeapa(calculosOperacionesDeFase, []);
+
+    this.auxDataProjectList[i] = {
+      ...this.auxDataProjectList[i],
+      resultsLoaded: true,
+      resultsLoading: false,
+      datos: calculosOperacionesDeFase,
+      impactoCompleteSelect: firstImpacto['name_complete_potential_type'],
+      impactoSelect: firstImpactoKey,
+      unit_impacto: firstImpacto['unit_potential_type'],
+      porcentaje: this.calculos.ValoresProcentaje(calculosOperacionesDeFase, []),
+      porcentajeSubepata,
+      dataGraficaBar: this.cargarDataBar(
+        porcentajeSubepata,
+        firstImpactoKey,
+        [],
+        element.id,
+        firstImpacto['name_complete_potential_type'],
+        calculosOperacionesDeFase
+      ),
+      dataGraficaPie: this.cargaDataPie(porcentajeSubepata, firstImpactoKey, []),
+      valorCarbono: this.calculos
+        .determinaValorCarbono(
           calculosOperacionesDeFase,
-          []
-        ),
-        porcentajeSubepata: this.calculos.ValoresProcentajeSubeapa(
-          calculosOperacionesDeFase,
-          []
-        ),
-        banderaEtapa: false,
-        etapaSeleccionada: 'Ninguna',
-        subetasMostrada: [{ abreviacion: 'nada', color: '#FFFFFF' }],
-        impactoCompleteSelect:
-          this.catologoImpactoAmbiental[0]['name_complete_potential_type'],
-        impactoSelect: this.calculos.ajustarNombre(
-          this.catologoImpactoAmbiental[0]['name_complete_potential_type']
-        ),
-        unit_impacto: this.catologoImpactoAmbiental[0]['unit_potential_type'],
-        TipoGraficaActiva: { Pie: true, Bar: false },
-        idsTextBotones: {
-          Producción: 'ProducciónTInfo'.concat(String(element.id)),
-          Construccion: 'ConstruccionTInfo'.concat(String(element.id)),
-          Uso: 'UsoTInfo'.concat(String(element.id)),
-          FinDeVida: 'FinDeVidaTInfo'.concat(String(element.id)),
-        },
-        idsBotones: {
-          Producción: 'ProducciónTextInfo'.concat(String(element.id)),
-          Construccion: 'ConstruccionTextInfo'.concat(String(element.id)),
-          Uso: 'UsoTextInfo'.concat(String(element.id)),
-          FinDeVida: 'FinDeVidaTextInfo'.concat(String(element.id)),
-        },
-        iconosCambio: {
-          Producción: 'visibility',
-          Construccion: 'visibility',
-          Uso: 'visibility',
-          FinDeVida: 'visibility',
-        },
-        dataGraficaBar: this.cargarDataBar(
-          this.calculos.ValoresProcentajeSubeapa(calculosOperacionesDeFase, []),
-          this.calculos.ajustarNombre(
-            this.catologoImpactoAmbiental[0]['name_complete_potential_type']
-          ),
-          [],
-          element.id,
-          this.catologoImpactoAmbiental[0]['name_complete_potential_type'],
-          calculosOperacionesDeFase
-        ),
-        dataGraficaPie: this.cargaDataPie(
-          this.calculos.ValoresProcentajeSubeapa(calculosOperacionesDeFase, []),
-          this.calculos.ajustarNombre(
-            this.catologoImpactoAmbiental[0]['name_complete_potential_type']
-          ),
-          []
-        ),
-        mostrarOpcionCarbono: false,
-        iconoCarbono: 'switch_left',
-        graficasCarbonoOResultados: { resultados: true, carbono: false },
-        opcionCarbonoSeleccionada: this.catologoOpcionesCarbono[0],
-        dataGraficaCarbono: this.calculos.llenarGraficaCarbono(
-          this.catologoOpcionesCarbono[0]
-        ),
-        valorCarbono: this.calculos
-          .determinaValorCarbono(
-            calculosOperacionesDeFase,
-            this.DatosCalculos.projectsList,
-            element.id,
-            this.DatosCalculos.ULList
-          )
-          .toExponential(2),
-        flagsCarbono: this.calculos.buscarValosCarbono(
-          calculosOperacionesDeFase,
-          this.catologoOpcionesCarbono[0],
           this.DatosCalculos.projectsList,
           element.id,
           this.DatosCalculos.ULList
-        ),
-        descripcionCarbono: this.calculos.determinarDescripcionCarbono(
-          this.catologoOpcionesCarbono[0]
-        ),
-        errorCalculos: auxCalculos[1],
-        DBList: auxBD,
-        basesDatos: auxbases,
-      };
-      this.auxDataProjectList.push(auxDatos);
-    });
-    this.cargaDatosCalculo = true;
-
-    // Trigger database "selection"
-    this.auxDataProjectList.forEach( (project, i) => {
-      this.ajusteUsoBaseDatos(project.DBList, i);
-    });
+        )
+        .toExponential(2),
+      flagsCarbono: this.calculos.buscarValosCarbono(
+        calculosOperacionesDeFase,
+        this.catologoOpcionesCarbono[0],
+        this.DatosCalculos.projectsList,
+        element.id,
+        this.DatosCalculos.ULList
+      ),
+      errorCalculos: result.error,
+    };
   }
 
   onlyUnique(value, index, self) {
@@ -1252,73 +1229,63 @@ export class HomeEvamedComponent implements OnInit {
     }
   }
 
-  ajusteUsoBaseDatos(seleccion, project) {
-    Object.keys(this.auxDataProjectList[project]['basesDatos']).forEach(
-      bd => {
-        let flag = false;
-        seleccion.forEach(bdSelect => {
-          if (bdSelect === bd) {
-            flag = true;
-          }
-        });
-        this.auxDataProjectList[project]['basesDatos'][bd] = flag;
-      }
-    );
-    const auxCalculos = this.calculos.OperacionesDeFase(
-      this.auxDataProjectList[project]['id'],
-      this.DatosCalculos,
-      this.auxDataProjectList[project]['basesDatos']
-    ),
-     calculosOperacionesDeFase = auxCalculos[0];
+  async ajusteUsoBaseDatos(seleccion: string[], project: number) {
+    const projectId = this.auxDataProjectList[project]['id'];
+    const databases = seleccion.length > 0 ? seleccion.join(',') : undefined;
+
+    const result = await lastValueFrom(this.analisis.getProjectResults(projectId, databases));
+
+    const rawDatos = result.datos;
+    const calculosOperacionesDeFase: Record<string, any> = {};
+    Object.keys(rawDatos).forEach(key => {
+      calculosOperacionesDeFase[this.calculos.ajustarNombre(key)] = rawDatos[key];
+    });
+
     this.auxDataProjectList[project]['datos'] = calculosOperacionesDeFase;
-    const valorPorcentaje = this.calculos.ValoresProcentaje(
-      calculosOperacionesDeFase,
-      this.auxDataProjectList[project].etapasIgnoradas
-    );
+    this.auxDataProjectList[project]['basesDatos'] = this.auxDataProjectList[project]['DBList']
+      .reduce((acc: Record<string, boolean>, db: string) => { acc[db] = seleccion.includes(db); return acc; }, {});
+
+    const etapasIgnoradas = this.auxDataProjectList[project].etapasIgnoradas;
+    const valorPorcentaje = this.calculos.ValoresProcentaje(calculosOperacionesDeFase, etapasIgnoradas);
+    const valorPorcentajeS = this.calculos.ValoresProcentajeSubeapa(calculosOperacionesDeFase, etapasIgnoradas);
+
     this.auxDataProjectList[project]['porcentaje'] = valorPorcentaje;
-    const valorPorcentajeS = this.calculos.ValoresProcentajeSubeapa(
-      calculosOperacionesDeFase,
-      this.auxDataProjectList[project].etapasIgnoradas
-    );
+    this.auxDataProjectList[project]['porcentajeSubepata'] = valorPorcentajeS;
     this.auxDataProjectList[project].dataGraficaPie = this.cargaDataPie(
       valorPorcentajeS,
       this.auxDataProjectList[project].impactoSelect,
-      this.auxDataProjectList[project].etapasIgnoradas
+      etapasIgnoradas
     );
     this.auxDataProjectList[project]['dataGraficaBar'] = this.cargarDataBar(
       valorPorcentajeS,
       this.auxDataProjectList[project]['impactoSelect'],
-      this.auxDataProjectList[project].etapasIgnoradas,
-      this.auxDataProjectList[project].id,
+      etapasIgnoradas,
+      projectId,
       this.auxDataProjectList[project].impactoCompleteSelect,
-      this.auxDataProjectList[project].datos
+      calculosOperacionesDeFase
     );
-    this.auxDataProjectList[project]['porcentajeSubepata'] = valorPorcentajeS;
-    if (this.auxDataProjectList[project].etapaSeleccionada != 'Ninguna') {
-      this.auxDataProjectList[project].subetasMostrada =
-        this.calculos.findSubetapas(
-          this.auxDataProjectList[project].etapaSeleccionada,
-          this.auxDataProjectList[project].impactoCompleteSelect,
-          this.auxDataProjectList[project].datos
-        );
+    if (this.auxDataProjectList[project].etapaSeleccionada !== 'Ninguna') {
+      this.auxDataProjectList[project].subetasMostrada = this.calculos.findSubetapas(
+        this.auxDataProjectList[project].etapaSeleccionada,
+        this.auxDataProjectList[project].impactoCompleteSelect,
+        calculosOperacionesDeFase
+      );
     }
     this.auxDataProjectList[project]['valorCarbono'] = this.calculos
       .determinaValorCarbono(
         calculosOperacionesDeFase,
         this.DatosCalculos.projectsList,
-        this.auxDataProjectList[project].id,
+        projectId,
         this.DatosCalculos.ULList
       )
       .toExponential(2);
-
-    this.auxDataProjectList[project]['flagsCarbono'] =
-      this.calculos.buscarValosCarbono(
-        calculosOperacionesDeFase,
-        this.auxDataProjectList[project].opcionCarbonoSeleccionada,
-        this.DatosCalculos.projectsList,
-        this.auxDataProjectList[project].id,
-        this.DatosCalculos.ULList
-      );
+    this.auxDataProjectList[project]['flagsCarbono'] = this.calculos.buscarValosCarbono(
+      calculosOperacionesDeFase,
+      this.auxDataProjectList[project].opcionCarbonoSeleccionada,
+      this.DatosCalculos.projectsList,
+      projectId,
+      this.DatosCalculos.ULList
+    );
   }
 
   openDialogANP() {

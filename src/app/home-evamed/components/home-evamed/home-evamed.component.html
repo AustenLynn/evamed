@@ -57,7 +57,7 @@
       </div>
     </mat-card-header>
     <mat-card-content>
-      <mat-tab-group class="container-principal-tab" mat-stretch-tabs="false" mat-align-tabs="end">
+      <mat-tab-group class="container-principal-tab" mat-stretch-tabs="false" mat-align-tabs="end" (selectedTabChange)="onTabChange($event, i)">
         <mat-tab label="Configurar información" class="label-principal-tab">
           <div class="second-mat-tab-group">
             <mat-tab-group class="container-second-tab">
@@ -187,7 +187,11 @@
           </div>
         </mat-tab>
         <mat-tab label="Resultados" class="label-principal-tab">
-          <div *ngIf="cargaDatosCalculo">
+          <div *ngIf="auxDataProjectList && auxDataProjectList[i]">
+            <div *ngIf="!auxDataProjectList[i].resultsLoaded" class="loading-results">
+              <mat-spinner diameter="48"></mat-spinner>
+            </div>
+            <div *ngIf="auxDataProjectList[i].resultsLoaded">
             <div class="mat-tab-resultados" *ngIf="auxDataProjectList[i]['graficasCarbonoOResultados']['resultados']">
               <div>
                 <div class="seccionUno">
@@ -418,6 +422,7 @@
                     </button>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </mat-tab>
